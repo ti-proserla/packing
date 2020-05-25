@@ -4,10 +4,11 @@
             <h4>Nuevo Lote de Ingreso</h4>
         </div>
         <div class="card-body">
-            <div class="row">
+            <form v-on:submit.prevent="guardar()" class="row">
                 <div class="col-md-6">
                     <label for="">Codigo</label>
                     <input type="text" class="form-control" v-model="lote.codigo">
+                    <span>{{ lote_error.codigo }}</span>
                 </div>
                 <div class="col-md-6">
                     <label for="">Cliente</label>
@@ -15,6 +16,7 @@
                         <option value="">-Seleccionar Cliente-</option>
                         <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.descripcion }}</option>
                     </select>
+                    <span>{{ lote_error.cliente_id }}</span>
                 </div>
                 <div class="col-md-6">
                     <label for="">Materia</label>
@@ -22,6 +24,7 @@
                         <option value="">-Seleccionar Materia-</option>
                         <option v-for="materia in materias" :value="materia.id">{{ materia.nombre_materia }}</option>
                     </select>
+                    <span>{{ lote_error.materia_id }}</span>
                 </div>
                 <div class="col-md-6">
                     <label for="">Variedad</label>
@@ -29,15 +32,17 @@
                         <option value="">-Seleccionar Variedad-</option>
                         <option v-for="variedad in variedades" :value="variedad.id">{{ variedad.nombre_variedad }}</option>
                     </select>
+                    <span>{{ lote_error.variedad_id }}</span>
                 </div>
                 <div class="col-sm-6">
                     <label for="">Fecha cosecha</label>
                     <input type="date" class="form-control" v-model="lote.fecha_cosecha">
+                    <span>{{ lote_error.fecha_cosecha }}</span>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </template>
@@ -54,11 +59,13 @@ export default {
              * Modificadores
              */
             lote: {
+                codigo: "",
                 cliente_id: "",
                 materia_id: "",
                 variedad_id: "",
                 fecha_cosecha: moment().format('YYYY-MM-DD')
-            }
+            },
+            lote_error: {}
         }
     },
     mounted() {
@@ -89,6 +96,35 @@ export default {
             .then(response => {
                 this.clientes=response.data
             });
+        },
+        guardar(){
+            var t=this;
+            t.lote_error={};
+            // swal({ title: "¿Desea crear Lote?", buttons: ['Cancelar',"Crear"]})
+            // .then((res) => {
+            //     if (res) {
+                    /**
+                     * Guardado
+                     */
+                    axios.post(url_base+'/lote-ingreso',t.lote)
+                    .then(response => {
+                        var respuesta=response.data;
+                        switch (respuesta.status) {
+                            case "VALIDATION":
+                                t.lote_error=respuesta.data;
+                                break;
+                            case "OK":
+                                swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
+                                t.$router.push('/lote');
+                                t.lote_error={};
+                                break;
+                            default:
+                                t.lote_error={};
+                                break;
+                        }
+                    });
+            //     }
+            // });
         }
     },
 }

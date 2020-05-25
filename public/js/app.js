@@ -1955,6 +1955,56 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/Index.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/lote/Index.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      lotes_ingreso: []
+    };
+  },
+  mounted: function mounted() {
+    this.listarLotes();
+  },
+  methods: {
+    listarLotes: function listarLotes() {
+      var _this = this;
+
+      axios.get(url_base + '/lote-ingreso').then(function (response) {
+        _this.lotes_ingreso = response.data;
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/New.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/lote/New.vue?vue&type=script&lang=js& ***!
@@ -1964,6 +2014,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2020,11 +2075,13 @@ __webpack_require__.r(__webpack_exports__);
        * Modificadores
        */
       lote: {
+        codigo: "",
         cliente_id: "",
         materia_id: "",
         variedad_id: "",
         fecha_cosecha: moment().format('YYYY-MM-DD')
-      }
+      },
+      lote_error: {}
     };
   },
   mounted: function mounted() {
@@ -2060,6 +2117,41 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(url_base + '/cliente').then(function (response) {
         _this2.clientes = response.data;
       });
+    },
+    guardar: function guardar() {
+      var t = this;
+      t.lote_error = {}; // swal({ title: "¿Desea crear Lote?", buttons: ['Cancelar',"Crear"]})
+      // .then((res) => {
+      //     if (res) {
+
+      /**
+       * Guardado
+       */
+
+      axios.post(url_base + '/lote-ingreso', t.lote).then(function (response) {
+        var respuesta = response.data;
+
+        switch (respuesta.status) {
+          case "VALIDATION":
+            t.lote_error = respuesta.data;
+            break;
+
+          case "OK":
+            swal("Lote Creado", {
+              icon: "success",
+              timer: 2000,
+              buttons: false
+            });
+            t.$router.push('/lote');
+            t.lote_error = {};
+            break;
+
+          default:
+            t.lote_error = {};
+            break;
+        }
+      }); //     }
+      // });
     }
   }
 });
@@ -41039,6 +41131,71 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("h5", [_vm._v("Lista de Palets")]),
+      _vm._v(_vm._s(_vm.lotes_ingreso) + "\n    "),
+      _vm._l(_vm.lotes_ingreso, function(lote) {
+        return _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-10" }, [
+                _c("h6", [
+                  _vm._v(_vm._s(lote.codigo) + " - Plantaciones del Sol")
+                ]),
+                _vm._v(" "),
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c("p")
+              ]),
+              _vm._v(" "),
+              _vm._m(1, true)
+            ])
+          ])
+        ])
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_c("b", [_vm._v("Materia:")]), _vm._v(" UVA - RED GLOBE")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2 text-right" }, [
+      _c("span", { staticClass: "btn btn-sm btn-info" }, [_vm._v("Registrado")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/New.vue?vue&type=template&id=558a517e&":
 /*!*****************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/lote/New.vue?vue&type=template&id=558a517e& ***!
@@ -41058,205 +41215,227 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("label", { attrs: { for: "" } }, [_vm._v("Codigo")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.lote.codigo,
-                expression: "lote.codigo"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text" },
-            domProps: { value: _vm.lote.codigo },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.lote, "codigo", $event.target.value)
-              }
+      _c(
+        "form",
+        {
+          staticClass: "row",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.guardar()
             }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("label", { attrs: { for: "" } }, [_vm._v("Cliente")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
+          }
+        },
+        [
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Codigo")]),
+            _vm._v(" "),
+            _c("input", {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.lote.cliente_id,
-                  expression: "lote.cliente_id"
+                  value: _vm.lote.codigo,
+                  expression: "lote.codigo"
                 }
               ],
               staticClass: "form-control",
+              attrs: { type: "text" },
+              domProps: { value: _vm.lote.codigo },
               on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.lote,
-                    "cliente_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.lote, "codigo", $event.target.value)
                 }
               }
-            },
-            [
-              _c("option", { attrs: { value: "" } }, [
-                _vm._v("-Seleccionar Cliente-")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.clientes, function(cliente) {
-                return _c("option", { domProps: { value: cliente.id } }, [
-                  _vm._v(_vm._s(cliente.descripcion))
-                ])
-              })
-            ],
-            2
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("label", { attrs: { for: "" } }, [_vm._v("Materia")]),
+            }),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.lote_error.codigo))])
+          ]),
           _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.lote.materia_id,
-                  expression: "lote.materia_id"
-                }
-              ],
-              staticClass: "form-control",
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.lote,
-                    "materia_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
-              }
-            },
-            [
-              _c("option", { attrs: { value: "" } }, [
-                _vm._v("-Seleccionar Materia-")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.materias, function(materia) {
-                return _c("option", { domProps: { value: materia.id } }, [
-                  _vm._v(_vm._s(materia.nombre_materia))
-                ])
-              })
-            ],
-            2
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("label", { attrs: { for: "" } }, [_vm._v("Variedad")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.lote.variedad_id,
-                  expression: "lote.variedad_id"
-                }
-              ],
-              staticClass: "form-control",
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.lote,
-                    "variedad_id",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
-              }
-            },
-            [
-              _c("option", { attrs: { value: "" } }, [
-                _vm._v("-Seleccionar Variedad-")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.variedades, function(variedad) {
-                return _c("option", { domProps: { value: variedad.id } }, [
-                  _vm._v(_vm._s(variedad.nombre_variedad))
-                ])
-              })
-            ],
-            2
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-6" }, [
-          _c("label", { attrs: { for: "" } }, [_vm._v("Fecha cosecha")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Cliente")]),
+            _vm._v(" "),
+            _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.lote.fecha_cosecha,
-                expression: "lote.fecha_cosecha"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "date" },
-            domProps: { value: _vm.lote.fecha_cosecha },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.lote.cliente_id,
+                    expression: "lote.cliente_id"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.lote,
+                      "cliente_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
                 }
-                _vm.$set(_vm.lote, "fecha_cosecha", $event.target.value)
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("-Seleccionar Cliente-")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.clientes, function(cliente) {
+                  return _c("option", { domProps: { value: cliente.id } }, [
+                    _vm._v(_vm._s(cliente.descripcion))
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.lote_error.cliente_id))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Materia")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.lote.materia_id,
+                    expression: "lote.materia_id"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.lote,
+                      "materia_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("-Seleccionar Materia-")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.materias, function(materia) {
+                  return _c("option", { domProps: { value: materia.id } }, [
+                    _vm._v(_vm._s(materia.nombre_materia))
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.lote_error.materia_id))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Variedad")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.lote.variedad_id,
+                    expression: "lote.variedad_id"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.lote,
+                      "variedad_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("-Seleccionar Variedad-")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.variedades, function(variedad) {
+                  return _c("option", { domProps: { value: variedad.id } }, [
+                    _vm._v(_vm._s(variedad.nombre_variedad))
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.lote_error.variedad_id))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Fecha cosecha")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.lote.fecha_cosecha,
+                  expression: "lote.fecha_cosecha"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "date" },
+              domProps: { value: _vm.lote.fecha_cosecha },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.lote, "fecha_cosecha", $event.target.value)
+                }
               }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _vm._m(1)
-      ])
+            }),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.lote_error.fecha_cosecha))])
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ]
+      )
     ])
   ])
 }
@@ -41274,7 +41453,11 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-12 text-center" }, [
-      _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Guardar")])
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Guardar")]
+      )
     ])
   }
 ]
@@ -56909,6 +57092,9 @@ var routes = [{
   path: '/ini',
   component: __webpack_require__(/*! ./view/paletizado/List.vue */ "./resources/js/view/paletizado/List.vue")["default"]
 }, {
+  path: '/lote',
+  component: __webpack_require__(/*! ./view/lote/Index.vue */ "./resources/js/view/lote/Index.vue")["default"]
+}, {
   path: '/lote/new',
   component: __webpack_require__(/*! ./view/lote/New.vue */ "./resources/js/view/lote/New.vue")["default"]
 }];
@@ -56985,6 +57171,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_14c26dca___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_14c26dca___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/view/lote/Index.vue":
+/*!******************************************!*\
+  !*** ./resources/js/view/lote/Index.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=b792619a& */ "./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/view/lote/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/view/lote/Index.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/view/lote/Index.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/view/lote/Index.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=b792619a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/lote/Index.vue?vue&type=template&id=b792619a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_b792619a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
