@@ -1,0 +1,17 @@
+* {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+}
+.content{
+    background-color: #eee;
+}
+
+html,body{
+    height: 100%;
+}
+#wrapper{
+    min-height: 100%;
+}
+.nav-link.active{
+    color: ;
+}
