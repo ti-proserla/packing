@@ -1,16 +1,16 @@
 <template>
     <div>
-        <h5>Lista de Palets</h5>{{ lotes_ingreso }}
+        <h5>Lista de Palets</h5>
         <div class="card" v-for="lote in lotes_ingreso">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-10">
-                        <h6>{{ lote.codigo }} - Plantaciones del Sol</h6>
-                        <p><b>Materia:</b> UVA - RED GLOBE</p>
-                        <p></p>
+                    <div class="col-9">
+                        <h6>{{ lote.descripcion}}</h6>
+                        <h6><b>Lote:</b> {{ lote.codigo }}</h6>
+                        <p><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</p>
                     </div>
-                    <div class="col-2 text-right">
-                        <span class="btn btn-sm btn-info">Registrado</span>
+                    <div class="col-3 text-right">
+                        <span class="btn btn-sm btn-info">{{ lote.estado }}</span>
                     </div>
                 </div>
             </div>

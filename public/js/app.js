@@ -41150,22 +41150,35 @@ var render = function() {
     "div",
     [
       _c("h5", [_vm._v("Lista de Palets")]),
-      _vm._v(_vm._s(_vm.lotes_ingreso) + "\n    "),
+      _vm._v(" "),
       _vm._l(_vm.lotes_ingreso, function(lote) {
         return _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-10" }, [
+              _c("div", { staticClass: "col-9" }, [
+                _c("h6", [_vm._v(_vm._s(lote.descripcion))]),
+                _vm._v(" "),
                 _c("h6", [
-                  _vm._v(_vm._s(lote.codigo) + " - Plantaciones del Sol")
+                  _c("b", [_vm._v("Lote:")]),
+                  _vm._v(" " + _vm._s(lote.codigo))
                 ]),
                 _vm._v(" "),
-                _vm._m(0, true),
-                _vm._v(" "),
-                _c("p")
+                _c("p", [
+                  _c("b", [_vm._v("Materia:")]),
+                  _vm._v(
+                    " " +
+                      _vm._s(lote.nombre_materia) +
+                      " - " +
+                      _vm._s(lote.nombre_variedad)
+                  )
+                ])
               ]),
               _vm._v(" "),
-              _vm._m(1, true)
+              _c("div", { staticClass: "col-3 text-right" }, [
+                _c("span", { staticClass: "btn btn-sm btn-info" }, [
+                  _vm._v(_vm._s(lote.estado))
+                ])
+              ])
             ])
           ])
         ])
@@ -41174,22 +41187,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [_c("b", [_vm._v("Materia:")]), _vm._v(" UVA - RED GLOBE")])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2 text-right" }, [
-      _c("span", { staticClass: "btn btn-sm btn-info" }, [_vm._v("Registrado")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
