@@ -55,48 +55,39 @@ class LoteIngresoController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $loteIngreso=LoteIngreso::where('id',$id)->first();
+        return response()->json($loteIngreso);
     }
+   
+    
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(LoteIngresoValidate $request, $id)
     {
-        //
+        $loteIngreso=LoteIngreso::where('id',$id)->first();
+        $loteIngreso->codigo=$request->codigo;
+        $loteIngreso->cliente_id=$request->cliente_id;
+        $loteIngreso->materia_id=$request->materia_id;
+        $loteIngreso->variedad_id=$request->variedad_id;
+        $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
+        $loteIngreso->estado="Registrado";
+        $loteIngreso->save();
+        return response()->json([
+            "status" => "OK",
+            "data"   => "Lote Ingreso Registrado."
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function destroy($id)
     {
-        //
+        $loteIngreso=LoteIngreso::where('id',$id)->first();
+        $loteIngreso->delete();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
+    
 }
+
