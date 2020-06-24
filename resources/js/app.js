@@ -63,7 +63,7 @@ window.store=new Vuex.Store({
 var socket = io.connect('http://localhost:3000', { 'forceNew': true });
   
 socket.on('balanza:data', function (dataSerial) {
-  store.state.peso=dataSerial.value;
+  store.state.peso=Number(dataSerial.value);
 });
 
 new Vue({

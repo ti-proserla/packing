@@ -1,7 +1,7 @@
 <template>
     <div>
         <h5>Lista de Palets</h5>
-        <div class="card" v-for="lote in lotes_ingreso">
+        <div class="card" v-for="lote in lotes_ingreso" @click="redirect(lote.id)">
             <div class="card-body">
                 <div class="row">
                     <div class="col-9">
@@ -28,8 +28,11 @@ export default {
         this.listarLotes()
     },
     methods: {
+        redirect(id){
+            this.$router.push('/lote/'+id+'/sub-lote');
+        },
         listarLotes(){
-            axios.get(url_base+'/lote-ingreso')
+            axios.get(url_base+'/lote_ingreso?estado=REGISTRADO')
             .then(response => {
                 this.lotes_ingreso=response.data
             })

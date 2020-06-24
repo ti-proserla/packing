@@ -27,8 +27,8 @@ class PaletEntradaValidate extends FormRequest
     public function rules()
     {
         return [
-            'sub_lote_id' => 'required|numeric',
-            'peso' => 'required|decimal',
+            // 'sub_lote_id' => 'required|numeric',
+            'peso' => 'required|between:0,999.99',
             'num_jabas' => 'required|numeric',
 
         ];

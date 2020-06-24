@@ -29,8 +29,8 @@ var routes =[
         component: require('./view/paletizado/List.vue').default
     },
     {
-        path: '/lote',
-        component: require('./view/lote/Index.vue').default
+        path: '/lote/acopio',
+        component: require('./view/lote/Acopio.vue').default
     },
     {
         path: '/lote/new',

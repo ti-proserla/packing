@@ -26,4 +26,5 @@ Route::resource('transportista', 'TransportistaController');
 Route::resource('lote_ingreso', 'LoteIngresoController');
 Route::get('lote_ingreso/{id}/sub_lote', 'SubLoteController@index');
 Route::post('sub_lote', 'SubLoteController@store');
-Route::resource('palet_entrada', 'PaletEntradaController');
+// Route::get('palet_entrada', 'PaletEntradaController');
+Route::resource('sub_lote/{sub_lote_id}/palet_entrada', 'PaletEntradaController');

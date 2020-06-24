@@ -31,28 +31,15 @@
                     <h5 class="mb-0">Lista Sub Lote</h5>
                 </div>
                 <div class="card-body">
-                    <div class="card" v-for="(sub,index) in sub_lotes">
+                    <div v-for="(sub,index) in sub_lotes" class="card" :class="(seleccionado_sub_lote==sub.id ? '' : 'card-no-select')" @click="seleccionar(sub.id)">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-2">
-                                    1
+                                    {{ index+1 }}
                                 </div>
                                 <div class="col-10">
-                                    <h6>Transportista: Dieojhsandk</h6>
-                                    <p>Guia: {{ }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-no-select">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-2">
-                                    2
-                                </div>
-                                <div class="col-10">
-                                    <h6>Transportista: Dieojhsandk</h6>
-                                    <p>Guia: 23151351351531</p>
+                                    <h6>Transportista: {{ sub.transportista.nombre_transportista  }}</h6>
+                                    <p>Guia: {{ sub.guia }}</p>
                                 </div>
                             </div>
                         </div>
@@ -72,10 +59,13 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12">
-                            Balanza: {{ peso }}
-                            Número de Jabas:
+                        <div class="col-6 form-group">
+                            <label for="">Número de Jabas:</label>
                             <input class="form-control" v-model="num_jabas">
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="">Balanza:</label>
+                            <div class="digital">{{ peso }} Kg</div>
                         </div>
                         <div class="col-12 form-group text-center">
                             <button @click="add()" class="btn btn-info">Agregar</button>
@@ -90,10 +80,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>{{ 51 }}</td>
-                                        <td>{{ 20 }}</td>
+                                    <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
+                                        <td>{{ palets_entrada.length - index}}</td>
+                                        <td>{{ palet.num_jabas }}</td>
+                                        <td>{{ palet.peso }}</td>
+                                    </tr>
+                                    <tr v-if="seleccionado_sub_lote==null">
+                                        <td colspan="3"> Seleccione un Sub lote </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -109,6 +102,17 @@
     .card-no-select{
         background-color: #eee;
     }
+    @font-face {
+        font-family: "digital";
+        src: url("/font/digital_display_tfb.ttf");
+    }
+    .digital{
+        border: 1px solid #111;
+        padding: 0.5rem;
+        font-size: 2rem;
+        text-align: right;
+        font-family: 'digital';
+    }
 </style>
 <script>
 import { mapState,mapMutations } from 'vuex'
@@ -123,7 +127,10 @@ export default {
             //listas
             transportistas:[],
             sub_lotes: [],
-            palets: []
+            palets: [],
+            palets_entrada: [],
+            //selectores
+            seleccionado_sub_lote: null
         }
     },
     computed: {
@@ -154,13 +161,27 @@ export default {
         guardarSubLote(){
             axios.post(url_base+'/sub_lote',this.sub_lote)
             .then(response => {
-                
+                this.listarSublote();
+                this.sub_lote=this.init()
+            });
+        },
+        seleccionar(id){
+            this.seleccionado_sub_lote=id;
+            this.listarPaletEntrada();
+        },
+        listarPaletEntrada(){
+            axios.get(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palet_entrada`)
+            .then(response => {
+                this.palets_entrada=response.data
             });
         },
         add(){
-            this.palets.push({
+            axios.post(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palet_entrada`,{
                 num_jabas: this.num_jabas,
                 peso: this.peso
+            })
+            .then(response => {
+                this.listarPaletEntrada();
             });
         }    
     },
