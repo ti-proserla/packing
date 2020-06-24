@@ -22,4 +22,5 @@ Route::resource('cliente', 'ClienteController');
 Route::get('materia/variedad', 'MateriaController@variedad');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
+Route::resource('transportista', 'TransportistaController');
 Route::resource('lote-ingreso', 'LoteIngresoController');

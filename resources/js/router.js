@@ -9,6 +9,10 @@ var routes =[
         component: require('./view/Home.vue').default
     },
     {
+        path: '/acopio/new',
+        component: require('./view/acopio/New.vue').default
+    },
+    {
         path: '/paletizado/new',
         component: require('./view/paletizado/New.vue').default
     },
@@ -31,7 +35,11 @@ var routes =[
     {
         path: '/lote/new',
         component: require('./view/lote/New.vue').default
-    }
+    },
+    {
+        path: '/lote/:id/sub-lote',
+        component: require('./view/lote/sub-lote.vue').default
+    },
 
 ];
 var router=new VueRouter({

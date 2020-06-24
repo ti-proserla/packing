@@ -47,8 +47,28 @@ request.onupgradeneeded = function(event) {
   // objectStore.add({});
 };
 
+/**
+ * VUEX
+ */
+
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+window.store=new Vuex.Store({
+  state: {
+    peso: 0,
+  },
+});
+
+var socket = io.connect('http://localhost:3000', { 'forceNew': true });
+  
+socket.on('balanza:data', function (dataSerial) {
+  store.state.peso=dataSerial.value;
+});
+
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App),
 })

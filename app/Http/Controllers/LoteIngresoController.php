@@ -51,7 +51,7 @@ class LoteIngresoController extends Controller
         $loteIngreso->save();
         return response()->json([
             "status" => "OK",
-            "data"   => "Lote Ingreso Registrado."
+            "data"   => $loteIngreso,
         ]);
     }
 

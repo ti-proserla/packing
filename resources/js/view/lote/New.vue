@@ -100,9 +100,9 @@ export default {
         guardar(){
             var t=this;
             t.lote_error={};
-            // swal({ title: "¿Desea crear Lote?", buttons: ['Cancelar',"Crear"]})
-            // .then((res) => {
-            //     if (res) {
+            swal({ title: "¿Desea crear Lote?", buttons: ['Cancelar',"Crear"]})
+            .then((res) => {
+                if (res) {
                     /**
                      * Guardado
                      */
@@ -115,7 +115,7 @@ export default {
                                 break;
                             case "OK":
                                 swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
-                                t.$router.push('/lote');
+                                t.$router.push('/lote/'+respuesta.data.id+'/sub-lote');
                                 t.lote_error={};
                                 break;
                             default:
@@ -123,8 +123,8 @@ export default {
                                 break;
                         }
                     });
-            //     }
-            // });
+                }
+            });
         }
     },
 }
