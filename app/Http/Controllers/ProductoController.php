@@ -7,11 +7,7 @@ use App\Model\Producto;
 
 class ProductoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $productos=Producto::all();
@@ -19,7 +15,7 @@ class ProductoController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(ProductoValidate $request)
     {
         $productos=new Producto();
         $productos->nombre_producto=$request->nombre_producto;
@@ -39,7 +35,7 @@ class ProductoController extends Controller
 
 
 
-    public function update(Request $request, $id)
+    public function update(ProductoValidate $request, $id)
     {
         $produtos=Producto::where('id',$id)->first();
         $productos->nombre_producto=$request->nombre_producto;
