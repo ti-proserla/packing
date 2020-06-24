@@ -22,7 +22,7 @@ class SubLoteController extends Controller
         $subLotes->lote_id=$request->lote_id;
         $subLotes->guia=$request->guia;
         $subLotes->transportista_id=$request->transportista_id;
-        $variedades->save();
+        $subLotes->save();
 
         return response()->json([
             "status" => "OK"
