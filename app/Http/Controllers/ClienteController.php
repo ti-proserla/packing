@@ -2,84 +2,60 @@
 
 namespace App\Http\Controllers;
 use App\Model\Cliente;
+use App\Http\Requests\ClienteValidate;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
         $clientes=Cliente::all();
         return response()->json($clientes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+ 
+
+
+    public function store(ClienteValidate $request)
     {
-        //
+        $clientes=new Cliente();
+        $clientes->ruc=$request->ruc;
+        $clientes->descripcion=$request->descripcion;
+        $clientes->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show($id)
     {
-        //
+        $clientes=Cliente::where('id',$id)->first();
+        return response()->json($clientes);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+ 
+    public function update(ClienteValidate $request, $id)
     {
-        //
+        $clientes=Cliente::where('id',$id)->first();
+        $clientes->ruc=$request->ruc;
+        $clientes->descripcion=$request->descripcion;
+        $clientes->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function destroy($id)
     {
-        //
+        $clientes=Cliente::where('id',$id)->first();
+        $clientes->delete();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 }

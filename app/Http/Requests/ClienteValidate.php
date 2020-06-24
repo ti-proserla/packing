@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoteIngresoValidate extends FormRequest
+class ClienteValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,11 +27,8 @@ class LoteIngresoValidate extends FormRequest
     public function rules()
     {
         return [
-            'codigo' => 'required|max:30',
-            'cliente_id' => 'required|numeric',
-            'materia_id' => 'required',
-            'variedad_id' => 'required',
-            'fecha_cosecha' => 'required|date',
+            'ruc' => 'required|max:11',
+            'descripcion' => 'required|max:40',
         ];
     }
     

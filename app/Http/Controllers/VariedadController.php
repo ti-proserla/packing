@@ -1,84 +1,59 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\VariedadValidate;
+use App\Model\Variedad;
 use Illuminate\Http\Request;
 
 class VariedadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
-        //
+        $variedades=Variedad::all();
+        return response()->json($variedades);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(VariedadValidate $request)
     {
-        //
+        $variedades=new Variedad();
+        $variedades->nombre_variedad=$request->nombre_variedad;
+        $variedades->materia_id=$request->materia_id;
+        $variedades->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $variedades=Variedad::where('id',$id)->first();
+        return response()->json($variedades);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    
+    public function update(VariedadValidate $request, $id)
     {
-        //
+        $variedades=Variedad::where('id',$id)->first();
+        $variedades->nombre_variedad=$request->nombre_variedad;
+        $variedades->materia_id=$request->materia_id;
+        $variedades->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
-        //
+        $variedades=Variedad::where('id',$id)->first();
+        $variedades->delete();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Model\Materia;
+use App\Http\Requests\MateriaValidate;
 use Illuminate\Http\Request;
 
 class MateriaController extends Controller
@@ -13,7 +14,8 @@ class MateriaController extends Controller
      */
     public function index()
     {
-    
+        $materias=Materia::all();
+        return response()->json($materias);
     }
 
     public function variedad(){
@@ -21,69 +23,47 @@ class MateriaController extends Controller
         return response()->json($materias);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function store(MateriaValidate $request)
     {
-        //
+        $materias=new Materia();
+        $materias->nombre_materia=$request->nombre_materia;
+        $materias->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        $materias=Materia::where('id',$id)->first();
+        return response()->json($materias);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+  
+    public function update(MateriaValidate $request, $id)
     {
-        //
+        $materias=Materia::where('id',$id)->first();
+        $materias->nombre_materia=$request->nombre_materia;
+        $materias->save();
+
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $materias=Materia::where('id',$id)->first();
+        $materias->delete();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 }
