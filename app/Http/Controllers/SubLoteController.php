@@ -8,9 +8,9 @@ use App\Model\SubLote;
 class SubLoteController extends Controller
 {
    
-    public function index()
+    public function index($id)
     {
-        $subLotes=SubLote::all();
+        $subLotes=SubLote::with('transportista')->where('lote_id',$id)->get();
         return response()->json($subLotes);
     }
 

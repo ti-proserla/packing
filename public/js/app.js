@@ -2427,12 +2427,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       sub_lote_error: {},
       //listas
       transportistas: [],
+      sub_lotes: [],
       palets: []
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['peso'])),
   mounted: function mounted() {
     this.listarTransportistas();
+    this.listarSublote();
   },
   methods: {
     init: function init() {
@@ -2440,11 +2442,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         lote_id: this.$route.params.id
       };
     },
-    listarTransportistas: function listarTransportistas() {
+    listarSublote: function listarSublote() {
       var _this = this;
 
+      axios.get(url_base + "/lote_ingreso/".concat(this.$route.params.id, "/sub_lote")).then(function (response) {
+        _this.sub_lotes = response.data;
+      });
+    },
+    listarTransportistas: function listarTransportistas() {
+      var _this2 = this;
+
       axios.get(url_base + '/transportista').then(function (response) {
-        _this.transportistas = response.data;
+        _this2.transportistas = response.data;
       });
     },
     guardarSubLote: function guardarSubLote() {
@@ -42774,15 +42783,46 @@ var render = function() {
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
-      _vm._m(1)
+      _c("div", { staticClass: "card" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "card-body" },
+          [
+            _vm._l(_vm.sub_lotes, function(sub, index) {
+              return _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _vm._v(
+                        "\n                                1\n                            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-10" }, [
+                      _c("h6", [_vm._v("Transportista: Dieojhsandk")]),
+                      _vm._v(" "),
+                      _c("p", [_vm._v("Guia: " + _vm._s())])
+                    ])
+                  ])
+                ])
+              ])
+            }),
+            _vm._v(" "),
+            _vm._m(2)
+          ],
+          2
+        )
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-sm-6" }, [
       _c("div", { staticClass: "card" }, [
-        _vm._m(2),
+        _vm._m(3),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
-          _vm._m(3),
+          _vm._m(4),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-12" }, [
@@ -42830,7 +42870,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-12" }, [
               _c("table", { staticClass: "table-responsive table-bordered" }, [
-                _vm._m(4),
+                _vm._m(5),
                 _vm._v(" "),
                 _c("tbody", [
                   _c("tr", [
@@ -42862,45 +42902,27 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-head" }, [
-        _c("h5", { staticClass: "mb-0" }, [_vm._v("Lista Sub Lote")])
-      ]),
-      _vm._v(" "),
+    return _c("div", { staticClass: "card-head" }, [
+      _c("h5", { staticClass: "mb-0" }, [_vm._v("Lista Sub Lote")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card card-no-select" }, [
       _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-2" }, [
-                _vm._v(
-                  "\n                                1\n                            "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-10" }, [
-                _c("h6", [_vm._v("Transportista: Dieojhsandk")]),
-                _vm._v(" "),
-                _c("p", [_vm._v("Guia: 23151351351531")])
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card card-no-select" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-2" }, [
-                _vm._v(
-                  "\n                                2\n                            "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-10" }, [
-                _c("h6", [_vm._v("Transportista: Dieojhsandk")]),
-                _vm._v(" "),
-                _c("p", [_vm._v("Guia: 23151351351531")])
-              ])
-            ])
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _vm._v(
+              "\n                                2\n                            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-10" }, [
+            _c("h6", [_vm._v("Transportista: Dieojhsandk")]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Guia: 23151351351531")])
           ])
         ])
       ])

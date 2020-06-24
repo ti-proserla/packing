@@ -31,7 +31,7 @@
                     <h5 class="mb-0">Lista Sub Lote</h5>
                 </div>
                 <div class="card-body">
-                    <div class="card">
+                    <div class="card" v-for="(sub,index) in sub_lotes">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-2">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-10">
                                     <h6>Transportista: Dieojhsandk</h6>
-                                    <p>Guia: 23151351351531</p>
+                                    <p>Guia: {{ }}</p>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@ export default {
             sub_lote_error:{},
             //listas
             transportistas:[],
-
+            sub_lotes: [],
             palets: []
         }
     },
@@ -131,12 +131,19 @@ export default {
     },
     mounted() {
         this.listarTransportistas();
+        this.listarSublote();
     },
     methods: {
         init(){
             return {
                 lote_id: this.$route.params.id
             };
+        },
+        listarSublote(){
+            axios.get(url_base+`/lote_ingreso/${this.$route.params.id}/sub_lote`)
+            .then(response => {
+                this.sub_lotes=response.data
+            });
         },
         listarTransportistas(){
             axios.get(url_base+'/transportista')
