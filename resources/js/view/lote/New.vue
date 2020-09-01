@@ -106,7 +106,7 @@ export default {
                     /**
                      * Guardado
                      */
-                    axios.post(url_base+'/lote-ingreso',t.lote)
+                    axios.post(url_base+'/lote_ingreso',t.lote)
                     .then(response => {
                         var respuesta=response.data;
                         switch (respuesta.status) {

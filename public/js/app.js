@@ -2266,7 +2266,7 @@ __webpack_require__.r(__webpack_exports__);
           /**
            * Guardado
            */
-          axios.post(url_base + '/lote-ingreso', t.lote).then(function (response) {
+          axios.post(url_base + '/lote_ingreso', t.lote).then(function (response) {
             var respuesta = response.data;
 
             switch (respuesta.status) {
