@@ -6,7 +6,7 @@
         <div class="col-sm-6 form-group">
             <label for="">Cliente - Lote</label>
             <select name="" id="" class="form-control" v-model="palet_salida.lote_id">
-                <option value="1">Plantaciones del SOl - Lote RS</option>
+                <option v-for="(lote,index) in lote_ingreso" :value="lote.id">{{ `${lote.descripcion} - ${lote.codigo}` }}</option>
             </select>
         </div>
         <div class="col-sm-3 form-group">
@@ -31,6 +31,7 @@
 export default {
     data() {
         return {
+            lote_ingreso:[],
             palet_salida: {
                 lote_id:    null,
                 producto_id: null
@@ -39,9 +40,16 @@ export default {
         }
     },
     mounted() {
-        this.listarProducto()
+        this.listarProducto();
+        this.listarLoteIngreso();
     },
     methods: {
+        listarLoteIngreso(){
+            axios.get(url_base+`/lote_ingreso/`)
+            .then(response => {
+                this.lote_ingreso=response.data
+            });
+        },
         listarProducto(){
             axios.get(url_base+'/producto')
             .then(response => {
@@ -56,22 +64,39 @@ export default {
             })
             .then((res) => {
                 if (res) {
+                    axios.post(url_base+'/palet_salida',t.palet_salida)
+                    .then(response => {
+                        var respuesta=response.data;
+                        console.log(respuesta);
+                        switch (respuesta.status) {
+                            case "VALIDATION":
+                                break;
+                            case "OK":
+                                // swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
+                                // t.$router.push('/lote/'+respuesta.data.id+'/sub-lote');
+                                // t.lote_error={};
+                                break;
+                            default:
+                                // t.lote_error={};
+                                break;
+                        }
+                    });
                     /**
                      * Operacion
                      */
-                    var request=BD_REQUEST.transaction(["PALET_SALIDA"], "readwrite")
-                        .objectStore("PALET_SALIDA").add(t.palet_salida);
-                    /**
-                     * Registro Correcto
-                     */
-                    request.onsuccess = function(event) {
-                        swal("Palet Creado", {
-                            icon: "success",
-                            timer: 2000,
-                            buttons: false,
-                        });
-                        t.$router.push('/paletizado/'+event.target.result);
-                    };
+                    // var request=BD_REQUEST.transaction(["PALET_SALIDA"], "readwrite")
+                    //     .objectStore("PALET_SALIDA").add(t.palet_salida);
+                    // /**
+                    //  * Registro Correcto
+                    //  */
+                    // request.onsuccess = function(event) {
+                    //     swal("Palet Creado", {
+                    //         icon: "success",
+                    //         timer: 2000,
+                    //         buttons: false,
+                    //     });
+                    //     t.$router.push('/paletizado/'+event.target.result);
+                    // };
                 }
             });
         }

@@ -23,6 +23,8 @@ Route::get('materia/variedad', 'MateriaController@variedad');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
 Route::resource('transportista', 'TransportistaController');
+Route::resource('palet_salida', 'PaletSalidaController');
+Route::get('lote_ingreso/palets_salida', 'LoteIngresoController@palets_salida');
 Route::resource('lote_ingreso', 'LoteIngresoController');
 Route::get('lote_ingreso/{id}/sub_lote', 'SubLoteController@index');
 Route::post('sub_lote', 'SubLoteController@store');

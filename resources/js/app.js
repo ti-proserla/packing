@@ -60,11 +60,11 @@ window.store=new Vuex.Store({
   },
 });
 
-var socket = io.connect('http://localhost:3000', { 'forceNew': true });
+// var socket = io.connect('http://localhost:3000', { 'forceNew': true });
   
-socket.on('balanza:data', function (dataSerial) {
-  store.state.peso=Number(dataSerial.value);
-});
+// socket.on('balanza:data', function (dataSerial) {
+//   store.state.peso=Number(dataSerial.value);
+// });
 
 new Vue({
   el: '#app',

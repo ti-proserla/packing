@@ -12,4 +12,12 @@ class LoteIngreso extends Model
     {
         return $this->hasMany('App\Model\SubLote');
     }
+
+    public function palets_salida()
+    {
+        return $this->hasMany('App\Model\PaletSalida','lote_id')
+                    ->join('producto','palet_salida.producto_id','=','producto.id')
+                    ->select('palet_salida.id','lote_id','producto.nombre_producto as producto')
+                    ->orderBy('palet_salida.id','DESC');
+    }
 }

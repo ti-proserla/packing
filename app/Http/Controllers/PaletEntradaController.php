@@ -12,9 +12,7 @@ class PaletEntradaController extends Controller
     {
         $paletEntradas=PaletEntrada::where('sub_lote_id',$sub_lote_id)->get();
         return response()->json($paletEntradas);
-    }
-
-    
+    }    
   
     public function store(PaletEntradaValidate $request,$sub_lote_id)
     {

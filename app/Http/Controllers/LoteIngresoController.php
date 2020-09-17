@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\LoteIngreso;
+use App\Model\PaletSalida;
 use App\Http\Requests\LoteIngresoValidate;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,15 @@ class LoteIngresoController extends Controller
         return response()->json($lotesIngreso); 
     }
 
+    public function palets_salida(Request $request){
+        $loteIngreso=LoteIngreso::with('palets_salida')
+                            ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
+                            ->join('materia','materia.id','=','lote_ingreso.materia_id')
+                            ->select('lote_ingreso.*','cliente.descripcion as cliente','materia.nombre_materia as materia')
+                            ->where('estado',$request->estado)
+                            ->get();
+        return response()->json($loteIngreso);
+    }
     /**
      * Show the form for creating a new resource.
      *

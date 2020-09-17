@@ -2644,6 +2644,52 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/paletizado/List.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/paletizado/List.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      lotes: []
+    };
+  },
+  methods: {},
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get(url_base + "/lote_ingreso/palets_salida?estado=lanzado").then(function (response) {
+      _this.lotes = response.data;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/paletizado/New.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/paletizado/New.vue?vue&type=script&lang=js& ***!
@@ -2685,6 +2731,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      lote_ingreso: [],
       palet_salida: {
         lote_id: null,
         producto_id: null
@@ -2694,13 +2741,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.listarProducto();
+    this.listarLoteIngreso();
   },
   methods: {
-    listarProducto: function listarProducto() {
+    listarLoteIngreso: function listarLoteIngreso() {
       var _this = this;
 
+      axios.get(url_base + "/lote_ingreso/").then(function (response) {
+        _this.lote_ingreso = response.data;
+      });
+    },
+    listarProducto: function listarProducto() {
+      var _this2 = this;
+
       axios.get(url_base + '/producto').then(function (response) {
-        _this.productos = response.data;
+        _this2.productos = response.data;
       });
     },
     crear: function crear() {
@@ -2710,22 +2765,41 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ['Cancelar', "Crear"]
       }).then(function (res) {
         if (res) {
+          axios.post(url_base + '/palet_salida', t.palet_salida).then(function (response) {
+            var respuesta = response.data;
+            console.log(respuesta);
+
+            switch (respuesta.status) {
+              case "VALIDATION":
+                break;
+
+              case "OK":
+                // swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
+                // t.$router.push('/lote/'+respuesta.data.id+'/sub-lote');
+                // t.lote_error={};
+                break;
+
+              default:
+                // t.lote_error={};
+                break;
+            }
+          });
           /**
            * Operacion
            */
-          var request = BD_REQUEST.transaction(["PALET_SALIDA"], "readwrite").objectStore("PALET_SALIDA").add(t.palet_salida);
-          /**
-           * Registro Correcto
-           */
-
-          request.onsuccess = function (event) {
-            swal("Palet Creado", {
-              icon: "success",
-              timer: 2000,
-              buttons: false
-            });
-            t.$router.push('/paletizado/' + event.target.result);
-          };
+          // var request=BD_REQUEST.transaction(["PALET_SALIDA"], "readwrite")
+          //     .objectStore("PALET_SALIDA").add(t.palet_salida);
+          // /**
+          //  * Registro Correcto
+          //  */
+          // request.onsuccess = function(event) {
+          //     swal("Palet Creado", {
+          //         icon: "success",
+          //         timer: 2000,
+          //         buttons: false,
+          //     });
+          //     t.$router.push('/paletizado/'+event.target.result);
+          // };
         }
       });
     }
@@ -43185,36 +43259,44 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h5", [_vm._v("Lista de Palets")]),
+  return _c(
+    "div",
+    [
+      _c("h5", [_vm._v("Lista de Palets x Lote")]),
       _vm._v(" "),
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-10" }, [
-              _c("h6", [_vm._v("LOT001002 - Plantaciones del Sol - UVA")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("CAJA, RED GLOBE ")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-2 text-right" }, [
-              _c("button", { staticClass: "text-danger btn btn-sm" }, [
-                _vm._v("S")
-              ])
-            ])
+      _vm._l(_vm.lotes, function(lote) {
+        return _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "div",
+              { staticClass: "row" },
+              [
+                _c("div", { staticClass: "col-12" }, [
+                  _c("h6", [_vm._v("COD LOTE: " + _vm._s(lote.codigo))]),
+                  _vm._v(" "),
+                  _c("h6", [_vm._v("CLIENTE: " + _vm._s(lote.cliente) + " ")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("MATERIA " + _vm._s(lote.materia) + " ")])
+                ]),
+                _vm._v(" "),
+                _vm._l(lote.palets_salida, function(palet) {
+                  return _c("div", { staticClass: "col-sm-3" }, [
+                    _c("button", { staticClass: "btn btn-primary" }, [
+                      _vm._v(_vm._s(palet.producto))
+                    ])
+                  ])
+                })
+              ],
+              2
+            )
           ])
         ])
-      ])
-    ])
-  }
-]
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -43273,11 +43355,12 @@ var render = function() {
             }
           }
         },
-        [
-          _c("option", { attrs: { value: "1" } }, [
-            _vm._v("Plantaciones del SOl - Lote RS")
+        _vm._l(_vm.lote_ingreso, function(lote, index) {
+          return _c("option", { domProps: { value: lote.id } }, [
+            _vm._v(_vm._s(lote.descripcion + " - " + lote.codigo))
           ])
-        ]
+        }),
+        0
       )
     ]),
     _vm._v(" "),
@@ -59735,13 +59818,11 @@ window.store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
   state: {
     peso: 0
   }
-});
-var socket = io.connect('http://localhost:3000', {
-  'forceNew': true
-});
-socket.on('balanza:data', function (dataSerial) {
-  store.state.peso = Number(dataSerial.value);
-});
+}); // var socket = io.connect('http://localhost:3000', { 'forceNew': true });
+// socket.on('balanza:data', function (dataSerial) {
+//   store.state.peso=Number(dataSerial.value);
+// });
+
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: router,
@@ -60260,15 +60341,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _List_vue_vue_type_template_id_c51c10e0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./List.vue?vue&type=template&id=c51c10e0& */ "./resources/js/view/paletizado/List.vue?vue&type=template&id=c51c10e0&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./List.vue?vue&type=script&lang=js& */ "./resources/js/view/paletizado/List.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _List_vue_vue_type_template_id_c51c10e0___WEBPACK_IMPORTED_MODULE_0__["render"],
   _List_vue_vue_type_template_id_c51c10e0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -60282,6 +60365,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/view/paletizado/List.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/view/paletizado/List.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/view/paletizado/List.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./List.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/paletizado/List.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_List_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
