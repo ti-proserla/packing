@@ -45,7 +45,7 @@ export default {
     },
     methods: {
         listarLoteIngreso(){
-            axios.get(url_base+`/lote_ingreso/`)
+            axios.get(url_base+`/lote_ingreso?estado=lanzado`)
             .then(response => {
                 this.lote_ingreso=response.data
             });

@@ -2747,7 +2747,7 @@ __webpack_require__.r(__webpack_exports__);
     listarLoteIngreso: function listarLoteIngreso() {
       var _this = this;
 
-      axios.get(url_base + "/lote_ingreso/").then(function (response) {
+      axios.get(url_base + "/lote_ingreso?estado=lanzado").then(function (response) {
         _this.lote_ingreso = response.data;
       });
     },
