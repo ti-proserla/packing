@@ -1,21 +1,29 @@
 <template>
-    <div>
-        <h5>Lista de Palets</h5>
-        <div class="card" v-for="lote in lotes_ingreso" @click="redirect(lote.id)">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-9">
-                        <h6>{{ lote.descripcion}}</h6>
-                        <h6><b>Lote:</b> {{ lote.codigo }}</h6>
-                        <p><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</p>
-                    </div>
-                    <div class="col-3 text-right">
-                        <span class="btn btn-sm btn-info">{{ lote.estado }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <v-container fluid>
+        <v-card>
+            <v-card-title>LOTES DE INGRESO</v-card-title>              
+            <v-card-text>
+                <v-btn color="primary" @click="nuevo">
+                    Nuevo Lote
+                </v-btn>
+                <v-row>
+                    <v-col sm=4 cols="12" v-for="(lote,i) in lotes_ingreso" :key="i">
+                        <v-card>
+                            <v-card-text>
+                                <h5><b>Cliente:</b> {{ lote.descripcion}}</h5>
+                                <h5><b>Lote:</b> {{ lote.codigo }}</h5>
+                                <h5><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h5>
+                                <h5><b>Cosecha:</b> {{ lote.fecha_cosecha }}</h5>
+                                <v-btn outlined="true" @click="redirect(lote.id)">
+                                    Detalles
+                                </v-btn>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 <script>
 export default {
@@ -29,7 +37,7 @@ export default {
     },
     methods: {
         redirect(id){
-            this.$router.push('/lote/'+id+'/sub-lote');
+            this.$router.push('/acopio/lote/'+id);
         },
         listarLotes(){
             axios.get(url_base+'/lote_ingreso?estado=REGISTRADO')
@@ -37,6 +45,9 @@ export default {
                 this.lotes_ingreso=response.data
             })
         },
+        nuevo(){
+            this.$router.push('/acopio/lote/new');
+        }
     },
 }
 </script>

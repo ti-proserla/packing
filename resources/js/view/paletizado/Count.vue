@@ -1,34 +1,52 @@
 <template>
-    <div>
-        <h5 class="mb-3">Scanner de Palet</h5>
-        <div class="row">
-            <div class="col-sm-6 mb-3">
-                <button class="btn btn-secondary">Salir</button>
-                <button class="btn btn-success" @click="terminar()">Terminar</button>
-            </div>
-            <div class="col-sm-12">
-            </div>
-            <div class="form-group col-sm-6 col-12">
-                <label>Ingresar Código:</label>
-                <form v-on:submit.prevent="agregar()" class="input-group">
-                    <input type="text" class="form-control" v-model="codigo_barras" placeholder="(2)LAB-(8)COD-(4)NUM">
-                    <div class="input-group-prepend">
-                        <button type="submit" class="btn btn-primary"> > </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <h6>JABAS ESCANEADAS</h6>
-        <table class="table">
-            <tbody>
-                <td v-for="cell in fila_codigos">{{ cell }}</td>
-                <tr v-for="(fila,index) in matriz_codigos">
-                    <td>{{ matriz_codigos.length - index }}</td>
-                    <td v-for="row in fila">{{row}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <v-container fluid>
+        <v-row>
+            <v-col cols=12 sm=6>
+                PALETIZADO
+            </v-col>
+            <v-col cols=12 sm=6 class="text-right">
+                <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
+                <v-btn @click="terminar()" color="success">Cerrar Palet</v-btn>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols=12 sm=6>
+                <v-card>
+                    <v-card-text>
+                        <label>Ingresar Código:</label>
+                        <v-row>
+                            <v-col cols=12>
+                                <v-form @submit.prevent="agregar()">
+                                    <v-text-field dense outlined label="Código de Barras" autofocus v-model="codigo_barras">
+
+                                    </v-text-field>
+                                    <button type="submit" hidden>Submin</button>
+                                </v-form>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols=12 sm=6>
+                <v-card>
+                    <v-card-text>
+                        <h6>JABAS ESCANEADAS</h6>
+                        <v-simple-table>
+                            <template v-slot:default>
+                                <tbody>
+                                    <td v-for="cell in fila_codigos">{{ cell }}</td>
+                                    <tr v-for="(fila,index) in matriz_codigos">
+                                        <td>{{ matriz_codigos.length - index }}</td>
+                                        <td v-for="row in fila">{{row}}</td>
+                                    </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 <script>
 export default {
@@ -38,7 +56,7 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 2,
+            indice_matriz: 1,
         }
     },
     mounted() {

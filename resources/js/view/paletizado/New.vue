@@ -1,31 +1,61 @@
 <template>
-    <div class="row">
-        <div class="col-12">
-            <h5>Nuevo Palet</h5>
-        </div>
-        <div class="col-sm-6 form-group">
+    <v-container fluid>
+        <v-card>
+            <v-card-title>Nuevo Palet Salida</v-card-title>              
+            <v-card-text>
+                <v-row>
+                    <v-col cols=12 sm=6>
+                        <v-select
+                            outlined
+                            dense
+                            v-model="palet_salida.lote_id"
+                            label="Cliente - Lote:"
+                            :items="lote_ingreso"
+                            :item-text="lote => `${lote.descripcion} - ${lote.codigo}`"
+                            item-value="id">
+                            </v-select>
+                    </v-col>
+                     <v-col cols=12 sm=6>
+                        <v-select
+                            outlined
+                            dense
+                            v-model="palet_salida.producto_id"
+                            label="Producto:"
+                            :items="productos"
+                            item-text="nombre_producto"
+                            item-value="id">
+                            </v-select>
+                    </v-col>
+                </v-row>
+                <v-btn color=primary @click="crear()">
+                    Crear
+                </v-btn>
+            </v-card-text>
+        </v-card>
+    </v-container>
+        <!-- <div class="col-sm-6 form-group">
             <label for="">Cliente - Lote</label>
             <select name="" id="" class="form-control" v-model="palet_salida.lote_id">
                 <option v-for="(lote,index) in lote_ingreso" :value="lote.id">{{ `${lote.descripcion} - ${lote.codigo}` }}</option>
             </select>
-        </div>
-        <div class="col-sm-3 form-group">
+        </div> -->
+        <!-- <div class="col-sm-3 form-group">
             <label for="">Producto</label>
             <select name="" id="" class="form-control" v-model="palet_salida.producto_id">
                 <option v-for="producto in productos" :value="producto.id">{{ producto.nombre_producto }}</option>
             </select>
-        </div>
-        <div class="col-sm-3 form-group">
+        </div> -->
+        <!-- <div class="col-sm-3 form-group">
             <label>Proceso</label>
             <select class="form-control" name="" id="">
                 <option value="">Empaque 3 Etapas</option>
                 <option value="">Clanshell</option>
             </select>
-        </div>
-        <div class="col-sm-12 col-lg-3">
+        </div> -->
+        <!-- <div class="col-sm-12 col-lg-3">
             <button class="form-control btn-danger" @click="crear()">Crear</button>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
 </template>
 <script>
 export default {
@@ -72,9 +102,8 @@ export default {
                             case "VALIDATION":
                                 break;
                             case "OK":
-                                // swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
-                                // t.$router.push('/lote/'+respuesta.data.id+'/sub-lote');
-                                // t.lote_error={};
+                                swal("Palet Creado", { icon: "success", timer: 2000, buttons: false });
+                                t.$router.push('/paletizado/'+respuesta.data.id);
                                 break;
                             default:
                                 // t.lote_error={};

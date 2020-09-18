@@ -43,22 +43,7 @@ class LoteIngresoController extends Controller
                             ->get();
         return response()->json($loteIngreso);
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(LoteIngresoValidate $request)
     {
         $loteIngreso=new LoteIngreso();
@@ -83,15 +68,10 @@ class LoteIngresoController extends Controller
    
     
 
-    public function update(LoteIngresoValidate $request, $id)
+    public function update(Request $request, $id)
     {
         $loteIngreso=LoteIngreso::where('id',$id)->first();
-        $loteIngreso->codigo=$request->codigo;
-        $loteIngreso->cliente_id=$request->cliente_id;
-        $loteIngreso->materia_id=$request->materia_id;
-        $loteIngreso->variedad_id=$request->variedad_id;
-        $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
-        $loteIngreso->estado="Registrado";
+        $loteIngreso->estado=$request->estado;
         $loteIngreso->save();
         return response()->json([
             "status" => "OK",

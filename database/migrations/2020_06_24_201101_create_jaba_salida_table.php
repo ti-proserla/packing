@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJabasSalidaTable extends Migration
+class CreateJabaSalidaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateJabasSalidaTable extends Migration
      */
     public function up()
     {
-        Schema::create('jabas_salida', function (Blueprint $table) {
+        Schema::create('jaba_salida', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo_barras',25);
+            $table->string('linea',2)->nullable();
+            $table->string('codigo_operador',8)->nullable();
+            $table->integer('palet_salida_id');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateJabasSalidaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jabas_salida');
+        Schema::dropIfExists('jaba_salida');
     }
 }

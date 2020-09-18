@@ -1,50 +1,70 @@
 <template>
-    <div class="card">
-        <div class="card-head">
-            <h4>Nuevo Lote de Ingreso</h4>
-        </div>
-        <div class="card-body">
-            <form v-on:submit.prevent="guardar()" class="row">
-                <div class="col-md-6">
-                    <label for="">Codigo</label>
-                    <input type="text" class="form-control" v-model="lote.codigo">
-                    <span>{{ lote_error.codigo }}</span>
-                </div>
-                <div class="col-md-6">
-                    <label for="">Cliente</label>
-                    <select class="form-control" v-model="lote.cliente_id">
-                        <option value="">-Seleccionar Cliente-</option>
-                        <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.descripcion }}</option>
-                    </select>
-                    <span>{{ lote_error.cliente_id }}</span>
-                </div>
-                <div class="col-md-6">
-                    <label for="">Materia</label>
-                    <select class="form-control" v-model="lote.materia_id">
-                        <option value="">-Seleccionar Materia-</option>
-                        <option v-for="materia in materias" :value="materia.id">{{ materia.nombre_materia }}</option>
-                    </select>
-                    <span>{{ lote_error.materia_id }}</span>
-                </div>
-                <div class="col-md-6">
-                    <label for="">Variedad</label>
-                    <select class="form-control" v-model="lote.variedad_id">
-                        <option value="">-Seleccionar Variedad-</option>
-                        <option v-for="variedad in variedades" :value="variedad.id">{{ variedad.nombre_variedad }}</option>
-                    </select>
-                    <span>{{ lote_error.variedad_id }}</span>
-                </div>
-                <div class="col-sm-6">
-                    <label for="">Fecha cosecha</label>
-                    <input type="date" class="form-control" v-model="lote.fecha_cosecha">
-                    <span>{{ lote_error.fecha_cosecha }}</span>
-                </div>
-                <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <v-container fluid>
+        <v-card>
+            <v-card-title>Nuevo Lote de Ingreso</v-card-title>              
+            <v-card-text>
+                <v-form @submit.prevent="guardar()">
+                    <v-row>
+                        <v-col cols=12 sm=6>
+                            <v-text-field 
+                                label="Código Lote:" 
+                                v-model="lote.codigo"
+                                outlined
+                                dense
+                                clearable
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="lote.cliente_id"
+                                label="Cliente:"
+                                :items="clientes"
+                                item-text="descripcion"
+                                item-value="id">
+                                </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="lote.materia_id"
+                                label="Materia:"
+                                :items="materias"
+                                item-text="nombre_materia"
+                                item-value="id">
+                                </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="lote.variedad_id"
+                                label="Variedad:"
+                                :items="variedades"
+                                item-text="nombre_variedad"
+                                item-value="id">
+                                </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-text-field 
+                                label="Fecha Cosecha:" 
+                                v-model="lote.fecha_cosecha"
+                                outlined
+                                dense
+                                clearable
+                                type="date"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                        <v-btn type="submit" color="success">
+                            Guardar
+                        </v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 <script>
 export default {
@@ -115,7 +135,7 @@ export default {
                                 break;
                             case "OK":
                                 swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
-                                t.$router.push('/lote/'+respuesta.data.id+'/sub-lote');
+                                t.$router.push('/acopio/lote/'+respuesta.data.id);
                                 t.lote_error={};
                                 break;
                             default:

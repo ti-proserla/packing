@@ -1,6 +1,11 @@
 require('./bootstrap');
 
 import Vue from 'vue'
+
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css'
+Vue.use(Vuetify);
+
 import App from './App.vue'
 import swal from 'sweetalert';
 window.moment = require('moment');
@@ -68,6 +73,17 @@ window.store=new Vuex.Store({
 
 new Vue({
   el: '#app',
+  vuetify: new Vuetify({
+    theme:{
+      themes: {
+        light: {
+          primary: '#0bb5cc',
+          error: '#ea6665',
+          warning: '#e7b312'
+        }
+      }
+    }
+  }),
   router,
   store,
   render: h => h(App),

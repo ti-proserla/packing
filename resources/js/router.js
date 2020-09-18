@@ -12,6 +12,7 @@ var routes =[
         path: '/acopio/new',
         component: require('./view/acopio/New.vue').default
     },
+    //Paletizado
     {
         path: '/paletizado/new',
         component: require('./view/paletizado/New.vue').default
@@ -28,16 +29,17 @@ var routes =[
         path: '/ini',
         component: require('./view/paletizado/List.vue').default
     },
+    //ACOPIO
     {
-        path: '/lote/acopio',
+        path: '/acopio/lote',
         component: require('./view/lote/Acopio.vue').default
     },
     {
-        path: '/lote/new',
+        path: '/acopio/lote/new',
         component: require('./view/lote/New.vue').default
     },
     {
-        path: '/lote/:id/sub-lote',
+        path: '/acopio/lote/:id',
         component: require('./view/lote/sub-lote.vue').default
     },
 
