@@ -2725,6 +2725,7 @@ __webpack_require__.r(__webpack_exports__);
           this.fila_codigos.push(this.codigo_barras);
 
           if (this.fila_codigos.length == this.indice_matriz) {
+            axios;
             this.matriz_codigos.push(this.fila_codigos);
             this.fila_codigos = [];
           }
