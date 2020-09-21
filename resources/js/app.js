@@ -77,9 +77,11 @@ new Vue({
     theme:{
       themes: {
         light: {
-          primary: '#0bb5cc',
-          error: '#ea6665',
-          warning: '#e7b312'
+          primary: '#3472F7',
+          info: '#00bbff',
+          success: '#87cb16',
+          error: '#fb404b',
+          warning: '#ffa534'
         }
       }
     }

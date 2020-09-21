@@ -1,5 +1,13 @@
 <template>
     <v-container fluid>
+        <v-card>
+            <v-row>
+                <v-col cols="12" sm=6>
+                    <v-card-title>Registro de Palets - Lote: {{lote.codigo}} </v-card-title>
+                    
+                </v-col>
+            </v-row>
+        </v-card>
         <v-row>
             <v-col cols=12 sm=6>
                 PALETS DE INGRESO - LOTE: {{lote.codigo}} 
@@ -20,14 +28,15 @@
                                         <v-text-field 
                                             label="Guia:" 
                                             v-model="sub_lote.guia"
-                                            outlined
+                                            :outlined="true"
+
                                             dense
                                             clearable
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols=12>
                                         <v-select
-                                            outlined
+                                            :outlined="true"
                                             dense
                                             v-model="sub_lote.transportista_id"
                                             label="Transportista"
@@ -42,6 +51,7 @@
                                 </v-btn>
                             </v-col>
                             <v-col sm=4 cols=12>
+                                Lista de Sub Lotes
                                 <v-card class="mb-3" v-for="(sub,index) in sub_lotes" :key="index" :class="(seleccionado_sub_lote==sub.id ? '' : 'card-no-select')" @click="seleccionar(sub.id)">
                                     <v-card-text>
                                         <h6>Transportista: {{ sub.transportista.nombre_transportista  }}</h6>

@@ -1,32 +1,49 @@
 <template>
   <v-app>
         <v-app-bar app
-         absolute
-         >
-            <v-app-bar-nav-icon @click="open=true"></v-app-bar-nav-icon>
-            <v-toolbar-title>PACKING</v-toolbar-title>
+                    dense
+                    elevate-on-scroll
+                    >
+            <v-app-bar-nav-icon @click="open=true">
+
+            </v-app-bar-nav-icon>
+            <v-toolbar-title>
+                Sistema Packing
+            </v-toolbar-title>
         </v-app-bar>
         <v-navigation-drawer
-            absolute
-            light
-            color="primary"
+            dark 
             app
             v-model="open"
         >
+            <v-list>
+                <v-list-item>
+                <v-list-item-avatar>
+                    <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+                </v-list-item-avatar>
+                </v-list-item>
+
+                <v-list-item link>
+                    <v-list-item-content>
+                        <v-list-item-title class="title">Diego Mendoza</v-list-item-title>
+                        <!-- <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle> -->
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                        <v-icon>mdi-menu-down</v-icon>
+                    </v-list-item-action>
+                </v-list-item>
+            </v-list>
             <v-list
             dense
             nav
             class="py-0"
             >
-            <v-list-item two-line>
-                <v-list-item-avatar>
-                    <img src="http://172.16.1.112:80/storage/logotipo.png">
-                </v-list-item-avatar>
-
+            <!-- <v-list-item two-line>
                 <v-list-item-content>
-                    <!-- <v-list-item-title>{{ cuenta.nombre.toUpperCase()+' '+cuenta.apellido.toUpperCase() }}</v-list-item-title> -->
+                    SISTEMA PACKING
                 </v-list-item-content>
-            </v-list-item>
+            </v-list-item> -->
             <v-divider></v-divider>
                 <v-list-item link to="/acopio/lote">
                     <v-list-item-icon>
@@ -52,11 +69,15 @@
         
         <v-main>
             <!-- <notifications group="foo" position="top center"/> -->
-            <router-view></router-view>
+            <router-view class="pa-6"></router-view>
         </v-main>
   </v-app>
 </template>
-
+<style>
+    .v-application.theme--light{
+        background-color: rgba(203,203,210,.15)!important;
+    }
+</style>
 <script>
 export default {
   name: 'app',

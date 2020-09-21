@@ -12,6 +12,8 @@
                                 outlined
                                 dense
                                 clearable
+                                hide-details="auto"
+                                :error-messages="lote_error.codigo"
                             ></v-text-field>
                         </v-col>
                         <v-col cols=12 sm=6>
@@ -22,7 +24,10 @@
                                 label="Cliente:"
                                 :items="clientes"
                                 item-text="descripcion"
-                                item-value="id">
+                                item-value="id"
+                                hide-details="auto"
+                                :error-messages="lote_error.cliente_id"
+                                >
                                 </v-select>
                         </v-col>
                         <v-col cols=12 sm=6>
@@ -33,7 +38,10 @@
                                 label="Materia:"
                                 :items="materias"
                                 item-text="nombre_materia"
-                                item-value="id">
+                                item-value="id"
+                                hide-details="auto"
+                                :error-messages="lote_error.materia_id"
+                                >
                                 </v-select>
                         </v-col>
                         <v-col cols=12 sm=6>
@@ -44,7 +52,10 @@
                                 label="Variedad:"
                                 :items="variedades"
                                 item-text="nombre_variedad"
-                                item-value="id">
+                                item-value="id"
+                                hide-details="auto"
+                                :error-messages="lote_error.variedad_id"
+                                >
                                 </v-select>
                         </v-col>
                         <v-col cols=12 sm=6>
@@ -55,12 +66,16 @@
                                 dense
                                 clearable
                                 type="date"
+                                hide-details="auto"
+                                :error-messages="lote_error.fecha_cosecha"
                             ></v-text-field>
                         </v-col>
                     </v-row>
+                    <div class="text-center my-3">
                         <v-btn type="submit" color="success">
                             Guardar
                         </v-btn>
+                    </div>
                 </v-form>
             </v-card-text>
         </v-card>
