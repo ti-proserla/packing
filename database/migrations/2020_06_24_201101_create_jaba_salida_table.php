@@ -17,6 +17,7 @@ class CreateJabaSalidaTable extends Migration
             $table->id();
             $table->string('codigo_barras',25);
             $table->string('linea',2)->nullable();
+            $table->string('codigo_labor',8)->nullable();
             $table->string('codigo_operador',8)->nullable();
             $table->integer('palet_salida_id');
             $table->integer('numero');

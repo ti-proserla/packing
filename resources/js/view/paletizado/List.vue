@@ -12,9 +12,15 @@
                                 <h5><b>Lote:</b> {{ lote.codigo }}</h5>
                                 <h5><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h5>
                                 <h5><b>Cosecha:</b> {{ lote.fecha_cosecha }}</h5>
-                                <div v-for="palet in lote.palets_salida" class="col-sm-3">
-                                    <button class="btn btn-primary">{{ palet.producto }}</button>
-                                </div>
+                                <v-row>
+                                    <v-col v-for="(palet,index) in lote.palets_salida" :key="index" cols=6 sm=3>
+                                        <v-btn :to="`/paletizado/${palet.id}`">
+                                            Palet {{palet.numero }}
+                                            <br>
+                                            {{ palet.producto }}
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
                             </v-card-text>
                         </v-card>
                     </v-col>

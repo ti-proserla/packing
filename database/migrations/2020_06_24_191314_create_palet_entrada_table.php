@@ -18,6 +18,7 @@ class CreatePaletEntradaTable extends Migration
             $table->integer('sub_lote_id');
             $table->decimal('peso',5,2);
             $table->integer('num_jabas');
+            $table->integer('producto_id');
             $table->timestamps();
         });
     }

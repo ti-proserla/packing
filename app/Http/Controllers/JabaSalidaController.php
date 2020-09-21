@@ -16,9 +16,8 @@ class JabaSalidaController extends Controller
          * codigo_barras
          */
         $estructura='{linea}{codigo_barras}';
-        $resultado=JabaSalida::select(DB::raw('count(id) contar'))
+        $resultado=JabaSalida::select(DB::raw('COUNT(DISTINCT(numero)) contar'))
                         ->where('palet_salida_id',$id)
-                        ->groupBy('numero')
                         ->first();
         $numero=1;
         if($resultado!=null){

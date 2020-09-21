@@ -32,5 +32,22 @@ class PaletSalidaController extends Controller
             "status" => "OK",
             "data"  => $paletSalida
         ]);
-    }  
+    }
+    
+    public function show(Request $request,$id){
+        $paletSalida=PaletSalida::with('jabas')
+                                ->where('id',$id)
+                                ->first();
+        return response()->json($paletSalida);
+    }
+
+    public function update(Request $request,$id){
+        $paletSalida=PaletSalida::where('id',$id)->first();
+        $paletSalida->estado="Cerrado";
+        $paletSalida->save();
+        return response()->json([
+            "status" => "OK",
+            "data"  => $paletSalida
+        ]);
+    }
 }

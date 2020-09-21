@@ -31,3 +31,8 @@ Route::get('lote_ingreso/{id}/sub_lote', 'SubLoteController@index');
 Route::post('sub_lote', 'SubLoteController@store');
 // Route::get('palet_entrada', 'PaletEntradaController');
 Route::resource('sub_lote/{sub_lote_id}/palet_entrada', 'PaletEntradaController');
+
+/**
+ * REPORTES
+ */
+Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');

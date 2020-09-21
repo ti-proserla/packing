@@ -42,6 +42,11 @@ var routes =[
         path: '/acopio/lote/:id',
         component: require('./view/lote/sub-lote.vue').default
     },
+    //Reportes
+    {
+        path: '/reporte/cantidad-por-linea',
+        component: require('./view/reporte/CantidadLinea.vue').default
+    }
 
 ];
 var router=new VueRouter({
