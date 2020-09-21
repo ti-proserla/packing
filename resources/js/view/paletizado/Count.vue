@@ -61,14 +61,14 @@ export default {
     },
     mounted() {
         // setTimeout(() => {
-            var objectStore=BD_REQUEST.transaction(["PALET_SALIDA"])
-                            .objectStore("PALET_SALIDA");
-            var request=objectStore.get(3);
+            // var objectStore=BD_REQUEST.transaction(["PALET_SALIDA"])
+            //                 .objectStore("PALET_SALIDA");
+            // var request=objectStore.get(3);
     
-            request.onsuccess = function(event) {
-                var data = request.result;
-                console.log(data);
-            };
+            // request.onsuccess = function(event) {
+            //     var data = request.result;
+            //     console.log(data);
+            // };
             
         // }, 100);
 
@@ -89,7 +89,7 @@ export default {
                     }
                 }
             }
-
+            console.info("comprobacion de repeticion");
             if (repetido==1) {
                 swal("Código ya registrado en este Palet.", {
                     icon: "error",
@@ -107,12 +107,26 @@ export default {
                         break;
                     }
                 }
+                console.info("comprobacion de repeticion2");
+                
                 if (repetido==0) {
                     this.fila_codigos.push(this.codigo_barras);
                     if (this.fila_codigos.length==this.indice_matriz) {
-                        axios
-                        this.matriz_codigos.push(this.fila_codigos);
-                        this.fila_codigos=[];
+                        axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
+                            codigos_barras: this.fila_codigos
+                        }).then(res=>{
+                            var data=res.data;
+                            switch (data.status) {
+                                case "OK":
+                                    this.matriz_codigos.push(this.fila_codigos);
+                                    this.fila_codigos=[];
+                                    break;
+                            
+                                default:
+                                    break;
+                            }
+                            this.codigo_barras="";       
+                        });
                     }    
                 }
                 

@@ -19,6 +19,7 @@ class CreateJabaSalidaTable extends Migration
             $table->string('linea',2)->nullable();
             $table->string('codigo_operador',8)->nullable();
             $table->integer('palet_salida_id');
+            $table->integer('numero');
             $table->timestamps();
         });
     }

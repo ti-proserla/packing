@@ -3,23 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Model\JabaSalida;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class JabaSalidaController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request,$id)
     {
-        $loteIngreso=new LoteIngreso();
-        $loteIngreso->codigo=$request->codigo;
-        $loteIngreso->cliente_id=$request->cliente_id;
-        $loteIngreso->materia_id=$request->materia_id;
-        $loteIngreso->variedad_id=$request->variedad_id;
-        $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
-        $loteIngreso->estado="Registrado";
-        $loteIngreso->save();
+        /**
+         * Linea 00
+         * labor 00
+         * codigo_barras
+         */
+        $estructura='{linea}{codigo_barras}';
+        $resultado=JabaSalida::select(DB::raw('count(id) contar'))
+                        ->where('palet_salida_id',$id)
+                        ->groupBy('numero')
+                        ->first();
+        $numero=1;
+        if($resultado!=null){
+            $numero=$resultado->contar+1;
+        }
+        foreach ($request->codigos_barras as $key => $codigo) {
+            $jabaSalida=new JabaSalida();
+            $jabaSalida->codigo_barras=$codigo;
+            $jabaSalida->linea=substr($codigo,0,2);
+            $jabaSalida->codigo_operador=null;
+            $jabaSalida->palet_salida_id=$id;
+            $jabaSalida->numero=$numero;
+            $jabaSalida->save();
+        }
         return response()->json([
             "status" => "OK",
-            "data"   => $loteIngreso,
+            "data"   => "Jaba registrada",
         ]);
     }
 }
