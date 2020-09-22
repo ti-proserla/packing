@@ -2559,6 +2559,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -43279,54 +43282,42 @@ var render = function() {
         "v-card",
         [
           _c(
-            "v-row",
+            "v-card-text",
             [
               _c(
-                "v-col",
-                { attrs: { cols: "12", sm: "6" } },
+                "v-row",
                 [
-                  _c("v-card-title", [
+                  _c("v-col", { attrs: { cols: "12", sm: "6" } }, [
                     _vm._v(
-                      "Registro de Palets - Lote: " +
+                      "\n                    Registro de Palets - Lote: " +
                         _vm._s(_vm.lote.codigo) +
-                        " "
+                        "\n                "
                     )
-                  ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    {
+                      staticClass: "text-right",
+                      attrs: { cols: "12", sm: "6" }
+                    },
+                    [
+                      _vm.lote.estado == "Registrado"
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "orange" },
+                              on: { click: _vm.finalizar }
+                            },
+                            [_vm._v("FINALIZAR")]
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  )
                 ],
                 1
               )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c("v-col", { attrs: { cols: "12", sm: "6" } }, [
-            _vm._v(
-              "\n            PALETS DE INGRESO - LOTE: " +
-                _vm._s(_vm.lote.codigo) +
-                " \n        "
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "v-col",
-            { staticClass: "text-right", attrs: { cols: "12", sm: "6" } },
-            [
-              _vm.lote.estado == "Registrado"
-                ? _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "orange" },
-                      on: { click: _vm.finalizar }
-                    },
-                    [_vm._v("FINALIZAR")]
-                  )
-                : _vm._e()
             ],
             1
           )
@@ -43368,6 +43359,7 @@ var render = function() {
                                         attrs: {
                                           label: "Guia:",
                                           outlined: true,
+                                          "hide-details": "auto",
                                           dense: "",
                                           clearable: ""
                                         },
@@ -43394,7 +43386,8 @@ var render = function() {
                                           label: "Transportista",
                                           items: _vm.transportistas,
                                           "item-text": "nombre_transportista",
-                                          "item-value": "id"
+                                          "item-value": "id",
+                                          "hide-details": "auto"
                                         },
                                         model: {
                                           value: _vm.sub_lote.transportista_id,
@@ -43417,20 +43410,27 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "v-btn",
-                                {
-                                  attrs: { outlined: "true" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.guardarSubLote()
-                                    }
-                                  }
-                                },
+                                "div",
+                                { staticClass: "text-center" },
                                 [
-                                  _vm._v(
-                                    "\n                                Guardar\n                            "
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { color: "primary" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.guardarSubLote()
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Guardar\n                                "
+                                      )
+                                    ]
                                   )
-                                ]
+                                ],
+                                1
                               )
                             ],
                             1
@@ -43502,7 +43502,8 @@ var render = function() {
                                           label: "N° de Jabas:",
                                           outlined: "",
                                           dense: "",
-                                          clearable: ""
+                                          clearable: "",
+                                          "hide-details": "auto"
                                         },
                                         model: {
                                           value: _vm.num_jabas,
@@ -43525,7 +43526,8 @@ var render = function() {
                                           label: "Peso Total:",
                                           outlined: "",
                                           dense: "",
-                                          clearable: ""
+                                          clearable: "",
+                                          "hide-details": "auto"
                                         },
                                         model: {
                                           value: _vm.peso,
@@ -43542,88 +43544,119 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: { outlined: "true" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.add()
-                                    }
-                                  }
-                                },
-                                [_vm._v("Agregar")]
-                              ),
-                              _vm._v(" "),
-                              _c("v-simple-table", {
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "default",
-                                    fn: function() {
-                                      return [
-                                        _c("thead", [
-                                          _c("tr", [
-                                            _c("th", [_vm._v("N°")]),
-                                            _vm._v(" "),
-                                            _c("th", [_vm._v("N° Jabas")]),
-                                            _vm._v(" "),
-                                            _c("th", [_vm._v("Peso Total")])
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c(
-                                          "tbody",
+                              _vm.seleccionado_sub_lote != null
+                                ? _c(
+                                    "div",
+                                    { staticClass: "text-center" },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.add()
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Agregar")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("v-simple-table", {
+                                        scopedSlots: _vm._u(
                                           [
-                                            _vm._l(
-                                              _vm.palets_entrada
-                                                .slice()
-                                                .reverse(),
-                                              function(palet, index) {
-                                                return _c("tr", [
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        _vm.palets_entrada
-                                                          .length - index
-                                                      )
-                                                    )
+                                            {
+                                              key: "default",
+                                              fn: function() {
+                                                return [
+                                                  _c("thead", [
+                                                    _c("tr", [
+                                                      _c("th", [_vm._v("N°")]),
+                                                      _vm._v(" "),
+                                                      _c("th", [
+                                                        _vm._v("N° Jabas")
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("th", [
+                                                        _vm._v("Peso Total")
+                                                      ])
+                                                    ])
                                                   ]),
                                                   _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(palet.num_jabas)
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(_vm._s(palet.peso))
-                                                  ])
-                                                ])
-                                              }
-                                            ),
-                                            _vm._v(" "),
-                                            _vm.seleccionado_sub_lote == null
-                                              ? _c("tr", [
                                                   _c(
-                                                    "td",
-                                                    { attrs: { colspan: "3" } },
+                                                    "tbody",
                                                     [
-                                                      _vm._v(
-                                                        " Seleccione un Sub lote "
-                                                      )
-                                                    ]
+                                                      _vm._l(
+                                                        _vm.palets_entrada
+                                                          .slice()
+                                                          .reverse(),
+                                                        function(palet, index) {
+                                                          return _c("tr", [
+                                                            _c("td", [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  _vm
+                                                                    .palets_entrada
+                                                                    .length -
+                                                                    index
+                                                                )
+                                                              )
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c("td", [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  palet.num_jabas
+                                                                )
+                                                              )
+                                                            ]),
+                                                            _vm._v(" "),
+                                                            _c("td", [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  palet.peso
+                                                                )
+                                                              )
+                                                            ])
+                                                          ])
+                                                        }
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _vm.seleccionado_sub_lote ==
+                                                      null
+                                                        ? _c("tr", [
+                                                            _c(
+                                                              "td",
+                                                              {
+                                                                attrs: {
+                                                                  colspan: "3"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  " Seleccione un Sub lote "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ])
+                                                        : _vm._e()
+                                                    ],
+                                                    2
                                                   )
-                                                ])
-                                              : _vm._e()
+                                                ]
+                                              },
+                                              proxy: true
+                                            }
                                           ],
-                                          2
+                                          null,
+                                          false,
+                                          796360080
                                         )
-                                      ]
-                                    },
-                                    proxy: true
-                                  }
-                                ])
-                              })
+                                      })
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
                             ],
                             1
                           )
@@ -104362,10 +104395,15 @@ window.store = new vuex__WEBPACK_IMPORTED_MODULE_5__["default"].Store({
   state: {
     peso: 0
   }
-}); // var socket = io.connect('http://localhost:3000', { 'forceNew': true });
+}); // var socket = io.connect('http://192.168.1.164:9100', { 'forceNew': true });
+// socket.emit('',"^XA^CFd0,10,18^PR12^LRY^MD30^PW400^LL400^PON^FO91,53^BY1^B3N,N,72N,N^FDBARCODE^FS^FO103,157^FDHOLA MUNDO^FS^PQ1^XZ");
 // socket.on('balanza:data', function (dataSerial) {
 //   store.state.peso=Number(dataSerial.value);
 // });
+// var connection = new WebSocket('ws://192.168.1.164:9100');
+// connection.onopen = function () {
+//   // connection.send("^XA^CFd0,10,18^PR12^LRY^MD30^PW400^LL400^PON^FO91,53^BY1^B3N,N,72N,N^FDBARCODE^FS^FO103,157^FDHOLA MUNDO^FS^PQ1^XZ"); // Send the message 'Ping' to the server
+// };
 
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',

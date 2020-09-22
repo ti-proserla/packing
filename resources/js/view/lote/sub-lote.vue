@@ -1,21 +1,17 @@
 <template>
     <v-container fluid>
         <v-card>
-            <v-row>
-                <v-col cols="12" sm=6>
-                    <v-card-title>Registro de Palets - Lote: {{lote.codigo}} </v-card-title>
-                    
-                </v-col>
-            </v-row>
+            <v-card-text>
+                <v-row>
+                    <v-col cols="12" sm=6>
+                        Registro de Palets - Lote: {{lote.codigo}}
+                    </v-col>
+                    <v-col cols=12 sm=6 class="text-right">
+                        <v-btn v-if="lote.estado=='Registrado'" color="orange" @click="finalizar">FINALIZAR</v-btn>
+                    </v-col>
+                </v-row>
+            </v-card-text>
         </v-card>
-        <v-row>
-            <v-col cols=12 sm=6>
-                PALETS DE INGRESO - LOTE: {{lote.codigo}} 
-            </v-col>
-            <v-col cols=12 sm=6 class="text-right">
-                <v-btn v-if="lote.estado=='Registrado'" color="orange" @click="finalizar">FINALIZAR</v-btn>
-            </v-col>
-        </v-row>
         <v-row>
             <v-col cols="12">
                 <v-card>
@@ -29,7 +25,7 @@
                                             label="Guia:" 
                                             v-model="sub_lote.guia"
                                             :outlined="true"
-
+                                            hide-details="auto"
                                             dense
                                             clearable
                                         ></v-text-field>
@@ -42,13 +38,16 @@
                                             label="Transportista"
                                             :items="transportistas"
                                             item-text="nombre_transportista"
-                                            item-value="id">
-                                            </v-select>
+                                            item-value="id"
+                                            hide-details="auto"
+                                            ></v-select>
                                     </v-col>
                                 </v-row>
-                                <v-btn outlined="true" @click="guardarSubLote()">
-                                    Guardar
-                                </v-btn>
+                                <div class="text-center">
+                                    <v-btn color="primary" @click="guardarSubLote()">
+                                        Guardar
+                                    </v-btn>
+                                </div>
                             </v-col>
                             <v-col sm=4 cols=12>
                                 Lista de Sub Lotes
@@ -69,6 +68,7 @@
                                             outlined
                                             dense
                                             clearable
+                                            hide-details="auto"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6">
@@ -78,31 +78,34 @@
                                             outlined
                                             dense
                                             clearable
+                                            hide-details="auto"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
-                                <v-btn outlined="true" @click="add()">Agregar</v-btn>
-                                <v-simple-table>
-                                    <template v-slot:default>
-                                        <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>N° Jabas</th>
-                                                <th>Peso Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
-                                                <td>{{ palets_entrada.length - index}}</td>
-                                                <td>{{ palet.num_jabas }}</td>
-                                                <td>{{ palet.peso }}</td>
-                                            </tr>
-                                            <tr v-if="seleccionado_sub_lote==null">
-                                                <td colspan="3"> Seleccione un Sub lote </td>
-                                            </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
+                                <div class="text-center" v-if="seleccionado_sub_lote!=null">
+                                    <v-btn color="primary" @click="add()">Agregar</v-btn>
+                                    <v-simple-table>
+                                        <template v-slot:default>
+                                            <thead>
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>N° Jabas</th>
+                                                    <th>Peso Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
+                                                    <td>{{ palets_entrada.length - index}}</td>
+                                                    <td>{{ palet.num_jabas }}</td>
+                                                    <td>{{ palet.peso }}</td>
+                                                </tr>
+                                                <tr v-if="seleccionado_sub_lote==null">
+                                                    <td colspan="3"> Seleccione un Sub lote </td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </div>
                             </v-col>
                         </v-row>
                     </v-card-text>

@@ -65,11 +65,18 @@ window.store=new Vuex.Store({
   },
 });
 
-// var socket = io.connect('http://localhost:3000', { 'forceNew': true });
-  
+// var socket = io.connect('http://192.168.1.164:9100', { 'forceNew': true });
+// socket.emit('',"^XA^CFd0,10,18^PR12^LRY^MD30^PW400^LL400^PON^FO91,53^BY1^B3N,N,72N,N^FDBARCODE^FS^FO103,157^FDHOLA MUNDO^FS^PQ1^XZ");
 // socket.on('balanza:data', function (dataSerial) {
 //   store.state.peso=Number(dataSerial.value);
 // });
+// var connection = new WebSocket('ws://192.168.1.164:9100');
+
+// connection.onopen = function () {
+//   // connection.send("^XA^CFd0,10,18^PR12^LRY^MD30^PW400^LL400^PON^FO91,53^BY1^B3N,N,72N,N^FDBARCODE^FS^FO103,157^FDHOLA MUNDO^FS^PQ1^XZ"); // Send the message 'Ping' to the server
+// };
+
+
 
 new Vue({
   el: '#app',
