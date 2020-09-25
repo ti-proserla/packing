@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 class ClienteController extends Controller
 {
    
-    public function index()
+    public function index(Request $request)
     {
-        $clientes=Cliente::all();
+        if ($request->has('all')) {
+            $clientes=Cliente::all();
+        }else{
+            $clientes=Cliente::paginate(10);
+            
+        }
         return response()->json($clientes);
     }
 

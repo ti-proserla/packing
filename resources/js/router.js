@@ -12,6 +12,14 @@ var routes =[
         path: '/acopio/new',
         component: require('./view/acopio/New.vue').default
     },
+    {
+        path: '/materia',
+        component: require('./view/materia.vue').default
+    },
+    {
+        path: '/cliente',
+        component: require('./view/cliente.vue').default
+    },
     //Paletizado
     {
         path: '/paletizado/new',

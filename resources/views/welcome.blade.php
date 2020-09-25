@@ -9,7 +9,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> --}}
         {{-- <link rel="stylesheet" href="{{ asset('app.css') }}"> --}}
-        {{-- <link rel="stylesheet" href="{{ asset('app-unico.css') }}"> --}}
+        <link rel="stylesheet" href="{{ asset('fontawesome-5/css/all.css') }}">
     </head>
     <body>
         <div id="app">

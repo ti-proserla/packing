@@ -12,9 +12,13 @@ class MateriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $materias=Materia::all();
+        if ($request->has('all')) {
+            $materias=Materia::all();
+        }else{
+            $materias=Materia::paginate(10);
+        }
         return response()->json($materias);
     }
 

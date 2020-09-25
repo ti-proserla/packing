@@ -65,19 +65,19 @@ export default {
     },
     methods: {
         listarClientes(){
-            axios.get(url_base+'/cliente')
+            axios.get(url_base+'/cliente?all')
             .then(response => {
                 this.clientes=response.data
             })
         },    
         listarMaterias(){
-            axios.get(url_base+'/materia')
+            axios.get(url_base+'/materia?all')
             .then(response => {
                 this.materias=response.data
             })
         }, 
         listarVariedades(){
-            axios.get(url_base+'/variedad')
+            axios.get(url_base+'/variedad?all')
             .then(response => {
                 this.variedades=response.data
             })
