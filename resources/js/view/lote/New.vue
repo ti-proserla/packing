@@ -127,7 +127,7 @@ export default {
             });
         },
         listarClientes(){
-            axios.get(url_base+'/cliente')
+            axios.get(url_base+'/cliente?all')
             .then(response => {
                 this.clientes=response.data
             });

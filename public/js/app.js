@@ -2631,7 +2631,7 @@ __webpack_require__.r(__webpack_exports__);
     listarClientes: function listarClientes() {
       var _this2 = this;
 
-      axios.get(url_base + '/cliente').then(function (response) {
+      axios.get(url_base + '/cliente?all').then(function (response) {
         _this2.clientes = response.data;
       });
     },

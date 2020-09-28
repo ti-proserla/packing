@@ -136,7 +136,7 @@ export default {
                 last_page: 1,
                 data: []
             },
-            search: '',
+            search: '', 
             //Modal Nuevo
             open_nuevo: false,
             producto: this.initForm(),
