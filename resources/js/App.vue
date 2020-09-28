@@ -45,6 +45,38 @@
                 </v-list-item-content>
             </v-list-item> -->
             <v-divider></v-divider>
+                <v-list-item link to="/materia">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Materia
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/variedad">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Variedad
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/producto">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Producto
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/cliente">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Cliente
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/acopio/lote">
                     <v-list-item-icon>
                         <i class="far fa-building"></i>

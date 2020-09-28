@@ -49,7 +49,7 @@
             <!-- Editar -->
             <v-dialog v-model="open_editar" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Nueva Materia</v-card-title>
+                    <v-card-title class="headline">Editar Materia</v-card-title>
                     <v-card-text>
                         <v-text-field 
                             required 

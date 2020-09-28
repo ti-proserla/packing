@@ -1,9 +1,9 @@
 <template>
     <v-container fluid>
         <v-card outlined>
-            <v-card-title>Lista de clientes</v-card-title>
+            <v-card-title>Lista de productos</v-card-title>
             <v-card-text>
-                <v-btn @click="open_nuevo=true" outlined color="info">Nuevo Cliente</v-btn>
+                <v-btn @click="open_nuevo=true" outlined color="info">Nuevo producto</v-btn>
                 <v-data-table
                     :headers="header"
                     :items="table.data"
@@ -22,21 +22,36 @@
             <!-- Nuevo -->
             <v-dialog v-model="open_nuevo" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Nuevo Cliente</v-card-title>
+                    <v-card-title class="headline">Nuevo producto</v-card-title>
                     <v-card-text>
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="RUC" 
-                            v-model="cliente.ruc"
-                            :error-messages="error.ruc"
+                            label="Nombre:" 
+                            v-model="producto.nombre_producto"
+                            :error-messages="error.nombre_producto"
                         ></v-text-field>
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="Nombre" 
-                            v-model="cliente.descripcion"
-                            :error-messages="error.descripcion"
+                            label="Peso Bruto:" 
+                            v-model="producto.peso_bruto"
+                            :error-messages="error.peso_bruto"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Peso Pote:" 
+                            v-model="producto.peso_pote"
+                            :error-messages="error.peso_pote"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Potes:"
+                            type="number" 
+                            v-model="producto.potes"
+                            :error-messages="error.potes"
                         ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -56,21 +71,36 @@
             <!-- Editar -->
             <v-dialog v-model="open_editar" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Editar Cliente</v-card-title>
+                    <v-card-title class="headline">Editar producto</v-card-title>
                     <v-card-text>
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="RUC" 
-                            v-model="cliente_editar.ruc"
-                            :error-messages="error_editar.ruc"
+                            label="Nombre" 
+                            v-model="producto_editar.nombre_producto"
+                            :error-messages="error_editar.nombre_producto"
                         ></v-text-field>
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="Nombre" 
-                            v-model="cliente_editar.descripcion"
-                            :error-messages="error_editar.descripcion"
+                            label="Peso Bruto:" 
+                            v-model="producto_editar.peso_bruto"
+                            :error-messages="error_editar.peso_bruto"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Peso Pote:" 
+                            v-model="producto_editar.peso_pote"
+                            :error-messages="error_editar.peso_pote"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Potes:"
+                            type="number" 
+                            v-model="producto_editar.potes"
+                            :error-messages="error_editar.potes"
                         ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -95,8 +125,10 @@ export default {
     data() {
         return {
             header:[
-                { text: 'RUC', value: 'ruc' },
-                { text: 'Descripción', value: 'descripcion' },
+                { text: 'Descripción', value: 'nombre_producto' },
+                { text: 'Peso Bruto', value: 'peso_bruto' },
+                { text: 'Peso Pote', value: 'peso_pote' },
+                { text: 'Potes', value: 'potes' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -107,11 +139,11 @@ export default {
             search: '',
             //Modal Nuevo
             open_nuevo: false,
-            cliente: this.initForm(),
+            producto: this.initForm(),
             error: {},
             //Modal Editar
             open_editar: false,
-            cliente_editar: this.initForm(),
+            producto_editar: this.initForm(),
             error_editar: {},
         }
     },
@@ -121,28 +153,31 @@ export default {
     methods: {
         initForm(){
             return {
-                descripcion: '',
-                ruc: '',
+                nombre_producto: '',
+                peso_bruto: '0.00',
+                peso_pote: '0.00',
+                potes: '0',
             }
         },
         listar(n=this.table.current_page){
-            axios.get(url_base+'/cliente?page='+n+'&search='+this.search)
+            axios.get(url_base+'/producto?page='+n+'&search='+this.search)
             .then(response => {
                 this.table = response.data;
             })
         },
         guardar(){
-            axios.post(url_base+'/cliente',this.cliente)
+            axios.post(url_base+'/producto',this.producto)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("Cliente Creado", { 
+                        swal("producto Creado", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
                         });
-                        this.cliente=this.initForm();
+                        this.producto=this.initForm();
+                        this.error={};
                         this.open_nuevo=false;
                         this.listar();
                         break;
@@ -158,24 +193,25 @@ export default {
             });
         },
         buscar(id){
-            axios.get(url_base+'/cliente/'+id)
+            axios.get(url_base+'/producto/'+id)
             .then(response => {
                 this.open_editar=true;
-                this.cliente_editar = response.data;
+                this.producto_editar = response.data;
             })
         },
         actualizar(){
-            axios.post(url_base+`/cliente/${this.cliente_editar.id}?_method=PUT`,this.cliente_editar)
+            axios.post(url_base+`/producto/${this.producto_editar.id}?_method=PUT`,this.producto_editar)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("Cliente Actualizado", { 
+                        swal("producto Actualizado", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
                         });
-                        this.cliente_editar=this.initForm();
+                        this.producto_editar=this.initForm();
+                        this.error_editar={};
                         this.open_editar=false;
                         this.listar();
                         break;

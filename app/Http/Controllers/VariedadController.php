@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 class VariedadController extends Controller
 {
    
-    public function index()
+    public function index(Request $request)
     {
-        $variedades=Variedad::all();
+        if ($request->has('all')) {
+            $variedades=Variedad::all();
+        }else {
+            $variedades=Variedad::select('variedad.*','nombre_materia')
+                                    ->join('materia','materia.id','=','variedad.materia_id')
+                                    ->paginate(10);
+        }
         return response()->json($variedades);
     }
 

@@ -1,23 +1,15 @@
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-
 ## Requerimientos
-- Registrar y editar Materia.
-- Registrar y editar Variedad.
-- Registrar y editar Cliente.
-- Registrar y editar Producto.
-- Escaneo de Palets de jabas.
-- Registrar Palet de salida.
+- RUC unico en clientes.
+- Generar Codigo de barras para zebra. 
 
 ## Avances
-- Lote de Ingreso
+- Lote de Ingreso (Terminado)
+- Registrar y editar Materia (Terminado).
+- Registrar y editar Variedad (Terminado).
+- Registrar y editar Cliente (Terminado).
+- Registrar y editar Producto (Terminado).
+- Escaneo de Palets de jabas (Terminado).
+- Registrar Palet de salida (Terminado).
 ## testeados
 
 ## preguntar

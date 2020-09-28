@@ -27,7 +27,10 @@ class ProductoValidate extends FormRequest
     public function rules()
     {
         return [
-            'nombre_producto' => 'required|max:50',
+            'nombre_producto' => 'required|max:100',
+            'peso_bruto' => 'required|numeric|min:1',
+            'peso_pote' => 'required|numeric|min:1',
+            'potes' => 'required|numeric|min:1',
         ];
     }
     

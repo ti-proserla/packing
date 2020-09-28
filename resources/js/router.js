@@ -20,6 +20,14 @@ var routes =[
         path: '/cliente',
         component: require('./view/cliente.vue').default
     },
+    {
+        path: '/variedad',
+        component: require('./view/variedad.vue').default
+    },
+    {
+        path: '/producto',
+        component: require('./view/producto.vue').default
+    },
     //Paletizado
     {
         path: '/paletizado/new',

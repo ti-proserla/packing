@@ -8,19 +8,25 @@ use App\Model\Producto;
 class ProductoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $productos=Producto::all();
+        if ($request->has('all')) {
+            $productos=Producto::all();
+        }else {
+            $productos=Producto::paginate(10);
+        }
         return response()->json($productos);
     }
 
 
     public function store(ProductoValidate $request)
     {
-        $productos=new Producto();
-        $productos->nombre_producto=$request->nombre_producto;
-        $productos->save();
-
+        $producto=new Producto();
+        $producto->nombre_producto=$request->nombre_producto;
+        $producto->peso_bruto=$request->peso_bruto;
+        $producto->peso_pote=$request->peso_pote;
+        $producto->potes=$request->potes;
+        $producto->save();
         return response()->json([
             "status" => "OK"
         ]);
@@ -37,10 +43,12 @@ class ProductoController extends Controller
 
     public function update(ProductoValidate $request, $id)
     {
-        $produtos=Producto::where('id',$id)->first();
-        $productos->nombre_producto=$request->nombre_producto;
-        $productos->save();
-
+        $producto=Producto::where('id',$id)->first();
+        $producto->nombre_producto=$request->nombre_producto;
+        $producto->peso_bruto=$request->peso_bruto;
+        $producto->peso_pote=$request->peso_pote;
+        $producto->potes=$request->potes;
+        $producto->save();
         return response()->json([
             "status" => "OK"
         ]);
