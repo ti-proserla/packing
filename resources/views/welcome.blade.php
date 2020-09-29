@@ -10,6 +10,7 @@
         {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> --}}
         {{-- <link rel="stylesheet" href="{{ asset('app.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('fontawesome-5/css/all.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     </head>
     <body>
         <div id="app">

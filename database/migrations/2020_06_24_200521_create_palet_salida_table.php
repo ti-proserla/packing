@@ -16,6 +16,7 @@ class CreatePaletSalidaTable extends Migration
         Schema::create('palet_salida', function (Blueprint $table) {
             $table->id();
             $table->integer('numero');
+            $table->integer('cantidad')->default(0);
             $table->integer('lote_id');
             $table->integer('proceso_id');
             $table->integer('producto_id');

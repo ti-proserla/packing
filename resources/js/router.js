@@ -62,6 +62,10 @@ var routes =[
     {
         path: '/reporte/cantidad-por-linea',
         component: require('./view/reporte/CantidadLinea.vue').default
+    },
+    {
+        path: '/reporte/lote',
+        component: require('./view/reporte/Lote.vue').default
     }
 
 ];

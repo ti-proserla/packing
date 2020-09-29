@@ -81,7 +81,7 @@ export default {
             });
         },
         listarProducto(){
-            axios.get(url_base+'/producto')
+            axios.get(url_base+'/producto?all')
             .then(response => {
                 this.productos=response.data
             })

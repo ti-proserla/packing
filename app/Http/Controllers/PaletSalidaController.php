@@ -14,7 +14,9 @@ class PaletSalidaController extends Controller
         $paletSalidas=PaletSalida::all();
         return response()->json($paletSalidas);
     }  
-
+    /**
+     * La cantidad se Agrega por defecto 0 y va creciendo conforme se escanean Jabas.
+     */
     public function store(Request $request)
     {
         $palet_contar=(PaletSalida::select(DB::raw('count(id) contar'))

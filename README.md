@@ -1,6 +1,8 @@
 ## Requerimientos
 - RUC unico en clientes.
-- Generar Codigo de barras para zebra. 
+- Generar Codigo de barras para zebra.
+- jabas no repetidas en el registro del mismo palet
+- Confirmar al finalizar Lote ingreso. 
 
 ## Avances
 - Lote de Ingreso (Terminado)

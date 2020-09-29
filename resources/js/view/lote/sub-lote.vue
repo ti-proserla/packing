@@ -51,12 +51,26 @@
                             </v-col>
                             <v-col sm=4 cols=12>
                                 Lista de Sub Lotes
-                                <v-card class="mb-3" v-for="(sub,index) in sub_lotes" :key="index" :class="(seleccionado_sub_lote==sub.id ? '' : 'card-no-select')" @click="seleccionar(sub.id)">
-                                    <v-card-text>
-                                        <h6>Transportista: {{ sub.transportista.nombre_transportista  }}</h6>
-                                        <p>Guia: {{ sub.guia }}</p>
-                                    </v-card-text>
-                                </v-card>
+                                <v-radio-group v-model="seleccionado_sub_lote">
+                                    <v-card 
+                                        outlined 
+                                        class="mb-3" 
+                                        v-for="(sub,index) in sub_lotes" 
+                                        :key="index" 
+                                        @click="seleccionar(sub.id)">
+                                            <v-card-text>
+                                                <v-row>
+                                                    <v-col cols="2">
+                                                        <v-radio :value="sub.id"></v-radio>
+                                                    </v-col>
+                                                    <v-col cols="10">
+                                                        <h6>Transportista: {{ sub.transportista.nombre_transportista  }}</h6>
+                                                        <p class="mb-0">Guia: {{ sub.guia }}</p>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-card-text>
+                                    </v-card>
+                                </v-radio-group>
                             </v-col>
                             <v-col sm=4 cols=12>
                                 Registro de Palets
@@ -69,6 +83,7 @@
                                             dense
                                             clearable
                                             hide-details="auto"
+                                            :error-messages="palets_error.num_jabas"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6">
@@ -79,6 +94,7 @@
                                             dense
                                             clearable
                                             hide-details="auto"
+                                            :error-messages="palets_error.peso"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -147,6 +163,7 @@ export default {
             sub_lotes: [],
             palets: [],
             palets_entrada: [],
+            palets_error:{},
             //selectores
             seleccionado_sub_lote: null
         }
@@ -203,9 +220,21 @@ export default {
                 peso: this.peso
             })
             .then(response => {
-                this.peso=0;
-                this.num_jabas=0;
-                this.listarPaletEntrada();
+                var res=response.data;
+                switch (res.status) {
+                    case 'OK':
+                        this.peso=0;
+                        this.num_jabas=0;
+                        this.listarPaletEntrada();
+                        break;
+
+                    case 'VALIDATION':
+                        this.palets_error=res.data;
+                        break;
+                
+                    default:
+                        break;
+                }
             });
         },
         finalizar(){

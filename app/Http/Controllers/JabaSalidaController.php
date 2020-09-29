@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\PaletSalida;
 use App\Model\JabaSalida;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -23,6 +24,9 @@ class JabaSalidaController extends Controller
         if($resultado!=null){
             $numero=$resultado->contar+1;
         }
+        $paletSalida=PaletSalida::where('id',$id)->first();
+        $paletSalida->cantidad=$numero;
+        $paletSalida->save();
         foreach ($request->codigos_barras as $key => $codigo) {
             $jabaSalida=new JabaSalida();
             $jabaSalida->codigo_barras=$codigo;

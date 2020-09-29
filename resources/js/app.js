@@ -81,6 +81,9 @@ window.store=new Vuex.Store({
 new Vue({
   el: '#app',
   vuetify: new Vuetify({
+    icons: {
+      iconfont: 'mdi', // default - only for display purposes
+    },
     theme:{
       themes: {
         light: {

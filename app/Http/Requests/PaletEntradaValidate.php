@@ -28,8 +28,8 @@ class PaletEntradaValidate extends FormRequest
     {
         return [
             // 'sub_lote_id' => 'required|numeric',
-            'peso' => 'required|between:0,999.99',
-            'num_jabas' => 'required|numeric',
+            'peso' => 'required|numeric|min:1',
+            'num_jabas' => 'required|numeric|min:1',
 
         ];
     }
