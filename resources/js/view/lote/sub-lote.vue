@@ -83,6 +83,7 @@
                                             dense
                                             clearable
                                             hide-details="auto"
+                                            type="number"
                                             :error-messages="palets_error.num_jabas"
                                         ></v-text-field>
                                     </v-col>
@@ -93,6 +94,7 @@
                                             outlined
                                             dense
                                             clearable
+                                            type="number"
                                             hide-details="auto"
                                             :error-messages="palets_error.peso"
                                         ></v-text-field>
@@ -225,6 +227,7 @@ export default {
                     case 'OK':
                         this.peso=0;
                         this.num_jabas=0;
+                        this.palets_error={};
                         this.listarPaletEntrada();
                         break;
 

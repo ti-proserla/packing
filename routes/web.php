@@ -8,15 +8,18 @@ Route::get('zebra', function () {
         $data=ZebraGenerate::text('Hola Mundo',10,20,0); 
         echo $data;
         $fp=pfsockopen("192.168.1.164",9100);
-        fputs($fp,"^XA 
-        ^FO10,20
-        ^GB200,500,2
-        ^FS
+        fputs($fp,"^XA
+        ^BYR2,1,90
+        ^FO30,10^BCR^FD0100000001^FS
         
-        ^FO10,20 
-        ^ADR,30,20
-        ^FB500,1,0,C, 
-        ^FD77382978^FS 
+        ^BYR2,1,90
+        ^FO150,10^BCR^FD0100000002^FS
+        
+        ^BYR2,1,80
+        ^FO270,10^BCR^FD0100000003^FS
+        
+        ^BYR2,1,80
+        ^FO390,10^BCR^FD0100000004^FS
         
         ^XZ");
         fclose($fp);

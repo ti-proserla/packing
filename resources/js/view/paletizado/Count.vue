@@ -55,6 +55,7 @@
     </v-container>
 </template>
 <script>
+    // extension: linea(2)autonumerico(8)
 export default {
     data() {
         return {
@@ -63,7 +64,8 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 2,
+            indice_matriz: 1,
+            extension: 10 
         }
     },
     mounted() {
@@ -81,59 +83,72 @@ export default {
     methods: {
         agregar(){
             var repetido=0;
-            for (let i = 0; i < this.matriz_codigos.length; i++) {
-                var fila_codigos = this.matriz_codigos[i];
-                for (let k = 0; k < fila_codigos.length; k++) {
-                    const element = fila_codigos[k];
-                    console.log(element);
-                    
+
+            if (this.codigo_barras.length==this.extension) {
+                for (let i = 0; i < this.matriz_codigos.length; i++) {
+                    var fila_codigos = this.matriz_codigos[i];
+                    for (let k = 0; k < fila_codigos.length; k++) {
+                        const element = fila_codigos[k];
+                        if (this.codigo_barras==element) {
+                            repetido=1;
+                            break;
+                        }
+                    }
+                }
+                for (let i = 0; i < this.fila_codigos.length; i++) {
+                    const element = this.fila_codigos[i];
                     if (this.codigo_barras==element) {
                         repetido=1;
                         break;
                     }
                 }
-            }
-            console.info("comprobacion de repeticion");
-            if (repetido==1) {
-                swal("Código ya registrado en este Palet.", {
+                
+                if (repetido==1) {
+                    swal("Código ya registrado en este Palet.", {
+                        icon: "error",
+                        timer: 3500
+                    });
+                }else{
+                    // for (let j = 0; j < this.fila_codigos.length; j++) {
+                    //     const element2 = this.fila_codigos[j];
+                    //     if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
+                    //         swal("Labor ya registrada para esta jaba.", {
+                    //             icon: "error",
+                    //             timer: 3500
+                    //         });
+                    //         repetido=1;
+                    //         break;
+                    //     }
+                    // }
+                    
+                    if (repetido==0) {
+                        this.fila_codigos.push(this.codigo_barras);
+                        if (this.fila_codigos.length==this.indice_matriz) {
+                            axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
+                                codigos_barras: this.fila_codigos
+                            }).then(res=>{
+                                var data=res.data;
+                                switch (data.status) {
+                                    case "OK":
+                                        this.matriz_codigos.push(this.fila_codigos);
+                                        this.fila_codigos=[];
+                                        break;
+                                
+                                    default:
+                                        break;
+                                }
+                                this.codigo_barras="";       
+                            });
+                        }    
+                    }
+                    
+                }
+                
+            }else{
+                swal("Código no cumple con la estructura.", {
                     icon: "error",
                     timer: 3500
                 });
-            }else{
-                // for (let j = 0; j < this.fila_codigos.length; j++) {
-                //     const element2 = this.fila_codigos[j];
-                //     if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
-                //         swal("Labor ya registrada para esta jaba.", {
-                //             icon: "error",
-                //             timer: 3500
-                //         });
-                //         repetido=1;
-                //         break;
-                //     }
-                // }
-                console.info("comprobacion de repeticion2");
-                
-                if (repetido==0) {
-                    this.fila_codigos.push(this.codigo_barras);
-                    if (this.fila_codigos.length==this.indice_matriz) {
-                        axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
-                            codigos_barras: this.fila_codigos
-                        }).then(res=>{
-                            var data=res.data;
-                            switch (data.status) {
-                                case "OK":
-                                    this.matriz_codigos.push(this.fila_codigos);
-                                    this.fila_codigos=[];
-                                    break;
-                            
-                                default:
-                                    break;
-                            }
-                            this.codigo_barras="";       
-                        });
-                    }    
-                }
-                
             }
             this.codigo_barras=null;
         },
