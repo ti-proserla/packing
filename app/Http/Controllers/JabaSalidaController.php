@@ -38,7 +38,7 @@ class JabaSalidaController extends Controller
         }
         return response()->json([
             "status" => "OK",
-            "data"   => "Jaba registrada",
+            "data"   => "Jaba registrada"
         ]);
     }
 }
