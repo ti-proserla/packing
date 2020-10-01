@@ -37,3 +37,4 @@ Route::resource('sub_lote/{sub_lote_id}/palet_entrada', 'PaletEntradaController'
  */
 Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
+Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
