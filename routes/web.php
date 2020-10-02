@@ -8,14 +8,14 @@ Route::get('zebra', function () {
 
         $string='{linea}{operador}{autonumerico}-{linea}{operador}{autonumerico}';
         $string="^XA
-        ^BY1.5,1,80
-        ^FO40,10^BCR^FD{linea}{operador}{autonumerico}^FS
-        ^BY1.5,1,80
-        ^FO200,10^BCR^FD{linea}{operador}{autonumerico}^FS
-        ^BY1.5,1,80
-        ^FO360,10^BCR^FD{linea}{operador}{autonumerico}^FS
-        ^BY1.5,1,80
-        ^FO520,10^BCR^FD{linea}{operador}{autonumerico}^FS
+        ^BY2,1,80
+        ^FO40,25^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+        ^BY2,1,80
+        ^FO200,25^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+        ^BY2,1,80
+        ^FO360,25^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+        ^BY2,1,80
+        ^FO520,25^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
         ^XZ";
         $parametros=array(
             'linea'=> '02',
@@ -30,7 +30,7 @@ Route::get('zebra', function () {
         $number=0;
 
         $index_db=16;
-        $cantidad=16;
+        $cantidad=4;
 
 
         if(-1<strpos($string,'{autonumerico}')){
@@ -44,7 +44,7 @@ Route::get('zebra', function () {
                 for ($i=0; $i < $conteo-1; $i++) { 
                     $value=$separate_autonumerico[$i];
                     $temp_index_db+=1;
-                    $index=str_pad($temp_index_db, 4, "0", STR_PAD_LEFT);
+                    $index=str_pad($temp_index_db, 8, "0", STR_PAD_LEFT);
                     $print=$print.$value.$index;
                 }
                 /**
@@ -59,33 +59,6 @@ Route::get('zebra', function () {
         $fp=pfsockopen("192.168.1.164",9100);
         fputs($fp,$print);
         fclose($fp);
-        /*
-        $data=ZebraGenerate::text('Hola Mundo',10,20,0); 
-        echo $data;
-        */
-        // echo 'Successfully Printed';
-
-
-        
-
-        // for ($i=1; $i < 2; $i++) { 
-        //     $print_data = "^XA
-        //     ^CFd0,10,18
-        //     ^PR12
-        //     ^LRY
-        //     ^MD30
-        //     ^PW350
-        //     ^LL150
-        //     ^PON
-        //     ^FO44,20^BY1^B3N,N,73N,N^FDBARCODE^FS^FO189,2^GB0,146,6^FS^FO262,0^GB0,150,5^FS^PQ1
-        //     ^XZ
-        //     ";
-        //     # code...
-        //     fputs($fp,$print_data);
-        // }
-        // fclose($fp);
-
-        // echo 'Successfully Printed';
     }
     catch (Exception $e) 
     {

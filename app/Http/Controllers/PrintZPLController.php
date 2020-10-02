@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 
 class PrintZPLController extends Controller
 {
+    /**
+     * ip_print: x.x.x.x    => IP de Impresora Zebra.
+     */
     public function cajas(Request $request){
-        $ip_addr = "192.168.1.164"; # Print prueba
-
-        if ($this->ping($ip_addr)){
+        $ip_print = $request->ip_print;
+        if ($this->ping($ip_print)){
             return response()->json([
-                "status" => "OK",
-
+                "status" => "OK"
             ]);
         }
         else {
