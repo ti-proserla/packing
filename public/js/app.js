@@ -2028,11 +2028,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app',
   data: function data() {
     return {
-      open: true
+      open: this.$vuetify.breakpoint.name == 'lg' ? true : false
     };
   },
   methods: {
@@ -2425,12 +2430,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3394,6 +3393,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3425,7 +3426,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   data: function data() {
     return {
       lotes: []
@@ -3443,7 +3458,11 @@ __webpack_require__.r(__webpack_exports__);
       _this.lotes = response.data;
     });
   }
-});
+}, "methods", {
+  seleccionar: function seleccionar(id) {
+    this.$router.push("/paletizado/".concat(id));
+  }
+}));
 
 /***/ }),
 
@@ -3740,8 +3759,8 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Descripción',
         value: 'nombre_producto'
       }, {
-        text: 'Peso Bruto',
-        value: 'peso_bruto'
+        text: 'Peso Neto',
+        value: 'peso_neto'
       }, {
         text: 'Peso Pote',
         value: 'peso_pote'
@@ -3775,7 +3794,7 @@ __webpack_require__.r(__webpack_exports__);
     initForm: function initForm() {
       return {
         nombre_producto: '',
-        peso_bruto: '0.00',
+        peso_neto: '0.00',
         peso_pote: '0.00',
         potes: '0'
       };
@@ -3867,15 +3886,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3902,21 +3923,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   data: function data() {
     return {
-      table: []
+      table: [],
+      fecha_produccion: moment().format('YYYY-MM-DD')
     };
   },
   methods: {},
   mounted: function mounted() {
+    this.buscar();
+  }
+}, "methods", {
+  buscar: function buscar() {
     var _this = this;
 
-    axios.get(url_base + "/cantidad-por-linea").then(function (response) {
+    axios.get("".concat(url_base, "/cantidad-por-linea"), {
+      params: {
+        fecha_produccion: this.fecha_produccion
+      }
+    }).then(function (response) {
       _this.table = response.data;
     });
   }
-});
+}));
 
 /***/ }),
 
@@ -3979,18 +4029,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      datos: []
+      datos: [],
+      fecha_produccion: moment().format('YYYY-MM-DD')
     };
   },
   mounted: function mounted() {
-    var _this = this;
+    this.buscar();
+  },
+  methods: {
+    buscar: function buscar() {
+      var _this = this;
 
-    axios.get("".concat(url_base, "/reporte/lote")).then(function (response) {
-      _this.datos = response.data;
-    });
+      axios.get("".concat(url_base, "/reporte/lote"), {
+        params: {
+          fecha_produccion: this.fecha_produccion
+        }
+      }).then(function (response) {
+        _this.datos = response.data;
+      });
+    },
+    decimal: function decimal(num) {
+      return Number(num).toFixed(2);
+    }
   }
 });
 
@@ -43823,7 +43909,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-list-item-content", [
                     _vm._v(
-                      "\n                      Lotes Ingreso\n                  "
+                      "\n                      Acopio de Lotes\n                  "
                     )
                   ])
                 ],
@@ -43864,7 +43950,22 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("v-list-item-content")
+              _c(
+                "v-list-item",
+                { attrs: { link: "", to: "/reporte/linea" } },
+                [
+                  _c("v-list-item-icon", [
+                    _c("i", { staticClass: "far fa-building" })
+                  ]),
+                  _vm._v(" "),
+                  _c("v-list-item-content", [
+                    _vm._v(
+                      "\n                      Reporte por Linea\n                  "
+                    )
+                  ])
+                ],
+                1
+              )
             ],
             1
           )
@@ -44469,7 +44570,7 @@ var render = function() {
         "v-card",
         [
           _c("v-card-title", [
-            _vm._v("\n            Lotes de Ingreso\n        ")
+            _vm._v("\n            Acopio de Lotes\n        ")
           ])
         ],
         1
@@ -45777,119 +45878,124 @@ var render = function() {
     [
       _c(
         "v-card",
-        [
-          _c("v-card-title", [_vm._v("LISTA DE PALETS POR LOTES")]),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
+        [_c("v-card-title", [_vm._v("LISTA DE PALETS POR LOTES")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          attrs: {
+            dark: "",
+            fab: "",
+            bottom: "",
+            fixed: "true",
+            right: "",
+            color: "primary"
+          },
+          on: {
+            click: function($event) {
+              return _vm.$router.push("/paletizado/new")
+            }
+          }
+        },
+        [_c("v-icon", [_vm._v("+")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        _vm._l(_vm.lotes, function(lote, i) {
+          return _c(
+            "v-col",
+            { key: i, attrs: { sm: "12", cols: "12" } },
             [
               _c(
-                "v-btn",
-                {
-                  attrs: { color: "primary" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.push("/paletizado/new")
-                    }
-                  }
-                },
-                [_vm._v("Nuevo Palet Salida")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                _vm._l(_vm.lotes, function(lote, i) {
-                  return _c(
-                    "v-col",
-                    { key: i, attrs: { sm: "12", cols: "12" } },
+                "v-card",
+                [
+                  _c(
+                    "v-card-text",
                     [
+                      _c("h5", [
+                        _c("b", [_vm._v("Cliente:")]),
+                        _vm._v(" " + _vm._s(lote.cliente))
+                      ]),
+                      _vm._v(" "),
+                      _c("h5", [
+                        _c("b", [_vm._v("Lote:")]),
+                        _vm._v(" " + _vm._s(lote.codigo))
+                      ]),
+                      _vm._v(" "),
+                      _c("h5", [
+                        _c("b", [_vm._v("Materia:")]),
+                        _vm._v(
+                          " " +
+                            _vm._s(lote.nombre_materia) +
+                            " - " +
+                            _vm._s(lote.nombre_variedad)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h5", [
+                        _c("b", [_vm._v("Cosecha:")]),
+                        _vm._v(" " + _vm._s(lote.fecha_cosecha))
+                      ]),
+                      _vm._v(" "),
                       _c(
-                        "v-card",
-                        [
-                          _c(
-                            "v-card-text",
+                        "v-row",
+                        _vm._l(lote.palets_salida, function(palet, index) {
+                          return _c(
+                            "v-col",
+                            { key: index, attrs: { cols: "6", sm: "3" } },
                             [
-                              _c("h5", [
-                                _c("b", [_vm._v("Cliente:")]),
-                                _vm._v(" " + _vm._s(lote.cliente))
-                              ]),
-                              _vm._v(" "),
-                              _c("h5", [
-                                _c("b", [_vm._v("Lote:")]),
-                                _vm._v(" " + _vm._s(lote.codigo))
-                              ]),
-                              _vm._v(" "),
-                              _c("h5", [
-                                _c("b", [_vm._v("Materia:")]),
-                                _vm._v(
-                                  " " +
-                                    _vm._s(lote.nombre_materia) +
-                                    " - " +
-                                    _vm._s(lote.nombre_variedad)
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("h5", [
-                                _c("b", [_vm._v("Cosecha:")]),
-                                _vm._v(" " + _vm._s(lote.fecha_cosecha))
-                              ]),
-                              _vm._v(" "),
                               _c(
-                                "v-row",
-                                _vm._l(lote.palets_salida, function(
-                                  palet,
-                                  index
-                                ) {
-                                  return _c(
-                                    "v-col",
-                                    {
-                                      key: index,
-                                      attrs: { cols: "6", sm: "3" }
-                                    },
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            to: "/paletizado/" + palet.id
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                        Palet " +
-                                              _vm._s(palet.numero) +
-                                              "\n                                        "
-                                          ),
-                                          _c("br"),
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(palet.producto) +
-                                              "\n                                    "
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                }),
+                                "v-card",
+                                {
+                                  staticClass: "text-center",
+                                  attrs: {
+                                    disabled: palet.estado == "Cerrado"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.seleccionar(palet.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-card-text", [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(palet.producto) +
+                                        "\n                                "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("v-card-actions", [
+                                    _vm._v(
+                                      "\n                                    Palet " +
+                                        _vm._s(palet.numero) +
+                                        "\n                                "
+                                    )
+                                  ])
+                                ],
                                 1
                               )
                             ],
                             1
                           )
-                        ],
+                        }),
                         1
                       )
                     ],
                     1
                   )
-                }),
+                ],
                 1
               )
             ],
             1
           )
-        ],
+        }),
         1
       )
     ],
@@ -46152,15 +46258,15 @@ var render = function() {
                         attrs: {
                           required: "",
                           "hide-details": "auto",
-                          label: "Peso Bruto:",
-                          "error-messages": _vm.error.peso_bruto
+                          label: "Peso Neto:",
+                          "error-messages": _vm.error.peso_neto
                         },
                         model: {
-                          value: _vm.producto.peso_bruto,
+                          value: _vm.producto.peso_neto,
                           callback: function($$v) {
-                            _vm.$set(_vm.producto, "peso_bruto", $$v)
+                            _vm.$set(_vm.producto, "peso_neto", $$v)
                           },
-                          expression: "producto.peso_bruto"
+                          expression: "producto.peso_neto"
                         }
                       }),
                       _vm._v(" "),
@@ -46286,15 +46392,15 @@ var render = function() {
                         attrs: {
                           required: "",
                           "hide-details": "auto",
-                          label: "Peso Bruto:",
-                          "error-messages": _vm.error_editar.peso_bruto
+                          label: "Peso Neto:",
+                          "error-messages": _vm.error_editar.peso_neto
                         },
                         model: {
-                          value: _vm.producto_editar.peso_bruto,
+                          value: _vm.producto_editar.peso_neto,
                           callback: function($$v) {
-                            _vm.$set(_vm.producto_editar, "peso_bruto", $$v)
+                            _vm.$set(_vm.producto_editar, "peso_neto", $$v)
                           },
-                          expression: "producto_editar.peso_bruto"
+                          expression: "producto_editar.peso_neto"
                         }
                       }),
                       _vm._v(" "),
@@ -46386,10 +46492,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe&":
-/*!******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe& ***!
-  \******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa&":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa& ***!
+  \**********************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -46402,51 +46508,110 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-container",
+    { attrs: { fluid: "" } },
     [
-      _c("v-simple-table", {
-        scopedSlots: _vm._u([
-          {
-            key: "default",
-            fn: function() {
-              return [
-                _c("thead", [
-                  _c("tr", [
-                    _c("th", [_vm._v("Fecha")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Cliente")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Codigo")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Linea")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Cantidad")])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.table, function(row, i) {
-                    return _c("tr", { key: i }, [
-                      _c("td", [_vm._v(_vm._s(row.fecha_produccion))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(row.cliente))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(row.codigo))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(row.linea))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(row.cantidad))])
-                    ])
-                  }),
-                  0
-                )
-              ]
-            },
-            proxy: true
-          }
-        ])
-      })
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", sm: "4" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          outlined: "",
+                          dense: "",
+                          label: "Fecha Producción",
+                          type: "date"
+                        },
+                        model: {
+                          value: _vm.fecha_produccion,
+                          callback: function($$v) {
+                            _vm.fecha_produccion = $$v
+                          },
+                          expression: "fecha_produccion"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", sm: "4" } },
+                    [
+                      _c(
+                        "v-btn",
+                        { attrs: { color: "info" }, on: { click: _vm.buscar } },
+                        [
+                          _vm._v(
+                            "\n                        Buscar\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-simple-table", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function() {
+                      return [
+                        _c("thead", [
+                          _c("tr", [
+                            _c("th", [_vm._v("Fecha")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Cliente")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Codigo")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Linea")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Cantidad")])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.table, function(row, i) {
+                            return _c("tr", { key: i }, [
+                              _c("td", [_vm._v(_vm._s(row.fecha_produccion))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(row.cliente))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(row.codigo))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(row.linea))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(row.cantidad))])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -46483,6 +46648,52 @@ var render = function() {
           _c(
             "v-card-text",
             [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", sm: "4" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          outlined: "",
+                          dense: "",
+                          label: "Fecha Producción",
+                          type: "date"
+                        },
+                        model: {
+                          value: _vm.fecha_produccion,
+                          callback: function($$v) {
+                            _vm.fecha_produccion = $$v
+                          },
+                          expression: "fecha_produccion"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", sm: "4" } },
+                    [
+                      _c(
+                        "v-btn",
+                        { attrs: { color: "info" }, on: { click: _vm.buscar } },
+                        [
+                          _vm._v(
+                            "\n                        Buscar\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
               _c("v-simple-table", {
                 attrs: { "fixed-header": "", height: "300px" },
                 scopedSlots: _vm._u([
@@ -46492,7 +46703,9 @@ var render = function() {
                       return [
                         _c("thead", [
                           _c("tr", [
-                            _c("th", [_vm._v("Lote")]),
+                            _c("th", { attrs: { colspan: "3" } }, [
+                              _vm._v("Lote")
+                            ]),
                             _vm._v(" "),
                             _c(
                               "th",
@@ -46516,50 +46729,85 @@ var render = function() {
                           _c("tr", [
                             _c("th", [_vm._v("Código Lote")]),
                             _vm._v(" "),
+                            _c("th", [_vm._v("Materia")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Variedad")]),
+                            _vm._v(" "),
                             _c("th", [_vm._v("Guias")]),
                             _vm._v(" "),
-                            _c("th", [_vm._v("Peso Total Ingreso")]),
+                            _c("th", [_vm._v("Peso Total (Kg)")]),
                             _vm._v(" "),
                             _c("th", [_vm._v("palets")]),
                             _vm._v(" "),
                             _c("th", [_vm._v("Nombre Producto")]),
                             _vm._v(" "),
-                            _c("th", [_vm._v("Peso Neto")]),
+                            _c("th", [_vm._v("Peso Neto (Gr)")]),
                             _vm._v(" "),
                             _c("th", [_vm._v("Potes x Caja")]),
                             _vm._v(" "),
                             _c("th", [_vm._v("Cajas")]),
                             _vm._v(" "),
-                            _c("th", [_vm._v("Peso Total Salida")])
+                            _c("th", [_vm._v("Peso Total (Kg)")])
                           ])
                         ]),
                         _vm._v(" "),
                         _c(
                           "tbody",
-                          _vm._l(_vm.datos, function(fila) {
-                            return _c("tr", [
-                              _c("td", [_vm._v(_vm._s(fila.codigo_lote))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.guias))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(fila.peso_total_ingreso))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.palets))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.nombre_producto))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.peso_bruto))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.potes_x_caja))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.cantidad_cajas))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(fila.peso_total_salida))])
-                            ])
-                          }),
-                          0
+                          [
+                            _vm.datos.lenght == 0
+                              ? _c("tr", [
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      attrs: { colspan: "11" }
+                                    },
+                                    [_vm._v(" Sin Registros")]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm._l(_vm.datos, function(fila) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(fila.codigo_lote))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(fila.nombre_materia))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(fila.nombre_variedad))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("pre", [_vm._v(_vm._s(fila.guias))])
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(_vm.decimal(fila.peso_total_ingreso))
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(fila.palets))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(fila.nombre_producto))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(fila.peso_neto))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(fila.potes_x_caja))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(fila.cantidad_cajas))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(_vm.decimal(fila.peso_total_salida))
+                                  )
+                                ])
+                              ])
+                            })
+                          ],
+                          2
                         )
                       ]
                     },
@@ -107153,8 +107401,8 @@ var routes = [{
   component: __webpack_require__(/*! ./view/lote/sub-lote.vue */ "./resources/js/view/lote/sub-lote.vue")["default"]
 }, //Reportes
 {
-  path: '/reporte/cantidad-por-linea',
-  component: __webpack_require__(/*! ./view/reporte/CantidadLinea.vue */ "./resources/js/view/reporte/CantidadLinea.vue")["default"]
+  path: '/reporte/linea',
+  component: __webpack_require__(/*! ./view/reporte/Linea.vue */ "./resources/js/view/reporte/Linea.vue")["default"]
 }, {
   path: '/reporte/lote',
   component: __webpack_require__(/*! ./view/reporte/Lote.vue */ "./resources/js/view/reporte/Lote.vue")["default"]
@@ -107945,17 +108193,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/view/reporte/CantidadLinea.vue":
-/*!*****************************************************!*\
-  !*** ./resources/js/view/reporte/CantidadLinea.vue ***!
-  \*****************************************************/
+/***/ "./resources/js/view/reporte/Linea.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/view/reporte/Linea.vue ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CantidadLinea.vue?vue&type=template&id=1bef5efe& */ "./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe&");
-/* harmony import */ var _CantidadLinea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CantidadLinea.vue?vue&type=script&lang=js& */ "./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Linea.vue?vue&type=template&id=8fc720fa& */ "./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa&");
+/* harmony import */ var _Linea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Linea.vue?vue&type=script&lang=js& */ "./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -107965,9 +108213,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _CantidadLinea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Linea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -107977,38 +108225,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/view/reporte/CantidadLinea.vue"
+component.options.__file = "resources/js/view/reporte/Linea.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js&":
-/*!******************************************************************************!*\
-  !*** ./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************/
+/***/ "./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js&":
+/*!**********************************************************************!*\
+  !*** ./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CantidadLinea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./CantidadLinea.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/CantidadLinea.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CantidadLinea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Linea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Linea.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/Linea.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Linea_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe& ***!
-  \************************************************************************************/
+/***/ "./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa& ***!
+  \****************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./CantidadLinea.vue?vue&type=template&id=1bef5efe& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/CantidadLinea.vue?vue&type=template&id=1bef5efe&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Linea.vue?vue&type=template&id=8fc720fa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/view/reporte/Linea.vue?vue&type=template&id=8fc720fa&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CantidadLinea_vue_vue_type_template_id_1bef5efe___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Linea_vue_vue_type_template_id_8fc720fa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

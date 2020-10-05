@@ -17,7 +17,7 @@ class LoteIngreso extends Model
     {
         return $this->hasMany('App\Model\PaletSalida','lote_id')
                     ->join('producto','palet_salida.producto_id','=','producto.id')
-                    ->select('palet_salida.id','lote_id','producto.nombre_producto as producto','numero')
+                    ->select('palet_salida.id','lote_id','producto.nombre_producto as producto','numero','palet_salida.estado')
                     ->orderBy('palet_salida.id','DESC');
     }
 }

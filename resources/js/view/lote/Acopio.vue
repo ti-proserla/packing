@@ -2,25 +2,19 @@
     <v-container fluid>
         <v-card>
             <v-card-title>
-                Lotes de Ingreso
-            </v-card-title>              
-            <!-- <v-card-text>
-                <v-btn color="primary" @click="nuevo">
-                    Nuevo Lote
-                </v-btn>
-            </v-card-text> -->
+                Acopio de Lotes
+            </v-card-title>
         </v-card>
         <v-btn
-              dark
-              fab
-              bottom
-              fixed="true"
-              right
-              color="primary"
-              @click="nuevo"
-            >
+            dark
+            fab
+            bottom
+            fixed="true"
+            right
+            color="primary"
+            @click="nuevo">
               <v-icon>+</v-icon>
-            </v-btn>
+        </v-btn>
         <v-row>
             <v-col sm=4 cols="12" v-for="(lote,i) in lotes_ingreso" :key="i">
                 <v-card>

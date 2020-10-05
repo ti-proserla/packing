@@ -82,7 +82,7 @@
                         <i class="far fa-building"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        Lotes Ingreso
+                        Acopio de Lotes
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link to="/paletizado">
@@ -101,9 +101,14 @@
                         Reporte por Lote
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item-content>
-                    <!-- <v-btn color="error" text small @click="cerrar">Cerrar Sistema</v-btn> -->
-                </v-list-item-content>
+                <v-list-item link to="/reporte/linea">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Reporte por Linea
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
         
@@ -123,7 +128,7 @@ export default {
   name: 'app',
   data() {
       return {
-          open: true
+          open: (this.$vuetify.breakpoint.name == 'lg') ? true :false
       }
   },
   methods: {

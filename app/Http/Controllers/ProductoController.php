@@ -23,7 +23,7 @@ class ProductoController extends Controller
     {
         $producto=new Producto();
         $producto->nombre_producto=$request->nombre_producto;
-        $producto->peso_bruto=$request->peso_bruto;
+        $producto->peso_neto=$request->peso_neto;
         $producto->peso_pote=$request->peso_pote;
         $producto->potes=$request->potes;
         $producto->save();
@@ -45,7 +45,7 @@ class ProductoController extends Controller
     {
         $producto=Producto::where('id',$id)->first();
         $producto->nombre_producto=$request->nombre_producto;
-        $producto->peso_bruto=$request->peso_bruto;
+        $producto->peso_neto=$request->peso_neto;
         $producto->peso_pote=$request->peso_pote;
         $producto->potes=$request->potes;
         $producto->save();

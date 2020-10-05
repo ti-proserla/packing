@@ -16,7 +16,7 @@ class CreateProductoTable extends Migration
         Schema::create('producto', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre_producto',100);
-            $table->decimal('peso_bruto',6,2);
+            $table->decimal('peso_neto',6,2);
             $table->decimal('peso_pote',6,2);
             $table->integer('potes');
             $table->timestamps();

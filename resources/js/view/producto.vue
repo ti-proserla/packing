@@ -34,9 +34,9 @@
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="Peso Bruto:" 
-                            v-model="producto.peso_bruto"
-                            :error-messages="error.peso_bruto"
+                            label="Peso Neto:" 
+                            v-model="producto.peso_neto"
+                            :error-messages="error.peso_neto"
                         ></v-text-field>
                         <v-text-field 
                             required 
@@ -83,9 +83,9 @@
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="Peso Bruto:" 
-                            v-model="producto_editar.peso_bruto"
-                            :error-messages="error_editar.peso_bruto"
+                            label="Peso Neto:" 
+                            v-model="producto_editar.peso_neto"
+                            :error-messages="error_editar.peso_neto"
                         ></v-text-field>
                         <v-text-field 
                             required 
@@ -126,7 +126,7 @@ export default {
         return {
             header:[
                 { text: 'Descripción', value: 'nombre_producto' },
-                { text: 'Peso Bruto', value: 'peso_bruto' },
+                { text: 'Peso Neto', value: 'peso_neto' },
                 { text: 'Peso Pote', value: 'peso_pote' },
                 { text: 'Potes', value: 'potes' },
                 { text: 'Editar', value: 'editar' },
@@ -154,7 +154,7 @@ export default {
         initForm(){
             return {
                 nombre_producto: '',
-                peso_bruto: '0.00',
+                peso_neto: '0.00',
                 peso_pote: '0.00',
                 potes: '0',
             }

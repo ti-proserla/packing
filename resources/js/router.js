@@ -60,8 +60,8 @@ var routes =[
     },
     //Reportes
     {
-        path: '/reporte/cantidad-por-linea',
-        component: require('./view/reporte/CantidadLinea.vue').default
+        path: '/reporte/linea',
+        component: require('./view/reporte/Linea.vue').default
     },
     {
         path: '/reporte/lote',
