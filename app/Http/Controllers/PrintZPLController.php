@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrintZPLController extends Controller
 {
     /**
      * ip_print: x.x.x.x    => IP de Impresora Zebra.
+     * codigo_operador
      */
     public function cajas(Request $request){
         $ip_print = $request->ip_print;
+        $codigo_operador = $request->codigo_operador;
         if ($this->ping($ip_print)){
+            // DB::select(DB::raw());
             return response()->json([
                 "status" => "OK"
             ]);

@@ -4,9 +4,7 @@
                     dense
                     elevate-on-scroll
                     >
-            <v-app-bar-nav-icon @click="open=true">
-
-            </v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click="open=true"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 Sistema Packing
             </v-toolbar-title>
