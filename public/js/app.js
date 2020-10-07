@@ -2031,6 +2031,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app',
   data: function data() {
@@ -43959,6 +43962,23 @@ var render = function() {
                   _c("v-list-item-content", [
                     _vm._v(
                       "\n                      Reporte por Linea\n                  "
+                    )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { link: "", to: "/dispensador" } },
+                [
+                  _c("v-list-item-icon", [
+                    _c("i", { staticClass: "far fa-building" })
+                  ]),
+                  _vm._v(" "),
+                  _c("v-list-item-content", [
+                    _vm._v(
+                      "\n                      Dispensador de Bar Code\n                  "
                     )
                   ])
                 ],
@@ -107404,6 +107424,9 @@ var routes = [{
 }, {
   path: '/reporte/lote',
   component: __webpack_require__(/*! ./view/reporte/Lote.vue */ "./resources/js/view/reporte/Lote.vue")["default"]
+}, {
+  path: '/dispensador',
+  component: __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './view/reporte/Dispensador.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()))["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',

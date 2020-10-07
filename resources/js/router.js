@@ -66,7 +66,11 @@ var routes =[
     {
         path: '/reporte/lote',
         component: require('./view/reporte/Lote.vue').default
-    }
+    },
+    {
+        path: '/dispensador',
+        component: require('./view/reporte/Dispensador.vue').default
+    },
 
 ];
 var router=new VueRouter({

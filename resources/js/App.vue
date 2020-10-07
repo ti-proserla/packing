@@ -37,11 +37,6 @@
             nav
             class="py-0"
             >
-            <!-- <v-list-item two-line>
-                <v-list-item-content>
-                    SISTEMA PACKING
-                </v-list-item-content>
-            </v-list-item> -->
             <v-divider></v-divider>
                 <v-list-item link to="/materia">
                     <v-list-item-icon>
@@ -105,6 +100,14 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                         Reporte por Linea
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/dispensador">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Dispensador de Bar Code
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
