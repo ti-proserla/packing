@@ -14,6 +14,11 @@ class PrintZPLController extends Controller
     public function cajas(Request $request){
         $ip_print = $request->ip_print;
         $codigo_operador = $request->codigo_operador;
+
+        
+
+
+
         if ($this->ping($ip_print)){
             //  DB::select(DB::raw());
             return response()->json([
