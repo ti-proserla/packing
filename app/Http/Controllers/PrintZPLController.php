@@ -15,7 +15,7 @@ class PrintZPLController extends Controller
         $ip_print = $request->ip_print;
         $codigo_operador = $request->codigo_operador;
         if ($this->ping($ip_print)){
-            // DB::select(DB::raw());
+            //  DB::select(DB::raw());
             return response()->json([
                 "status" => "OK"
             ]);

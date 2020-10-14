@@ -69,7 +69,7 @@ var routes =[
     },
     {
         path: '/dispensador',
-        component: require('./view/reporte/Dispensador.vue').default
+        component: require('./view/Dispensador.vue').default
     },
 
 ];
