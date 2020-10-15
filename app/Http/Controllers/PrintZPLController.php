@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Tareo;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +16,8 @@ class PrintZPLController extends Controller
     public function cajas(Request $request){
         $ip_print = $request->ip_print;
         $codigo_operador = $request->codigo_operador;
-
+        dd(Tareo::where('codigo_operador',$codigo_operador)
+                ->orderBy('id','DESC')->first());
         
 
 

@@ -3,7 +3,7 @@
         <v-row class="justify-center align-center">
             <v-col
                  cols="12" 
-                 sm=6>
+                 lg=6>
                 <v-card outlined>
                     <v-card-title>Producción Code Bar</v-card-title>
                     <v-card-text>
@@ -13,7 +13,7 @@
                                 outlined 
                                 label="Código de Barras" 
                                 autofocus 
-                                v-model="form.codigo_barras">
+                                v-model="form.codigo_operador">
                                 </v-text-field>
                             <v-select
                                 outlined
@@ -39,12 +39,11 @@
 export default {
     data() {
         return {
-            codigo_barras: null,
             prints: [
                 {nombre: 'ZT410 Linea 06', ip: '192.168.1.164'}
             ],
             form: {
-                codigo_barras: null,
+                codigo_operador: null,
                 ip_print: localStorage.getItem('ip_print') || null,
             }
         }
@@ -52,7 +51,7 @@ export default {
     methods: {
         print(){
             axios.get(`${url_base}/print/zpl/cajas/`,{
-                data: this.form
+                params: this.form
             })
             .then(response => {
                 

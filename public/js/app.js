@@ -2099,13 +2099,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      codigo_barras: null,
       prints: [{
         nombre: 'ZT410 Linea 06',
         ip: '192.168.1.164'
       }],
       form: {
-        codigo_barras: null,
+        codigo_operador: null,
         ip_print: localStorage.getItem('ip_print') || null
       }
     };
@@ -2113,7 +2112,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     print: function print() {
       axios.get("".concat(url_base, "/print/zpl/cajas/"), {
-        data: this.form
+        params: this.form
       }).then(function (response) {});
     },
     changePrint: function changePrint() {
@@ -44102,7 +44101,7 @@ var render = function() {
         [
           _c(
             "v-col",
-            { attrs: { cols: "12", sm: "6" } },
+            { attrs: { cols: "12", lg: "6" } },
             [
               _c(
                 "v-card",
@@ -44133,11 +44132,11 @@ var render = function() {
                               autofocus: ""
                             },
                             model: {
-                              value: _vm.form.codigo_barras,
+                              value: _vm.form.codigo_operador,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "codigo_barras", $$v)
+                                _vm.$set(_vm.form, "codigo_operador", $$v)
                               },
-                              expression: "form.codigo_barras"
+                              expression: "form.codigo_operador"
                             }
                           }),
                           _vm._v(" "),
