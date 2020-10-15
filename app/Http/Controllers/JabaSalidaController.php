@@ -31,7 +31,8 @@ class JabaSalidaController extends Controller
             $jabaSalida=new JabaSalida();
             $jabaSalida->codigo_barras=$codigo;
             $jabaSalida->linea=substr($codigo,0,2);
-            $jabaSalida->codigo_operador=null;
+            $jabaSalida->codigo_labor=substr($codigo,2,6);
+            $jabaSalida->codigo_operador=substr($codigo,8,8);
             $jabaSalida->palet_salida_id=$id;
             $jabaSalida->numero=$numero;
             $jabaSalida->save();

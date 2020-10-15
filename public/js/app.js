@@ -2096,9 +2096,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      alert: this.initAlert(),
+      timer: null,
       prints: [{
         nombre: 'ZT410 Linea 06',
         ip: '192.168.1.164'
@@ -2110,10 +2113,44 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    initAlert: function initAlert() {
+      return {
+        status: '',
+        visible: false,
+        message: ''
+      };
+    },
     print: function print() {
+      var _this = this;
+
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+
       axios.get("".concat(url_base, "/print/zpl/cajas/"), {
         params: this.form
-      }).then(function (response) {});
+      }).then(function (response) {
+        var respuesta = response.data;
+
+        switch (respuesta.status) {
+          case 'OK':
+            _this.alert.status = 'primary';
+            _this.alert.visible = true;
+            _this.alert.message = respuesta.data;
+            break;
+
+          case 'ERROR':
+            _this.alert.status = 'warning';
+            _this.alert.visible = true;
+            _this.alert.message = respuesta.data;
+            break;
+        }
+
+        _this.form.codigo_operador = '';
+        _this.timer = setTimeout(function () {
+          _this.alert = _this.initAlert();
+        }, 10000);
+      });
     },
     changePrint: function changePrint() {
       localStorage.setItem('ip_print', this.form.ip_print);
@@ -3321,8 +3358,8 @@ __webpack_require__.r(__webpack_exports__);
       lista_codigos: [],
       fila_codigos: [],
       matriz_codigos: [],
-      indice_matriz: 1,
-      extension: 10
+      indice_matriz: 2,
+      extension: 24
     };
   },
   mounted: function mounted() {
@@ -44161,6 +44198,26 @@ var render = function() {
                               expression: "form.ip_print"
                             }
                           }),
+                          _vm._v(" "),
+                          _c(
+                            "v-alert",
+                            {
+                              staticClass: "mt-3",
+                              attrs: {
+                                color: _vm.alert.status,
+                                dark: "",
+                                transition: "scale-transition"
+                              },
+                              model: {
+                                value: _vm.alert.visible,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.alert, "visible", $$v)
+                                },
+                                expression: "alert.visible"
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.alert.message))]
+                          ),
                           _vm._v(" "),
                           _c(
                             "button",
