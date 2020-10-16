@@ -88,7 +88,8 @@ export default {
     data() {
         return {
             header:[
-                { text: 'Nombre', value: 'nombre_impresora' },
+                { text: 'IP', value: 'ip' },
+                { text: 'Nombre', value: 'nombre' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
