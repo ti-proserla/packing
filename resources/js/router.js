@@ -17,6 +17,10 @@ var routes =[
         component: require('./view/materia.vue').default
     },
     {
+        path: '/impresora',
+        component: require('./view/impresora.vue').default
+    },
+    {
         path: '/cliente',
         component: require('./view/cliente.vue').default
     },

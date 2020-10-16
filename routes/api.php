@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('producto', 'ProductoController');
 Route::resource('cliente', 'ClienteController');
 Route::get('materia/variedad', 'MateriaController@variedad');
+Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
 Route::resource('transportista', 'TransportistaController');
