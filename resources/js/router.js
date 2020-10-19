@@ -72,6 +72,10 @@ var routes =[
         component: require('./view/reporte/Lote.vue').default
     },
     {
+        path: '/reporte/personal',
+        component: require('./view/reporte/Personal.vue').default
+    },
+    {
         path: '/dispensador',
         component: require('./view/Dispensador.vue').default
     },

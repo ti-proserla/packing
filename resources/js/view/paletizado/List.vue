@@ -4,10 +4,9 @@
             <v-card-title>LISTA DE PALETS POR LOTES</v-card-title>
         </v-card>
         <v-btn
-            dark
             fab
             bottom
-            fixed="true"
+            :fixed="true"
             right
             color="primary"
             @click="$router.push('/paletizado/new')">
@@ -17,10 +16,19 @@
             <v-col sm=12 cols="12" v-for="(lote,i) in lotes" :key="i">
                 <v-card>
                     <v-card-text>
-                        <h5><b>Cliente:</b> {{ lote.cliente}}</h5>
-                        <h5><b>Lote:</b> {{ lote.codigo }}</h5>
-                        <h5><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h5>
-                        <h5><b>Cosecha:</b> {{ lote.fecha_cosecha }}</h5>
+                        <v-row>
+                            <v-col cols="12" lg="8">
+                                <h4><b class="detalles">Cliente:</b> {{ lote.cliente}}</h4>
+                                <h4><b class="detalles">Lote:</b> {{ lote.codigo }}</h4>
+                                <h4><b class="detalles">Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h4>
+                                <h4><b class="detalles">Cosecha:</b> {{ lote.fecha_cosecha }}</h4>
+                            </v-col>
+                            <v-col cols="12" lg="4" class="text-right">
+                                <v-btn color="primary" @click="finalizar(lote.id)">
+                                    Finalizar
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                         <v-row>
                             <v-col v-for="(palet,index) in lote.palets_salida" :key="index" cols=6 sm=3>
                                 <v-card 
@@ -43,6 +51,12 @@
         </v-row>
     </v-container>
 </template>
+<style>
+    b.detalles{
+        width: 100px;
+        display: inline-block;
+    }
+</style>
 <script>
 export default {
     data() {
@@ -56,14 +70,36 @@ export default {
         }
     },
     mounted() {
-        axios.get(url_base+`/lote_ingreso/palets_salida?estado=lanzado`)
-        .then(response => {
-            this.lotes=response.data
-        });
+        this.listar();
     },
     methods:{
+        listar(){
+            axios.get(url_base+`/lote_ingreso/palets_salida?estado=lanzado`)
+            .then(response => {
+                this.lotes=response.data
+            });
+        },
         seleccionar(id){
             this.$router.push(`/paletizado/${id}`);
+        },
+        finalizar(id){
+            swal({ title: "¿Desea Finalizar?", buttons: ['Cancelar',"Finalizar"]})
+            .then((res) => {
+                if (res) {
+                    axios.post(url_base+`/lote_ingreso/${ id }?_method=patch`,{
+                        estado: 'Finalizado'
+                    }).then(response => {
+                        var res=response.data;
+                        switch (res.status) {
+                            case 'OK':
+                                this.listar();
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+            });
         }
     }
 }

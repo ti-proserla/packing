@@ -8,26 +8,32 @@
                     <v-card-title>Producción Code Bar</v-card-title>
                     <v-card-text>
                         <v-form autocomplete="off" @submit.prevent="print()">
-                            <v-text-field 
-                                dense 
-                                outlined 
-                                label="Código de Barras" 
-                                autofocus 
-                                v-model="form.codigo_operador">
-                                </v-text-field>
-                            <v-select
-                                outlined
-                                dense
-                                v-model="form.ip_print"
-                                label="Printers:"
-                                :items="prints"
-                                :item-text="print => `${print.ip} = ${print.nombre}`"
-                                item-value="ip"
-                                hide-details="auto"
-                                v-on:change="changePrint"
-                                >
-                                </v-select>
-                            <v-alert class="mt-3" v-model="alert.visible" :color="alert.status" dark transition="scale-transition">{{ alert.message }}</v-alert>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-select
+                                        outlined
+                                        dense
+                                        v-model="form.ip_print"
+                                        label="Printers:"
+                                        :items="prints"
+                                        :item-text="print => `${print.ip} = ${print.nombre}`"
+                                        item-value="ip"
+                                        hide-details="auto"
+                                        v-on:change="changePrint"
+                                        >
+                                        </v-select>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field 
+                                        dense 
+                                        outlined 
+                                        label="Código de Barras" 
+                                        autofocus 
+                                        v-model="form.codigo_operador">
+                                        </v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-alert v-model="alert.visible" :color="alert.status" dark transition="scale-transition">{{ alert.message }}</v-alert>
                             <button type="submit" hidden>Submin</button>
                         </v-form>
                     </v-card-text>
@@ -50,6 +56,12 @@ export default {
                 ip_print: localStorage.getItem('ip_print') || null,
             }
         }
+    },
+    mounted() {
+        axios.get(url_base+'/impresora?all')
+        .then(response => {
+            this.prints = response.data;
+        })
     },
     methods: {
         initAlert(){

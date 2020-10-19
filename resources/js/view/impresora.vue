@@ -61,9 +61,16 @@
                         <v-text-field 
                             required 
                             hide-details="auto"
+                            label="IP" 
+                            v-model="impresora_editar.ip"
+                            :error-messages="error_editar.ip"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
                             label="Nombre" 
-                            v-model="impresora_editar.nombre_impresora"
-                            :error-messages="error_editar.nombre_impresora"
+                            v-model="impresora_editar.nombre"
+                            :error-messages="error_editar.nombre"
                         ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 

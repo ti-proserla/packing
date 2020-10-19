@@ -40,7 +40,7 @@
             <v-divider></v-divider>
                 <v-list-item link to="/impresora">
                     <v-list-item-icon>
-                        <i class="far fa-building"></i>
+                        <i class="fas fa-print"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
                         Impresoras

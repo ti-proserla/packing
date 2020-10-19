@@ -19,10 +19,10 @@
             <v-col sm=4 cols="12" v-for="(lote,i) in lotes_ingreso" :key="i">
                 <v-card>
                     <v-card-text>
-                        <h5><b>Cliente:</b> {{ lote.descripcion}}</h5>
-                        <h5><b>Lote:</b> {{ lote.codigo }}</h5>
-                        <h5><b>Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h5>
-                        <h5><b>Cosecha:</b> {{ lote.fecha_cosecha }}</h5>
+                        <h4><b class="detalles">Cliente:</b> {{ lote.descripcion}}</h4>
+                        <h4><b class="detalles">Lote:</b> {{ lote.codigo }}</h4>
+                        <h4><b class="detalles">Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h4>
+                        <h4><b class="detalles">Cosecha:</b> {{ lote.fecha_cosecha }}</h4>
                         <div class="text-center my-3">
                             <v-btn outlined="true" color="info" @click="redirect(lote.id)">
                                 Detalles
@@ -34,6 +34,12 @@
         </v-row>
     </v-container>
 </template>
+<style>
+    b.detalles{
+        width: 100px;
+        display: inline-block;
+    }
+</style>
 <script>
 export default {
     data() {
