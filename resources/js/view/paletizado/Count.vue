@@ -1,12 +1,12 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col cols=12 sm=6>
+            <v-col cols=12 sm=4>
                 PALETIZADO
             </v-col>
-            <v-col cols=12 sm=6 class="text-right">
-                <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
-                <v-btn @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar Palet</v-btn>
+            <v-col cols=12 sm=8 class="text-right">
+                <v-btn  @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
+                <v-btn  @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar</v-btn>
             </v-col>
         </v-row>
         <v-row>
@@ -18,16 +18,24 @@
                             <v-col cols=12>
                                 <v-form autocomplete="off" @submit.prevent="agregar()">
                                     <v-text-field 
+                                        type="number"
                                         dense 
                                         outlined 
                                         label="Código de Barras" 
-                                        autofocus 
+                                        autofocus
+                                        @focus="OpenFocus()" 
+                                        :readonly="readonlyFocusInit"
                                         v-model="codigo_barras">
                                         </v-text-field>
                                     <button type="submit" hidden>Submin</button>
                                 </v-form>
                             </v-col>
                         </v-row>
+                        <audio id="myAudio">
+                            <!-- <source src="horse.ogg" type="audio/ogg"> -->
+                            <source src="/mp3/error.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -59,6 +67,7 @@
 export default {
     data() {
         return {
+            readonlyFocusInit: false,
             palet: {},
             codigo_barras: null,
             lista_codigos: [],
@@ -81,6 +90,15 @@ export default {
         });
     },
     methods: {
+        OpenFocus(){
+            // console.log("HOLA");
+            // if (this.focusSelect){
+                this.readonlyFocusInit=true;
+                setTimeout(() => {
+                    this.readonlyFocusInit=false;
+                },300 );
+            // }
+        },
         agregar(){
             var repetido=0;
 
@@ -104,10 +122,12 @@ export default {
                 }
                 
                 if (repetido==1) {
-                    swal("Código ya registrado en este Palet.", {
-                        icon: "error",
-                        timer: 3500
-                    });
+                    var x = document.getElementById("myAudio");
+                    x.play();
+                    // swal("Código ya registrado en este Palet.", {
+                    //     icon: "error",
+                    //     timer: 3500
+                    // });
                 }else{
                     // for (let j = 0; j < this.fila_codigos.length; j++) {
                     //     const element2 = this.fila_codigos[j];
