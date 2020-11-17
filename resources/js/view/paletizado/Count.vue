@@ -64,8 +64,8 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 2,
-            extension: 24 
+            indice_matriz: 1,
+            extension: 14 
         }
     },
     mounted() {

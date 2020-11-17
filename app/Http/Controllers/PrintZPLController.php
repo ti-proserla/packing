@@ -17,34 +17,35 @@ class PrintZPLController extends Controller
         $ip_print = $request->ip_print;
         $codigo_operador = $request->codigo_operador;
 
-        $tareo=Tareo::where('codigo_operador',$codigo_operador)
-                    ->orderBy('id','DESC')
-                    ->first();
+        // $tareo=Tareo::where('codigo_operador',$codigo_operador)
+        //             ->orderBy('id','DESC')
+        //             ->first();
 
-        if ($tareo==null) {
-            return response()->json([
-                "status"    => "ERROR",
-                "data"      => "Tareo no existe."
-            ]);
-        }
-        $labor_id=$tareo->labor_id;
-        $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
+        // if ($tareo==null) {
+        //     return response()->json([
+        //         "status"    => "ERROR",
+        //         "data"      => "Tareo no existe."
+        //     ]);
+        // }
+        // $labor_id=$tareo->labor_id;
+        // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
+        $linea_id="06";
         if ($this->ping($ip_print)){
             
             $string="^XA
                     ^BY2,1,80
-                    ^FO40,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO40,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO200,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO200,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO360,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO520,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
                     ^XZ";
             $parametros=array(
                 'linea'     =>  $linea_id,
                 'operador'  =>  $codigo_operador,
-                'labor'     =>  $labor_id
+                // 'labor'     =>  $labor_id
             );
                 
         
@@ -86,7 +87,7 @@ class PrintZPLController extends Controller
         $number=0;
 
         $index_db=0;
-        $cantidad=16;
+        $cantidad=30;
 
 
         if(-1<strpos($string_zpl,'{autonumerico}')){
@@ -100,7 +101,7 @@ class PrintZPLController extends Controller
                 for ($i=0; $i < $conteo-1; $i++) { 
                     $value=$separate_autonumerico[$i];
                     $temp_index_db+=1;
-                    $index=str_pad($temp_index_db, 8, "0", STR_PAD_LEFT);
+                    $index=str_pad($temp_index_db, 4, "0", STR_PAD_LEFT);
                     $print=$print.$value.$index;
                 }
                 /**
