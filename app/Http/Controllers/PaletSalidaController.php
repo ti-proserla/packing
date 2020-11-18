@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\LoteIngreso;
 use App\Model\PaletSalida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,9 @@ class PaletSalidaController extends Controller
         $paletSalida->numero=$palet_contar;
         $paletSalida->fecha=Carbon::now();
         $paletSalida->estado="Abierto";
+        $paletSalida->save();
+        $lote=LoteIngreso::where('id',$request->lote_id)->first();
+        $paletSalida->fecha=$lote->fecha_cosecha;
         $paletSalida->save();
         return response()->json([
             "status" => "OK",

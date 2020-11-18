@@ -64,4 +64,19 @@ class ReportesController extends Controller
         $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);      
         return response()->json($data);  
     }
+    public function rendimiento_personal(Request $request){
+        $query="SELECT 
+                        js.codigo_operador,
+                        op.nom_operador,
+                        op.ape_operador,
+                        COUNT(*) conteo
+                FROM jaba_salida js 
+                INNER JOIN palet_salida ps ON ps.id=js.palet_salida_id
+                INNER JOIN db_asistencia_produccion.operador op ON op.dni=js.codigo_operador
+                WHERE ps.fecha=?
+                GROUP BY js.codigo_operador
+                ORDER BY conteo DESC";
+        $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);      
+        return response()->json($data);  
+    }
 }

@@ -94,6 +94,14 @@
                         Palets de Salida
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/reporte/personal">
+                    <v-list-item-icon>
+                        <i class="far fa-building"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Rendimiento Personal
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/reporte/lote">
                     <v-list-item-icon>
                         <i class="far fa-building"></i>

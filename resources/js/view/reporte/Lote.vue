@@ -43,7 +43,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="datos.lenght==0">
+                            <tr v-if="datos.length==0">
                                 <td colspan="11" class="text-center"> Sin Registros</td>
                             </tr>
                             <tr v-for="fila in datos">
