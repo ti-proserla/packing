@@ -5,8 +5,8 @@
                 PALETIZADO
             </v-col>
             <v-col cols=12 sm=8 class="text-right">
-                <v-btn  @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
-                <v-btn  @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar</v-btn>
+                <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
+                <v-btn @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar</v-btn>
             </v-col>
         </v-row>
         <v-row>
@@ -124,6 +124,7 @@ export default {
                 if (repetido==1) {
                     var x = document.getElementById("myAudio");
                     x.play();
+                    window.navigator.vibrate([500,100,500]);
                     // swal("Código ya registrado en este Palet.", {
                     //     icon: "error",
                     //     timer: 3500
