@@ -28,6 +28,11 @@
                                         v-model="codigo_barras">
                                         </v-text-field>
                                     <button type="submit" hidden>Submin</button>
+                                    <v-alert v-model="alert.visible" 
+                                        :color="alert.status" 
+                                        dark 
+                                        transition="scale-transition"
+                                    >{{ alert.message }}</v-alert>
                                 </v-form>
                             </v-col>
                         </v-row>
@@ -69,6 +74,7 @@ export default {
         return {
             readonlyFocusInit: false,
             palet: {},
+            alert: this.initAlert(),
             codigo_barras: null,
             lista_codigos: [],
             fila_codigos: [],
@@ -90,6 +96,13 @@ export default {
         });
     },
     methods: {
+        initAlert(){
+            return {
+                status: '',
+                visible: false,
+                message: ''
+            }
+        },
         OpenFocus(){
             // console.log("HOLA");
             // if (this.focusSelect){
@@ -125,10 +138,12 @@ export default {
                     var x = document.getElementById("myAudio");
                     x.play();
                     window.navigator.vibrate([500,100,500]);
-                    // swal("Código ya registrado en este Palet.", {
-                    //     icon: "error",
-                    //     timer: 3500
-                    // });
+                    this.alert.status= 'danger';
+                    this.alert.visible= true;
+                    this.alert.message= "Código repetido.";
+                    this.timer=setTimeout(() => {
+                        this.alert=this.initAlert();
+                    }, 2000);
                 }else{
                     // for (let j = 0; j < this.fila_codigos.length; j++) {
                     //     const element2 = this.fila_codigos[j];
