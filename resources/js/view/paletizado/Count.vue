@@ -80,7 +80,7 @@ export default {
             fila_codigos: [],
             matriz_codigos: [],
             indice_matriz: 1,
-            extension: 14 
+            extension: 16 
         }
     },
     mounted() {

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Model\Tareo;
+use App\Model\Parametro;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Model\Labor;
+
 
 class PrintZPLController extends Controller
 {
@@ -17,37 +20,43 @@ class PrintZPLController extends Controller
         $ip_print = $request->ip_print;
         $codigo_operador = $request->codigo_operador;
 
-        // $tareo=Tareo::where('codigo_operador',$codigo_operador)
-        //             ->orderBy('id','DESC')
-        //             ->first();
+        $tareo=Tareo::where('codigo_operador',$codigo_operador)
+                    ->orderBy('id','DESC')
+                   ->first();
 
-        // if ($tareo==null) {
-        //     return response()->json([
-        //         "status"    => "ERROR",
-        //         "data"      => "Tareo no existe."
-        //     ]);
-        // }
-        // $labor_id=$tareo->labor_id;
+        if ($tareo==null) {
+           return response()->json([
+               "status"    => "ERROR",
+               "data"      => "Tareo no existe."
+           ]);
+        }
+        $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
+            ->first();
+        if ($labor==null) {
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Labor no permitida."
+            ]);
+        }
+        $labor_id=$labor->codigo_labor;
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
-        $linea_id="06";
-        if ($this->ping($ip_print)){
-            
+        $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
+        if ($this->ping($ip_print)){            
             $string="^XA
                     ^BY2,1,80
-                    ^FO40,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+                    ^FO40,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO200,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+                    ^FO200,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO360,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+                    ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^BY2,1,80
-                    ^FO520,35^BCR,,,,,A^FD{linea}{operador}{autonumerico}^FS
+                    ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^XZ";
             $parametros=array(
                 'linea'     =>  $linea_id,
                 'operador'  =>  $codigo_operador,
-                // 'labor'     =>  $labor_id
+                'labor'     =>  $labor_id
             );
-                
         
             $this->print_red($ip_print,9100,$this->cast_zpl($string,$parametros));
 
@@ -86,9 +95,9 @@ class PrintZPLController extends Controller
         $print="";
         $number=0;
 
-        $index_db=0;
+        $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
+        $index_db=(int)$parametro->valor;
         $cantidad=30;
-
 
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);
@@ -110,6 +119,8 @@ class PrintZPLController extends Controller
                 $print=$print.$separate_autonumerico[$conteo-1];
             }
         }
+        $parametro->valor=$temp_index_db;
+        $parametro->save();
         return $print;
     }
 
