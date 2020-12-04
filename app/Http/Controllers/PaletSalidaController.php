@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\LoteIngreso;
 use App\Model\PaletSalida;
+use App\Model\JabaSalida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -56,4 +57,17 @@ class PaletSalidaController extends Controller
             "data"  => $paletSalida
         ]);
     }
+
+    public function destroy($id){
+        $paletSalida=PaletSalida::where('id',$id)->first();
+        $jabas=JabaSalida::where('palet_salida_id',$paletSalida->id)->get();
+        foreach ($jabas as $key => $jaba) {
+            $jaba->delete();
+        }
+        $paletSalida->delete();
+        return response()->json([
+            "status" => "OK"
+        ]);
+    }
+
 }

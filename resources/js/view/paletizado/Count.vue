@@ -7,6 +7,26 @@
             <v-col cols=12 sm=8 class="text-right">
                 <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
                 <v-btn @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar</v-btn>
+                <v-menu offset-y>
+                    <template v-slot:activator="{ on }">
+                        <v-btn
+                        icon
+                        dark
+                        v-on="on"
+                        >
+                        <v-icon>more_vert</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-tile
+                        v-for="(item, index) in items"
+                        :key="index"
+                        @click=""
+                        >
+                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
             </v-col>
         </v-row>
         <v-row>
