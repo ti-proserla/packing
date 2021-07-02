@@ -98,7 +98,7 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 2,
+            indice_matriz: 1,
             extension: 16 
         }
     },
