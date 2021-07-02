@@ -30,6 +30,7 @@ class PrintZPLController extends Controller
                "data"      => "Tareo no existe."
            ]);
         }
+        //dd($tareo->labor_id);
         $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
             ->first();
         if ($labor==null) {
@@ -38,6 +39,7 @@ class PrintZPLController extends Controller
                 "data"      => "Labor no permitida."
             ]);
         }
+        //dd($labor);
         $labor_id=$labor->codigo_labor;
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
         $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
@@ -51,6 +53,14 @@ class PrintZPLController extends Controller
                     ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^BY2,1,80
                     ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^XZ";
+            $string="^XA
+                    ^FO10,10
+                    ^BY3,2,70
+                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO430,10
+                    ^BY3,2,70
+                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^XZ";
             $parametros=array(
                 'linea'     =>  $linea_id,
@@ -97,7 +107,8 @@ class PrintZPLController extends Controller
 
         $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
         $index_db=(int)$parametro->valor;
-        $cantidad=30;
+        //dd($index_db);
+        $cantidad=4;
 
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);

@@ -17,15 +17,14 @@
                         <v-icon>more_vert</v-icon>
                         </v-btn>
                     </template>
-                    <v-list>
+                    <!-- <v-list>
                         <v-list-tile
                         v-for="(item, index) in items"
                         :key="index"
-                        @click=""
                         >
                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                         </v-list-tile>
-                    </v-list>
+                    </v-list> -->
                 </v-menu>
             </v-col>
         </v-row>
@@ -99,7 +98,7 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 1,
+            indice_matriz: 2,
             extension: 16 
         }
     },
@@ -107,9 +106,9 @@ export default {
         axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
         .then(response => {
             this.palet=response.data
-            
-            for (let i = 0; i < this.palet.jabas.length; i++) {
-                const jaba = this.palet.jabas[i];
+            var jabas=this.palet.jabas.reverse();
+            for (let i = 0; i < jabas.length; i++) {
+                const jaba = jabas[i];
                 var codigos=jaba.codigos.split('|');
                 this.matriz_codigos.push(codigos);
             }
@@ -146,6 +145,7 @@ export default {
                         }
                     }
                 }
+                
                 for (let i = 0; i < this.fila_codigos.length; i++) {
                     const element = this.fila_codigos[i];
                     if (this.codigo_barras==element) {
@@ -153,7 +153,7 @@ export default {
                         break;
                     }
                 }
-                
+
                 if (repetido==1) {
                     var x = document.getElementById("myAudio");
                     x.play();
@@ -178,7 +178,10 @@ export default {
                     // }
                     
                     if (repetido==0) {
-                        this.fila_codigos.push(this.codigo_barras);
+                        if (this.fila_codigos.length<this.indice_matriz) {
+                            this.fila_codigos.push(this.codigo_barras);
+                            this.codigo_barras="";
+                        }
                         if (this.fila_codigos.length==this.indice_matriz) {
                             axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
                                 codigos_barras: this.fila_codigos
@@ -186,7 +189,8 @@ export default {
                                 var data=res.data;
                                 switch (data.status) {
                                     case "OK":
-                                        this.matriz_codigos.push(this.fila_codigos);
+                                        var temp_array=[this.fila_codigos];
+                                        this.matriz_codigos=temp_array.concat(this.matriz_codigos);
                                         this.fila_codigos=[];
                                         break;
                                 
@@ -201,10 +205,16 @@ export default {
                 }
                 
             }else{
-                swal("Código no cumple con la estructura.", {
-                    icon: "error",
-                    timer: 3500
-                });
+                this.alert.status= 'warning';
+                this.alert.visible= true;
+                this.alert.message= "Código no cumple con la estructura.";
+                this.timer=setTimeout(() => {
+                    this.alert=this.initAlert();
+                }, 2000);
+                // swal("Código no cumple con la estructura.", {
+                //     icon: "error",
+                //     timer: 3500
+                // });
             }
             this.codigo_barras=null;
         },
