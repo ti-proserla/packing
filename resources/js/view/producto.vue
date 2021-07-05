@@ -53,6 +53,14 @@
                             v-model="producto.potes"
                             :error-messages="error.potes"
                         ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Etapas:"
+                            type="number" 
+                            v-model="producto.etapas"
+                            :error-messages="error.etapas"
+                        ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -102,6 +110,14 @@
                             v-model="producto_editar.potes"
                             :error-messages="error_editar.potes"
                         ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Etapas:"
+                            type="number" 
+                            v-model="producto_editar.etapas"
+                            :error-messages="error_editar.etapas"
+                        ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -129,6 +145,7 @@ export default {
                 { text: 'Peso Neto', value: 'peso_neto' },
                 { text: 'Peso Pote', value: 'peso_pote' },
                 { text: 'Potes', value: 'potes' },
+                { text: 'Etapas', value: 'etapas' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -157,6 +174,7 @@ export default {
                 peso_neto: '0.00',
                 peso_pote: '0.00',
                 potes: '0',
+                etapas: 1
             }
         },
         listar(n=this.table.current_page){

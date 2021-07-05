@@ -9,7 +9,7 @@
             dark
             fab
             bottom
-            fixed="true"
+            :fixed="true"
             right
             color="primary"
             @click="nuevo">
@@ -24,7 +24,7 @@
                         <h4><b class="detalles">Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h4>
                         <h4><b class="detalles">Cosecha:</b> {{ lote.fecha_cosecha }}</h4>
                         <div class="text-center my-3">
-                            <v-btn outlined="true" color="info" @click="redirect(lote.id)">
+                            <v-btn :outlined="true" color="info" @click="redirect(lote.id)">
                                 Detalles
                             </v-btn>
                         </div>

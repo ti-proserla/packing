@@ -43,7 +43,9 @@ class PaletSalidaController extends Controller
     
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('jabas')
-                                ->where('id',$id)
+                                ->join('producto','palet_salida.producto_id','=','producto.id')
+                                ->where('palet_salida.id',$id)
+                                ->select('palet_salida.*','producto.etapas')
                                 ->first();
         return response()->json($paletSalida);
     }

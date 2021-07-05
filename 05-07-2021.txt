@@ -1,0 +1,22 @@
+REQUERIMIENTOS
+
+* Nueva Rama Materia -> Variedad , Materia -> Tipos
+* Materia,Variedad,Tipo en Viajes (SubLote) 
+* Viajes (SubLote) agregar (
+    Fecha_recepcion, 
+    HoraIngreso, 
+    Fecha_Proceso, 
+    Peso Guia de Campo, 
+    Descarte Racimo en Kilos, 
+    Descarte Grano en kilos,
+    total de jabas descartadas,
+    Numero de viaje
+)
+* spinner decimal descuento palet acopio (Valor Fijo 20).
+* Lanzado por Sublote.
+* Descarte por Sublote.
+
+
+CUESTIONARIO
+
+* CODIGO LUGAR PRODUCCION

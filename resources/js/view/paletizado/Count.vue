@@ -98,7 +98,6 @@ export default {
             lista_codigos: [],
             fila_codigos: [],
             matriz_codigos: [],
-            indice_matriz: 1,
             extension: 16 
         }
     },
@@ -178,11 +177,11 @@ export default {
                     // }
                     
                     if (repetido==0) {
-                        if (this.fila_codigos.length<this.indice_matriz) {
+                        if (this.fila_codigos.length<this.palet.etapas) {
                             this.fila_codigos.push(this.codigo_barras);
                             this.codigo_barras="";
                         }
-                        if (this.fila_codigos.length==this.indice_matriz) {
+                        if (this.fila_codigos.length==this.palet.etapas) {
                             axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
                                 codigos_barras: this.fila_codigos
                             }).then(res=>{

@@ -26,6 +26,7 @@ class ProductoController extends Controller
         $producto->peso_neto=$request->peso_neto;
         $producto->peso_pote=$request->peso_pote;
         $producto->potes=$request->potes;
+        $producto->etapas=$request->etapas;
         $producto->save();
         return response()->json([
             "status" => "OK"
@@ -48,6 +49,7 @@ class ProductoController extends Controller
         $producto->peso_neto=$request->peso_neto;
         $producto->peso_pote=$request->peso_pote;
         $producto->potes=$request->potes;
+        $producto->etapas=$request->etapas;
         $producto->save();
         return response()->json([
             "status" => "OK"
