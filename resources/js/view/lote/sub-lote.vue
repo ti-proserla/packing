@@ -1,5 +1,107 @@
 <template>
     <v-container fluid>
+        <v-dialog v-model="open_nuevo" persistent max-width="350">
+                <v-card>
+                    <v-card-title class="headline">Nuevo Sub Lote</v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols=4>
+                                <v-text-field 
+                                    label="Viaje:" 
+                                    type="number"
+                                    v-model="sub_lote.viaje"
+                                    :outlined="true"
+                                    hide-details="auto"
+                                    dense
+                                    clearable
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols=8>
+                                <v-text-field 
+                                    label="Guia:" 
+                                    v-model="sub_lote.guia"
+                                    :outlined="true"
+                                    hide-details="auto"
+                                    dense
+                                    clearable
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols=12>
+                                <v-select
+                                    :outlined="true"
+                                    dense
+                                    v-model="sub_lote.transportista_id"
+                                    label="Transportista"
+                                    :items="transportistas"
+                                    item-text="nombre_transportista"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    ></v-select>
+                            </v-col>
+                            <v-col cols=12>
+                                <v-text-field 
+                                    label="Peso Guia (Kg):" 
+                                    v-model="sub_lote.peso_guia"
+                                    :outlined="true"
+                                    hide-details="auto"
+                                    dense
+                                    type="number"
+                                    clearable
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols=12 sm=6>
+                                <v-select
+                                    outlined
+                                    dense
+                                    v-model="sub_lote.materia_id"
+                                    label="Materia:"
+                                    :items="materias"
+                                    item-text="nombre_materia"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    >
+                                    </v-select>
+                            </v-col>
+                            <v-col cols=12 sm=6>
+                                <v-select
+                                    outlined
+                                    dense
+                                    v-model="sub_lote.variedad_id"
+                                    label="Variedad:"
+                                    :items="variedades"
+                                    item-text="nombre_variedad"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    >
+                                    </v-select>
+                            </v-col>
+                            <v-col cols=12 sm=12>
+                                <v-text-field 
+                                    label="Fecha Recepcion:" 
+                                    v-model="lote.fecha_recepcion"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="datetime-local"
+                                    hide-details="auto"
+                                ></v-text-field>
+                            </v-col>
+                            
+                        </v-row>
+                        <div class="text-right mt-3">
+                            <v-btn 
+                                outlined 
+                                color="secondary" 
+                                @click="open_nuevo=false"
+                                >Cancelar</v-btn>
+                            <v-btn color="primary" @click="guardarSubLote()">
+                                Guardar
+                            </v-btn>
+                        </div>
+                    </v-card-text>
+                </v-card>               
+            </v-dialog>
+
         <v-card>
             <v-card-text>
                 <v-row>
@@ -20,37 +122,21 @@
                             <v-col sm=4 cols=12>
                                 Nuevo Sub Lote
                                 <v-row>
-                                    <v-col cols=12>
-                                        <v-text-field 
-                                            label="Guia:" 
-                                            v-model="sub_lote.guia"
-                                            :outlined="true"
-                                            hide-details="auto"
-                                            dense
-                                            clearable
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols=12>
-                                        <v-select
-                                            :outlined="true"
-                                            dense
-                                            v-model="sub_lote.transportista_id"
-                                            label="Transportista"
-                                            :items="transportistas"
-                                            item-text="nombre_transportista"
-                                            item-value="id"
-                                            hide-details="auto"
-                                            ></v-select>
-                                    </v-col>
+                                    
                                 </v-row>
                                 <div class="text-center">
-                                    <v-btn color="primary" @click="guardarSubLote()">
-                                        Guardar
-                                    </v-btn>
+                                    
                                 </div>
                             </v-col>
                             <v-col sm=4 cols=12>
-                                Lista de Sub Lotes
+                                <h4>Lista de Sub Lotes</h4>
+                                
+                                <v-btn @click="open_nuevo=true" 
+                                        outlined 
+                                        color="info">
+                                        Nuevo Sub Lote
+                                </v-btn>
+
                                 <v-radio-group v-model="seleccionado_sub_lote">
                                     <v-card 
                                         outlined 
@@ -154,6 +240,8 @@ import { mapState,mapMutations } from 'vuex'
 export default {
     data() {
         return {
+            //modal
+            open_nuevo:false,
             //operaciones
             num_jabas: 0,
             peso: 0,
@@ -166,6 +254,8 @@ export default {
             palets: [],
             palets_entrada: [],
             palets_error:{},
+            variedades: [],
+            materias: [],
             //selectores
             seleccionado_sub_lote: null
         }
@@ -180,12 +270,27 @@ export default {
         });
         this.listarTransportistas();
         this.listarSublote();
+        this.listarMaterias();
+        this.listarVariedades();
     },
     methods: {
         init(){
             return {
-                lote_id: this.$route.params.id
+                lote_id: this.$route.params.id,
+                viaje: 1,
             };
+        },
+        listarMaterias(){
+            axios.get(url_base+'/materia?all')
+            .then(response => {
+                this.materias=response.data
+            })
+        }, 
+        listarVariedades(){
+            axios.get(url_base+'/variedad?all')
+            .then(response => {
+                this.variedades=response.data
+            })
         },
         listarSublote(){
             axios.get(url_base+`/lote_ingreso/${this.$route.params.id}/sub_lote`)
