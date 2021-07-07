@@ -16,7 +16,8 @@ class CreatePaletEntradaTable extends Migration
         Schema::create('palet_entrada', function (Blueprint $table) {
             $table->id();
             $table->integer('sub_lote_id');
-            $table->decimal('peso',5,2);
+            $table->decimal('peso',6,2);
+            $table->decimal('peso_palet',6,2);
             $table->integer('num_jabas');
             $table->integer('producto_id');
             $table->timestamps();

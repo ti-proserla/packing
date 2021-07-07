@@ -12,4 +12,8 @@ class Materia extends Model
     {
         return $this->hasMany('App\Model\Variedad');
     }
+    public function tipo()
+    {
+        return $this->hasMany('App\Model\Tipo');
+    }
 }

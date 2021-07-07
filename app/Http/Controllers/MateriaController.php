@@ -26,6 +26,13 @@ class MateriaController extends Controller
         $materias=Materia::with('variedad')->get();
         return response()->json($materias);
     }
+    
+    public function detallado(){
+        $materias=Materia::with('variedad')
+                            ->with('tipo')
+                            ->get();
+        return response()->json($materias);
+    }
 
    
     public function store(MateriaValidate $request)
