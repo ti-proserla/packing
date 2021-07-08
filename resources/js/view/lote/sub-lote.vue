@@ -114,41 +114,49 @@
                 </v-card-text>
             </v-card>               
         </v-dialog>
-        <v-card>
+        <!-- <v-card>
             <v-card-text>
                 <v-row>
                     <v-col cols="12" sm=6>
-                        Registro de Palets - Lote: {{lote.codigo}}
                     </v-col>
                     <v-col cols=12 sm=6 class="text-right">
                         <v-btn v-if="lote.estado=='Registrado'" color="orange" @click="finalizar">FINALIZAR</v-btn>
                     </v-col>
                 </v-row>
             </v-card-text>
-        </v-card>
+        </v-card> -->
         <v-row>
-            <v-col cols="12">
+            <v-col cols="8">
                 <v-card>
                     <v-card-text>
+                        <h4>DATOS DE LOTE</h4>
+                        <p class="mb-0"><b>Lote:</b> {{lote.codigo}}</p>
+                        <p class="mb-0"><b>Cliente:</b> {{ lote.ruc }} | {{ lote.descripcion }}</p>
                         <v-row>
-                            <v-col sm=7 cols=12>
-                                <h4>Lista de Sub Lotes</h4>             
-                                <v-btn @click="open_nuevo=true" 
-                                        outlined 
-                                        color="info">
-                                        Nuevo Sub Lote
+                            <v-col cols="6">
+                                <h4>LISTA DE SUBLOTES</h4>             
+                            </v-col>
+                            <v-col cols="6" class="text-right">
+                                <v-btn 
+                                    @click="open_nuevo=true" 
+                                    small
+                                    color="info">
+                                    Nuevo Sub Lote
                                 </v-btn>
-                                <v-radio-group v-model="seleccionado_sub_lote">
+                            </v-col>
+                            <v-col cols=12>
+                                <v-radio-group v-model="seleccionado_sub_lote" class="mt-0">
                                     <v-card 
                                         outlined 
                                         class="mb-3" 
                                         v-for="(sub,index) in sub_lotes" 
-                                        :key="index" 
-                                        @click="seleccionar(sub.id)">
+                                        :key="index">
                                             <v-card-text>
                                                 <v-row>
                                                     <v-col cols="1"  class="pb-0 pt-0">
-                                                        <v-radio :value="sub.id"></v-radio>
+                                                        <v-radio :value="sub.id"
+                                                            @click="seleccionar(sub.id)">
+                                                        </v-radio>
                                                     </v-col>
                                                     <v-col cols="11" class="pb-0 pt-0">
                                                         <v-row>
@@ -157,15 +165,16 @@
                                                             <v-col class="pb-0 pt-0" cols="5">{{ sub.nombre_materia }} / {{ sub.nombre_variedad }} / {{ sub.nombre_tipo }}</v-col>
                                                             <v-col class="pb-0 pt-0" cols="2">
                                                                 <v-btn 
-                                                                    color="primary"
-                                                                    elevation="2"
-                                                                    small>
-                                                                    E
+                                                                    small
+                                                                    icon
+                                                                    color="amber">
+                                                                    <i class="far fa-edit"></i>
                                                                 </v-btn>
-                                                                <v-btn icon
-                                                                    outlined
+                                                                <v-btn 
+                                                                    small
+                                                                    icon
                                                                     color="red">
-                                                                    X
+                                                                    <i class="far fa-trash-alt"></i>
                                                                 </v-btn>
                                                             </v-col>
                                                         </v-row>
@@ -175,74 +184,85 @@
                                     </v-card>
                                 </v-radio-group>
                             </v-col>
-                            <v-col sm=5 cols=12>
-                                Registro de Palets
-                                <v-row>
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field 
-                                            label="N° de Jabas:" 
-                                            v-model="num_jabas"
-                                            outlined
-                                            dense
-                                            clearable
-                                            hide-details="auto"
-                                            type="number"
-                                            :error-messages="palets_error.num_jabas"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field 
-                                            label="Peso Total:" 
-                                            v-model="peso"
-                                            outlined
-                                            dense
-                                            clearable
-                                            type="number"
-                                            hide-details="auto"
-                                            :error-messages="palets_error.peso"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                        <v-text-field 
-                                            label="Peso Palet:" 
-                                            v-model="peso_palet"
-                                            outlined
-                                            dense
-                                            clearable
-                                            type="number"
-                                            hide-details="auto"
-                                            :error-messages="palets_error.peso_palet"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6">
-                                        <v-btn color="primary" @click="add()">Agregar</v-btn>
-                                    </v-col>
-                                </v-row>
-                                <div class="text-center" v-if="seleccionado_sub_lote!=null">
-                                    <v-simple-table dense>
-                                        <template v-slot:default>
-                                            <thead>
-                                                <tr>
-                                                    <th>N°</th>
-                                                    <th>N° Jabas</th>
-                                                    <th>Peso Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
-                                                    <td>{{ palets_entrada.length - index}}</td>
-                                                    <td>{{ palet.num_jabas }}</td>
-                                                    <td>{{ palet.peso }}</td>
-                                                </tr>
-                                                <tr v-if="seleccionado_sub_lote==null">
-                                                    <td colspan="3"> Seleccione un Sub lote </td>
-                                                </tr>
-                                            </tbody>
-                                        </template>
-                                    </v-simple-table>
-                                </div>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="4">
+                <v-card v-if="seleccionado_sub_lote!=null">
+                    <v-card-text>
+                        Registro de Palets
+                        <v-row>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="N° de Jabas:" 
+                                    v-model="num_jabas"
+                                    outlined
+                                    dense
+                                    clearable
+                                    hide-details="auto"
+                                    type="number"
+                                    :error-messages="palets_error.num_jabas"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="Peso Total:" 
+                                    v-model="peso"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="number"
+                                    hide-details="auto"
+                                    :error-messages="palets_error.peso"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="Peso Palet:" 
+                                    v-model="peso_palet"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="number"
+                                    hide-details="auto"
+                                    :error-messages="palets_error.peso_palet"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-btn 
+                                    color="primary"
+                                    block 
+                                    @click="add()">
+                                    Agregar
+                                </v-btn>
                             </v-col>
                         </v-row>
+                        <div class="text-center">
+                                <v-simple-table dense>
+                                    <template v-slot:default>
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>N° Jabas</th>
+                                                <th>Peso Total</th>
+                                                <th>Peso Palet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
+                                                <td>{{ palets_entrada.length - index}}</td>
+                                                <td>{{ palet.num_jabas }}</td>
+                                                <td>{{ palet.peso }}</td>
+                                                <td>{{ palet.peso_palet }}</td>
+                                            </tr>
+                                            <tr v-if="seleccionado_sub_lote==null">
+                                                <td colspan="3"> Seleccione un Sub lote </td>
+                                            </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
+                            </div>
                     </v-card-text>
                 </v-card>
             </v-col>

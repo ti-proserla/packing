@@ -52,8 +52,6 @@ export default {
             fecha_produccion: moment().format('YYYY-MM-DD')
         }
     },
-    methods: {
-    },
     mounted() {
         this.buscar();
     },

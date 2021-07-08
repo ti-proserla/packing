@@ -64,6 +64,10 @@ var routes =[
     },
     //Reportes
     {
+        path: '/reporte/acopio',
+        component: require('./view/reporte/Acopio.vue').default
+    },
+    {
         path: '/reporte/linea',
         component: require('./view/reporte/Linea.vue').default
     },

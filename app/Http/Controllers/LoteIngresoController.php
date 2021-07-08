@@ -62,7 +62,10 @@ class LoteIngresoController extends Controller
 
     public function show($id)
     {
-        $loteIngreso=LoteIngreso::where('id',$id)->first();
+        $loteIngreso=LoteIngreso::where('lote_ingreso.id',$id)
+                    ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
+                    ->select('lote_ingreso.*','cliente.ruc','cliente.descripcion')
+                    ->first();
         return response()->json($loteIngreso);
     }
    
