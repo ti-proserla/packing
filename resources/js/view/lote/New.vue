@@ -54,7 +54,33 @@
                                 item-text="nombre_variedad"
                                 item-value="id"
                                 hide-details="auto"
-                                :error-messages="lote_error.variedad_id"
+                                >
+                                </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-select
+                                    outlined
+                                    dense
+                                    v-model="lote.tipo_id"
+                                    label="Tipo:"
+                                    :items="tipos"
+                                    item-text="nombre_tipo"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    >
+                                    </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="lote.fundo_id"
+                                label="Fundo:"
+                                :items="fundos"
+                                item-text="nombre_fundo"
+                                item-value="id"
+                                hide-details="auto"
+                                :error-messages="lote_error.fundo_id"
                                 >
                                 </v-select>
                         </v-col>
@@ -88,8 +114,9 @@ export default {
             /**
              * Listas
              */
-            materias: [],
             clientes: [],
+            materias: [],
+            fundos: [],
             /**
              * Modificadores
              */
@@ -98,6 +125,9 @@ export default {
                 cliente_id: "",
                 materia_id: "",
                 variedad_id: "",
+                tipo_id: "",
+                fundo_id: "",
+                parcela_id: "",
                 fecha_cosecha: moment().format('YYYY-MM-DD')
             },
             lote_error: {}
@@ -106,24 +136,40 @@ export default {
     mounted() {
         this.listarProductos();
         this.listarClientes();
+        this.listarFundos();
     },
     computed: {
-        variedades(){
-            var variedades = [];
+        variedades() {
             for (let i = 0; i < this.materias.length; i++) {
                 const materia = this.materias[i];
                 if (materia.id==this.lote.materia_id) {
-                    variedades=materia.variedad;
+                    return materia.variedad;
+                    // this.tipos= materia.tipo;
                 }
             }
-            return variedades
+            return []
+        },
+        tipos() {
+            for (let i = 0; i < this.materias.length; i++) {
+                const materia = this.materias[i];
+                if (materia.id==this.lote.materia_id) {
+                    return materia.tipo;
+                }
+            }
+            return []
         }
     },
     methods: {
         listarProductos(){
-            axios.get(url_base+'/materia/variedad')
+            axios.get(url_base+'/materia/detallado')
             .then(response => {
                 this.materias=response.data
+            });
+        },
+        listarFundos(){
+            axios.get(url_base+'/fundo/detallado')
+            .then(response => {
+                this.fundos=response.data
             });
         },
         listarClientes(){

@@ -18,9 +18,7 @@ class CreateSubLoteTable extends Migration
             $table->integer('lote_id');
             //recepcin de materia
             $table->integer('viaje');
-            $table->string('guia',50);
-            // $table->integer('transportista_id');
-            
+            $table->string('guia',50);            
             $table->decimal('peso_guia',8,2);
             $table->datetime('fecha_recepcion');
             //lanzado y descarte

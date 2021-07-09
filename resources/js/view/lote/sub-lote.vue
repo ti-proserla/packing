@@ -335,7 +335,6 @@ export default {
         this.listarTransportistas();
         this.listarSublote();
         this.listarMaterias();
-        // this.listarVariedades();
     },
     methods: {
         init(){
@@ -351,12 +350,6 @@ export default {
                 this.materias=response.data
             })
         }, 
-        listarVariedades(){
-            axios.get(url_base+'/variedad?all')
-            .then(response => {
-                this.variedades=response.data
-            })
-        },
         listarSublote(){
             axios.get(url_base+`/lote_ingreso/${this.$route.params.id}/sub_lote`)
             .then(response => {

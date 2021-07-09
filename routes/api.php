@@ -24,6 +24,10 @@ Route::get('materia/detallado', 'MateriaController@detallado');
 Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
+
+Route::get('fundo/detallado', 'FundoController@detallado');
+Route::resource('fundo', 'FundoController');
+
 Route::resource('transportista', 'TransportistaController');
 Route::resource('palet_salida/{id}/jaba', 'JabaSalidaController');
 Route::resource('palet_salida', 'PaletSalidaController');

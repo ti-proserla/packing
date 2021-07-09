@@ -51,6 +51,9 @@ class LoteIngresoController extends Controller
         $loteIngreso->cliente_id=$request->cliente_id;
         $loteIngreso->materia_id=$request->materia_id;
         $loteIngreso->variedad_id=$request->variedad_id;
+        $loteIngreso->tipo_id=$request->tipo_id;
+        $loteIngreso->fundo_id=$request->fundo_id;
+        $loteIngreso->parcela_id=$request->parcela_id;
         $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
         $loteIngreso->estado="Registrado";
         $loteIngreso->save();
