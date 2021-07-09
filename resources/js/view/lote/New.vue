@@ -85,6 +85,19 @@
                                 </v-select>
                         </v-col>
                         <v-col cols=12 sm=6>
+                            <v-select
+                                    outlined
+                                    dense
+                                    v-model="lote.parcela_id"
+                                    label="Parcelas:"
+                                    :items="parcelas"
+                                    item-text="nombre_parcela"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    >
+                                    </v-select>
+                        </v-col>
+                        <v-col cols=12 sm=6>
                             <v-text-field 
                                 label="Fecha Cosecha:" 
                                 v-model="lote.fecha_cosecha"
@@ -144,7 +157,6 @@ export default {
                 const materia = this.materias[i];
                 if (materia.id==this.lote.materia_id) {
                     return materia.variedad;
-                    // this.tipos= materia.tipo;
                 }
             }
             return []
@@ -154,6 +166,15 @@ export default {
                 const materia = this.materias[i];
                 if (materia.id==this.lote.materia_id) {
                     return materia.tipo;
+                }
+            }
+            return []
+        },
+        parcelas() {
+            for (let i = 0; i < this.fundos.length; i++) {
+                const fundo = this.fundos[i];
+                if (fundo.id==this.lote.fundo_id) {
+                    return fundo.parcelas;
                 }
             }
             return []
