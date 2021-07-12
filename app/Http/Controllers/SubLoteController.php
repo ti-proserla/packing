@@ -8,15 +8,15 @@ use App\Model\SubLote;
 class SubLoteController extends Controller
 {
    
-    public function index($id)
+    public function index(Request $request)
     {
-        $subLotes=SubLote::with('transportista')
-                            ->join('materia','materia.id','=','sub_lote.materia_id')
-                            ->join('variedad','variedad.id','=','sub_lote.variedad_id')
-                            ->join('tipo','tipo.id','=','sub_lote.tipo_id')
-                            ->where('lote_id',$id)
-                            ->select('sub_lote.*','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
-                            ->get();
+        if ($request->has('estado')) {
+            $subLotes=SubLote::join('lote_ingreso','lote_ingreso.id','=','sub_lote.lote_id')
+                        ->where('sub_lote.estado',$request->estado)    
+                        ->get();
+        }else{
+            
+        }
         return response()->json($subLotes);
     }
 
@@ -27,14 +27,11 @@ class SubLoteController extends Controller
         // dd($request->all());
         $subLotes=new SubLote();
         $subLotes->lote_id=$request->lote_id;
-        $subLotes->guia=$request->guia;
-        $subLotes->transportista_id=$request->transportista_id;
         $subLotes->viaje=$request->viaje;
+        $subLotes->guia=$request->guia;
         $subLotes->fecha_recepcion=$request->fecha_recepcion;
         $subLotes->peso_guia=$request->peso_guia;
-        $subLotes->materia_id=$request->materia_id;
-        $subLotes->variedad_id=$request->variedad_id;
-        $subLotes->tipo_id=$request->tipo_id;
+        $subLotes->estado='Pendiente';
         $subLotes->save();
 
         return response()->json([

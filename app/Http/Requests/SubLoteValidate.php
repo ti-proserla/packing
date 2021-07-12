@@ -29,8 +29,6 @@ class SubLoteValidate extends FormRequest
         return [
             'lote_id' => 'required|numeric',
             'guia' => 'required|max:50',
-            'transportista_id' => 'required|numeric',
-
         ];
     }
     

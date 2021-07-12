@@ -1,10 +1,28 @@
 <template>
     <v-container fluid>
-        <v-dialog v-model="open_nuevo" persistent max-width="350">
+        <v-dialog 
+            transition="dialog-top-transition"
+            max-width="600"
+            v-model="open_nuevo" 
+            persistent>
             <v-card>
                 <v-card-title class="headline">Nuevo Sub Lote</v-card-title>
                 <v-card-text>
                     <v-row>
+                        <v-col cols=12>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="sub_lote.lote_id"
+                                label="Lote:"
+                                :items="lotes"
+                                :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}/${item.nombre_tipo}`"
+                                item-value="id"
+                                hide-details="auto"
+                                :error-messages="sub_lote_error.lote_id"
+                                >
+                                </v-select>
+                        </v-col>
                         <v-col cols=4>
                             <v-text-field 
                                 label="Viaje:" 
@@ -24,19 +42,8 @@
                                 hide-details="auto"
                                 dense
                                 clearable
+                                :error-messages="sub_lote_error.guia"
                             ></v-text-field>
-                        </v-col>
-                        <v-col cols=12>
-                            <v-select
-                                :outlined="true"
-                                dense
-                                v-model="sub_lote.transportista_id"
-                                label="Transportista"
-                                :items="transportistas"
-                                item-text="nombre_transportista"
-                                item-value="id"
-                                hide-details="auto"
-                                ></v-select>
                         </v-col>
                         <v-col cols=12>
                             <v-text-field 
@@ -47,46 +54,8 @@
                                 dense
                                 type="number"
                                 clearable
+                                :error-messages="sub_lote_error.peso_guia"
                             ></v-text-field>
-                        </v-col>
-                        <v-col cols=12 sm=6>
-                            <v-select
-                                outlined
-                                dense
-                                v-model="sub_lote.materia_id"
-                                label="Materia:"
-                                :items="materias"
-                                item-text="nombre_materia"
-                                item-value="id"
-                                hide-details="auto"
-                                >
-                                </v-select>
-                        </v-col>
-                        <v-col cols=12 sm=6>
-                            <v-select
-                                outlined
-                                dense
-                                v-model="sub_lote.variedad_id"
-                                label="Variedad:"
-                                :items="variedades"
-                                item-text="nombre_variedad"
-                                item-value="id"
-                                hide-details="auto"
-                                >
-                                </v-select>
-                        </v-col>
-                        <v-col cols=12 sm=6>
-                            <v-select
-                                outlined
-                                dense
-                                v-model="sub_lote.tipo_id"
-                                label="Tipo:"
-                                :items="tipos"
-                                item-text="nombre_tipo"
-                                item-value="id"
-                                hide-details="auto"
-                                >
-                                </v-select>
                         </v-col>
                         <v-col cols=12 sm=12>
                             <v-text-field 
@@ -97,9 +66,9 @@
                                 clearable
                                 type="datetime-local"
                                 hide-details="auto"
+                                :error-messages="sub_lote_error.fecha_recepcion"
                             ></v-text-field>
                         </v-col>
-                        
                     </v-row>
                     <div class="text-right mt-3">
                         <v-btn 
@@ -129,9 +98,6 @@
             <v-col cols="8">
                 <v-card>
                     <v-card-text>
-                        <h4>DATOS DE LOTE</h4>
-                        <p class="mb-0"><b>Lote:</b> {{lote.codigo}}</p>
-                        <p class="mb-0"><b>Cliente:</b> {{ lote.ruc }} | {{ lote.descripcion }}</p>
                         <v-row>
                             <v-col cols="6">
                                 <h4>LISTA DE SUBLOTES</h4>             
@@ -160,6 +126,7 @@
                                                     </v-col>
                                                     <v-col cols="11" class="pb-0 pt-0">
                                                         <v-row>
+                                                            <v-col class="pb-0 pt-0" cols="2"><b>Lote:</b> {{ sub.codigo }}</v-col>
                                                             <v-col class="pb-0 pt-0" cols="2"><b>Viaje:</b> {{ sub.viaje }}</v-col>
                                                             <v-col class="pb-0 pt-0" cols="3"><b>Guia:</b> {{ sub.guia }}</v-col>
                                                             <v-col class="pb-0 pt-0" cols="5">{{ sub.nombre_materia }} / {{ sub.nombre_variedad }} / {{ sub.nombre_tipo }}</v-col>
@@ -167,7 +134,8 @@
                                                                 <v-btn 
                                                                     small
                                                                     icon
-                                                                    color="amber">
+                                                                    color="amber" 
+                                                                    @click="abrirEditar(sub.id)">
                                                                     <i class="far fa-edit"></i>
                                                                 </v-btn>
                                                                 <v-btn 
@@ -298,6 +266,7 @@ export default {
             peso: 0,
             peso_palet: 20.00,
             lote: {},
+            lotes: [],
             sub_lote: this.init(),
             sub_lote_error:{},
             //listas
@@ -306,67 +275,50 @@ export default {
             palets: [],
             palets_entrada: [],
             palets_error:{},
-            materias: [],
-            variedades: [],
-            tipos: [],
             //selectores
             seleccionado_sub_lote: null
         }
     },
-    // computed: {
-    //     materias()
-    // },
-    watch: {
-        sub_lote: function (newQuestion, oldQuestion) {
-            for (let i = 0; i < this.materias.length; i++) {
-                const materia = this.materias[i];
-                if (materia.id==this.sub_lote.materia_id) {
-                    this.variedades = materia.variedad;
-                    this.tipos= materia.tipo;
-                }
-            }
-        }
-    },
     mounted() {
-        axios.get(url_base+`/lote_ingreso/${this.$route.params.id}`)
+        axios.get(url_base+`/lote_ingreso`)
         .then(response => {
-            this.lote=response.data
+            this.lotes=response.data
         });
-        this.listarTransportistas();
         this.listarSublote();
-        this.listarMaterias();
     },
     methods: {
         init(){
             return {
-                lote_id: this.$route.params.id,
+                lote_id: null,
                 viaje: 1,
                 fecha_recepcion: moment().format('YYYY-MM-DDTHH:mm')
             };
         },
-        listarMaterias(){
-            axios.get(url_base+'/materia/detallado')
-            .then(response => {
-                this.materias=response.data
-            })
-        }, 
         listarSublote(){
-            axios.get(url_base+`/lote_ingreso/${this.$route.params.id}/sub_lote`)
+            axios.get(`${url_base}/sub_lote?estado=Pendiente`)
             .then(response => {
                 this.sub_lotes=response.data
-            });
-        },
-        listarTransportistas(){
-            axios.get(url_base+'/transportista')
-            .then(response => {
-                this.transportistas=response.data
             });
         },
         guardarSubLote(){
             axios.post(url_base+'/sub_lote',this.sub_lote)
             .then(response => {
-                this.listarSublote();
-                this.open_nuevo=false;
+                 var respuesta=response.data;
+                switch (respuesta.status) {
+                    case "VALIDATION":
+                        this.sub_lote_error=respuesta.data;
+                        break;
+                    case "OK":
+                        swal("Sub Lote Creado", { icon: "success", timer: 2000, buttons: false });
+                        this.listarSublote();
+                        this.open_nuevo=false;
+                        t.lote_error={};
+                        break;
+                    default:
+                        t.lote_error={};
+                        break;
+                }
+                
                 // this.sub_lote=this.init()
             });
         },

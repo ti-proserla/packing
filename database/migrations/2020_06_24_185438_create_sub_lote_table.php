@@ -21,6 +21,7 @@ class CreateSubLoteTable extends Migration
             $table->string('guia',50);            
             $table->decimal('peso_guia',8,2);
             $table->datetime('fecha_recepcion');
+            $table->string('estado',30)->nullable();
             //lanzado y descarte
             $table->datetime('fecha_proceso')->nullable();
             $table->decimal('descarte_racimos',8,2)->nullable();

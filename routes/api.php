@@ -33,7 +33,7 @@ Route::resource('palet_salida/{id}/jaba', 'JabaSalidaController');
 Route::resource('palet_salida', 'PaletSalidaController');
 Route::get('lote_ingreso/palets_salida', 'LoteIngresoController@palets_salida');
 Route::resource('lote_ingreso', 'LoteIngresoController');
-Route::get('lote_ingreso/{id}/sub_lote', 'SubLoteController@index');
+Route::get('sub_lote', 'SubLoteController@index');
 Route::post('sub_lote', 'SubLoteController@store');
 // Route::get('palet_entrada', 'PaletEntradaController');
 Route::resource('sub_lote/{sub_lote_id}/palet_entrada', 'PaletEntradaController');

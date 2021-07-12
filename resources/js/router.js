@@ -59,7 +59,7 @@ var routes =[
         component: require('./view/lote/New.vue').default
     },
     {
-        path: '/acopio/lote/:id',
+        path: '/acopio/sublote',
         component: require('./view/lote/sub-lote.vue').default
     },
     //Reportes
