@@ -8,9 +8,9 @@ class SubLote extends Model
 {
     protected $table="sub_lote";
 
-    public function transportista()
+    public function palets()
     {
-        return $this->belongsTo('App\Model\Transportista');
+        return $this->hasMany('App\Model\PaletEntrada');
     }
     
 }

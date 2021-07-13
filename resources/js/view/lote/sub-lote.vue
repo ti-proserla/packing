@@ -1,6 +1,103 @@
 <template>
     <v-container fluid>
         <v-dialog 
+            max-width="400"
+            v-model="open_palets" 
+            persistent>
+            <v-card>
+                <v-card-title class="headline">
+                    <v-btn 
+                        icon
+                        color="black"
+                        @click="open_palets=false">
+                        <i class="fas fa-times"></i>
+                    </v-btn> 
+                        Registro de Palets
+                </v-card-title>
+                <v-card-text>
+                        <v-row v-if="sub_lote_seleccionado.estado=='Pendiente'">
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="N° de Jabas:" 
+                                    v-model="num_jabas"
+                                    outlined
+                                    dense
+                                    clearable
+                                    hide-details="auto"
+                                    type="number"
+                                    :error-messages="palets_error.num_jabas"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="Peso Total:" 
+                                    v-model="peso"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="number"
+                                    hide-details="auto"
+                                    :error-messages="palets_error.peso"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="Peso Palet:" 
+                                    v-model="peso_palet"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="number"
+                                    hide-details="auto"
+                                    :error-messages="palets_error.peso_palet"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-btn 
+                                    color="primary"
+                                    block 
+                                    @click="add()">
+                                    Agregar
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                        <div class="text-center">
+                            <v-simple-table dense>
+                                <template v-slot:default>
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>N° Jabas</th>
+                                            <th>Peso Total</th>
+                                            <th>Peso Palet</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(palet,index) in sub_lote_seleccionado.palets.slice().reverse()">
+                                            <td>{{ sub_lote_seleccionado.palets.length - index}}</td>
+                                            <td>{{ palet.num_jabas }}</td>
+                                            <td>{{ palet.peso }}</td>
+                                            <td>{{ palet.peso_palet }}</td>
+                                        </tr>
+                                        <tr v-if="seleccionado_sub_lote==null">
+                                            <td colspan="3"> Seleccione un Sub lote </td>
+                                        </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                            <v-btn  
+                                v-if="sub_lote_seleccionado.estado=='Pendiente'"
+                                class="mt-3"
+                                color="primary"
+                                block 
+                                @click="pesado()">
+                                Finalizar
+                            </v-btn>
+                        </div>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-dialog 
             transition="dialog-top-transition"
             max-width="600"
             v-model="open_nuevo" 
@@ -83,19 +180,8 @@
                 </v-card-text>
             </v-card>               
         </v-dialog>
-        <!-- <v-card>
-            <v-card-text>
-                <v-row>
-                    <v-col cols="12" sm=6>
-                    </v-col>
-                    <v-col cols=12 sm=6 class="text-right">
-                        <v-btn v-if="lote.estado=='Registrado'" color="orange" @click="finalizar">FINALIZAR</v-btn>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-        </v-card> -->
         <v-row>
-            <v-col cols="8">
+            <v-col cols="12">
                 <v-card>
                     <v-card-text>
                         <v-row>
@@ -110,134 +196,73 @@
                                     Nuevo Sub Lote
                                 </v-btn>
                             </v-col>
-                            <v-col cols=12>
-                                <v-radio-group v-model="seleccionado_sub_lote" class="mt-0">
-                                    <v-card 
-                                        outlined 
-                                        class="mb-3" 
-                                        v-for="(sub,index) in sub_lotes" 
-                                        :key="index">
-                                            <v-card-text>
-                                                <v-row>
-                                                    <v-col cols="1"  class="pb-0 pt-0">
-                                                        <v-radio :value="sub.id"
-                                                            @click="seleccionar(sub.id)">
-                                                        </v-radio>
-                                                    </v-col>
-                                                    <v-col cols="11" class="pb-0 pt-0">
-                                                        <v-row>
-                                                            <v-col class="pb-0 pt-0" cols="2"><b>Lote:</b> {{ sub.codigo }}</v-col>
-                                                            <v-col class="pb-0 pt-0" cols="2"><b>Viaje:</b> {{ sub.viaje }}</v-col>
-                                                            <v-col class="pb-0 pt-0" cols="3"><b>Guia:</b> {{ sub.guia }}</v-col>
-                                                            <v-col class="pb-0 pt-0" cols="5">{{ sub.nombre_materia }} / {{ sub.nombre_variedad }} / {{ sub.nombre_tipo }}</v-col>
-                                                            <v-col class="pb-0 pt-0" cols="2">
-                                                                <v-btn 
-                                                                    small
-                                                                    icon
-                                                                    color="amber" 
-                                                                    @click="abrirEditar(sub.id)">
-                                                                    <i class="far fa-edit"></i>
-                                                                </v-btn>
-                                                                <v-btn 
-                                                                    small
-                                                                    icon
-                                                                    color="red">
-                                                                    <i class="far fa-trash-alt"></i>
-                                                                </v-btn>
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-card-text>
-                                    </v-card>
-                                </v-radio-group>
-                            </v-col>
+                            
                         </v-row>
                     </v-card-text>
                 </v-card>
-            </v-col>
-            <v-col cols="4">
-                <v-card v-if="seleccionado_sub_lote!=null">
-                    <v-card-text>
-                        Registro de Palets
-                        <v-row>
-                            <v-col cols="12" sm="6">
-                                <v-text-field 
-                                    label="N° de Jabas:" 
-                                    v-model="num_jabas"
-                                    outlined
-                                    dense
-                                    clearable
-                                    hide-details="auto"
-                                    type="number"
-                                    :error-messages="palets_error.num_jabas"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-text-field 
-                                    label="Peso Total:" 
-                                    v-model="peso"
-                                    outlined
-                                    dense
-                                    clearable
-                                    type="number"
-                                    hide-details="auto"
-                                    :error-messages="palets_error.peso"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-text-field 
-                                    label="Peso Palet:" 
-                                    v-model="peso_palet"
-                                    outlined
-                                    dense
-                                    clearable
-                                    type="number"
-                                    hide-details="auto"
-                                    :error-messages="palets_error.peso_palet"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-btn 
-                                    color="primary"
-                                    block 
-                                    @click="add()">
-                                    Agregar
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                        <div class="text-center">
-                                <v-simple-table dense>
-                                    <template v-slot:default>
-                                        <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>N° Jabas</th>
-                                                <th>Peso Total</th>
-                                                <th>Peso Palet</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(palet,index) in palets_entrada.slice().reverse()">
-                                                <td>{{ palets_entrada.length - index}}</td>
-                                                <td>{{ palet.num_jabas }}</td>
-                                                <td>{{ palet.peso }}</td>
-                                                <td>{{ palet.peso_palet }}</td>
-                                            </tr>
-                                            <tr v-if="seleccionado_sub_lote==null">
-                                                <td colspan="3"> Seleccione un Sub lote </td>
-                                            </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </div>
-                    </v-card-text>
-                </v-card>
+                    <v-row>
+                        <v-col 
+                            cols=4 
+                            v-for="(sub,index) in sub_lotes" 
+                            :key="index">
+                                <v-card 
+                                    outlined 
+                                    class="mb-3" 
+                                    >
+                                        <v-card-text>
+                                            <v-row>
+                                                <v-col cols="12" class="pb-0 pt-0">
+                                                    <v-row>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Viaje:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.viaje }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Lote:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.codigo }} - {{ sub.cliente }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Materia:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.materia }} - {{ sub.variedad }} - {{ sub.tipo }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Peso Guia:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.guia }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Recepción:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.fecha_recepcion }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Peso Guia:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.peso_guia }} Kl</v-col>
+                                                        <v-col cols="12" class="text-center">
+                                                            <v-btn 
+                                                                small
+                                                                color="info" 
+                                                                @click="abrirPalet(sub.id,sub.estado)">
+                                                                <i class="fas fa-boxes"></i>
+                                                            </v-btn>
+                                                            <v-btn 
+                                                                small
+                                                                color="amber" 
+                                                                @click="abrirEditar(sub.id)">
+                                                                <i class="far fa-edit"></i>
+                                                            </v-btn>
+                                                        </v-col>
+                                                        <!-- <v-col class="pb-0 pt-0" cols="2">
+                                                            
+                                                            <v-btn 
+                                                                small
+                                                                icon
+                                                                color="red">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </v-btn>
+                                                        </v-col> -->
+                                                    </v-row>
+                                                </v-col>
+                                            </v-row>
+                                        </v-card-text>
+                                </v-card>
+                        </v-col>
+                    </v-row>
             </v-col>
         </v-row>
     </v-container>
 </template>
 <style>
+    .table-noborde,.table-noborde *{
+        border: 0;
+    }
     .card-no-select{
         background-color: #eee;
     }
@@ -261,6 +286,7 @@ export default {
         return {
             //modal
             open_nuevo:false,
+            open_palets: false,
             //operaciones
             num_jabas: 0,
             peso: 0,
@@ -274,9 +300,13 @@ export default {
             sub_lotes: [],
             palets: [],
             palets_entrada: [],
+            sub_lote_seleccionado: {
+                palets: []
+            },
             palets_error:{},
             //selectores
-            seleccionado_sub_lote: null
+            seleccionado_sub_lote: null,
+            seleccionado_estado_sub_lote: null
         }
     },
     mounted() {
@@ -287,6 +317,17 @@ export default {
         this.listarSublote();
     },
     methods: {
+        abrirEditar(){
+
+        },
+        abrirPalet(id,estado){
+            this.seleccionar(id);
+            this.seleccionado_estado_sub_lote=estado;
+            this.open_palets=true;
+        },
+        momentFormat(fecha,format){
+            return moment(fecha).format(format);
+        },
         init(){
             return {
                 lote_id: null,
@@ -295,7 +336,7 @@ export default {
             };
         },
         listarSublote(){
-            axios.get(`${url_base}/sub_lote?estado=Pendiente`)
+            axios.get(`${url_base}/sub_lote?estado=Pendiente,Lanzado`)
             .then(response => {
                 this.sub_lotes=response.data
             });
@@ -327,9 +368,9 @@ export default {
             this.listarPaletEntrada();
         },
         listarPaletEntrada(){
-            axios.get(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palet_entrada`)
+            axios.get(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palets`)
             .then(response => {
-                this.palets_entrada=response.data
+                this.sub_lote_seleccionado=response.data;
             });
         },
         add(){
@@ -354,6 +395,28 @@ export default {
                 
                     default:
                         break;
+                }
+            });
+        },
+        pesado(){
+            var t=this;
+            swal({ title: "¿Cerrar pesado de Sub Lote?", buttons: ['Cancelar',"Si"]})
+            .then((res) => {
+                if (res) {
+                    axios.post(`${url_base}/sub_lote/${ t.seleccionado_sub_lote }/estado?_method=PUT`,{
+                        estado: 'Lanzado'
+                    }).then(response => {
+                        var res=response.data;
+                        switch (res.status) {
+                            case 'OK':
+                                t.open_palets=false;
+                                t.listarSublote();
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
                 }
             });
         },

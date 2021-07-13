@@ -57,7 +57,7 @@ class LoteIngresoController extends Controller
         $loteIngreso->fundo_id=$request->fundo_id;
         $loteIngreso->parcela_id=$request->parcela_id;
         $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
-        $loteIngreso->estado="Registrado";
+        $loteIngreso->estado="Pendiente";
         $loteIngreso->save();
         return response()->json([
             "status" => "OK",
