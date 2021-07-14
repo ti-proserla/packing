@@ -24,6 +24,7 @@ Route::get('materia/detallado', 'MateriaController@detallado');
 Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
+Route::resource('tipo', 'TipoController');
 
 Route::get('fundo/detallado', 'FundoController@detallado');
 Route::resource('fundo', 'FundoController');

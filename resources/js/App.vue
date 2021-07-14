@@ -48,7 +48,7 @@
                 </v-list-item>
                 <v-list-item link to="/materia">
                     <v-list-item-icon>
-                        <i class="far fa-building"></i>
+                        <i class="fas fa-apple-alt"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
                         Materia
@@ -56,10 +56,18 @@
                 </v-list-item>
                 <v-list-item link to="/variedad">
                     <v-list-item-icon>
-                        <i class="far fa-building"></i>
+                        <i class="fas fa-seedling"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
                         Variedad
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/tipo">
+                    <v-list-item-icon>
+                        <i class="fas fa-leaf"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Tipo
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link to="/producto">
@@ -102,38 +110,37 @@
                         Palets de Salida
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/reporte/acopio">
-                    <v-list-item-icon>
-                        <i class="far fa-building"></i>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        Reporte Acopio
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/reporte/personal">
-                    <v-list-item-icon>
-                        <i class="far fa-building"></i>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        Rendimiento Personal
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/reporte/lote">
-                    <v-list-item-icon>
-                        <i class="far fa-building"></i>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        Reporte por Lote
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/reporte/linea">
-                    <v-list-item-icon>
-                        <i class="far fa-building"></i>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        Reporte por Linea
-                    </v-list-item-content>
-                </v-list-item>
+                <v-list-group
+                    :value="false"
+                    no-action>
+                    <template v-slot:activator>
+                            <v-list-item-icon>
+                                <i class="far fa-file-alt"></i>
+                            </v-list-item-icon>
+                        <v-list-item-content>Reportes</v-list-item-content>
+                    </template>
+                    <v-list-item link to="/reporte/acopio">
+                        <v-list-item-content>
+                            Reporte Acopio
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/reporte/personal">
+                        <v-list-item-content>
+                            Rendimiento Personal
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/reporte/lote">
+                        <v-list-item-content>
+                            Reporte por Lote
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/reporte/linea">
+                        <v-list-item-content>
+                            Reporte por Linea
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-group>
+                <!-- </v-list-group> -->
                 <v-list-item link to="/dispensador">
                     <v-list-item-icon>
                         <i class="far fa-building"></i>

@@ -17,16 +17,20 @@ var routes =[
         component: require('./view/materia.vue').default
     },
     {
+        path: '/variedad',
+        component: require('./view/variedad.vue').default
+    },
+    {
+        path: '/tipo',
+        component: require('./view/tipo.vue').default
+    },
+    {
         path: '/impresora',
         component: require('./view/impresora.vue').default
     },
     {
         path: '/cliente',
         component: require('./view/cliente.vue').default
-    },
-    {
-        path: '/variedad',
-        component: require('./view/variedad.vue').default
     },
     {
         path: '/producto',
