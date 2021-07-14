@@ -13,8 +13,8 @@ class TipoController extends Controller
         if ($request->has('all')) {
             $tipo=Tipo::all();
         }else {
-            $tipo=Tipo::select('Tipo.*','nombre_materia')
-                                    ->join('materia','materia.id','=','Tipo.materia_id')
+            $tipo=Tipo::select('tipo.*','nombre_materia')
+                                    ->join('materia','materia.id','=','tipo.materia_id')
                                     ->paginate(10);
         }
         return response()->json($tipo);

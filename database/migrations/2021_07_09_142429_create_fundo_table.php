@@ -16,6 +16,7 @@ class CreateFundoTable extends Migration
         Schema::create('fundo', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_fundo',50);
+            $table->string('cod_cartilla',5)->nullable();
             $table->timestamps();
         });
     }

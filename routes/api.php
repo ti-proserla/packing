@@ -32,6 +32,7 @@ Route::resource('fundo', 'FundoController');
 Route::resource('transportista', 'TransportistaController');
 Route::resource('palet_salida/{id}/jaba', 'JabaSalidaController');
 Route::resource('palet_salida', 'PaletSalidaController');
+Route::get('lote_ingreso/generar_codigo', 'LoteIngresoController@generar_codigo');
 Route::get('lote_ingreso/palets_salida', 'LoteIngresoController@palets_salida');
 Route::resource('lote_ingreso', 'LoteIngresoController');
 Route::get('sub_lote/{id}/palets', 'SubLoteController@palets');

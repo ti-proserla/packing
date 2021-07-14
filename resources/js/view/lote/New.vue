@@ -15,6 +15,7 @@
                                 hide-details="auto"
                                 :error-messages="lote_error.codigo"
                             ></v-text-field>
+                            <a @click="generar_codigo">GENERAR</a>
                         </v-col>
                         <v-col cols=12 sm=6>
                             <v-select
@@ -197,6 +198,14 @@ export default {
             axios.get(url_base+'/cliente?all')
             .then(response => {
                 this.clientes=response.data
+            });
+        },
+        generar_codigo(){
+            axios.get(url_base+'/lote_ingreso/generar_codigo',{
+                params: this.lote 
+            })
+            .then(response => {
+                this.lote.codigo=response.data.codigo;
             });
         },
         guardar(){

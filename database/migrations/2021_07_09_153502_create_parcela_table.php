@@ -17,6 +17,7 @@ class CreateParcelaTable extends Migration
             $table->id();
             $table->string('nombre_parcela',50);
             $table->integer('fundo_id');
+            $table->string('cod_cartilla',5)->nullable();
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Model\LoteIngreso;
 use App\Model\PaletSalida;
 use App\Http\Requests\LoteIngresoValidate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoteIngresoController extends Controller
 {
@@ -34,6 +35,24 @@ class LoteIngresoController extends Controller
                             ->get();
         }
         return response()->json($lotesIngreso); 
+    }
+
+    public function generar_codigo(Request $request){
+        $materia_id=$request->materia_id;
+        $variedad_id=$request->variedad_id;
+        $cliente_id=$request->cliente_id;
+        $fecha_cosecha=$request->fecha_cosecha;
+        $query="SELECT 
+                CONCAT(
+                    'J',
+                    (SELECT cod_cartilla FROM cliente where id=$cliente_id),
+                    (SELECT cod_cartilla FROM materia where id=$materia_id),
+                    (SELECT cod_cartilla FROM variedad where id=$variedad_id),
+                    SUBSTRING(YEAR('$fecha_cosecha'),-1,1),
+                    DAYOFYEAR(DATE_FORMAT('$fecha_cosecha', '2016-%m-%d'))
+                ) codigo";
+        $data=DB::select(DB::raw("$query"),[])[0];      
+        return response()->json($data);  
     }
 
     public function palets_salida(Request $request){
@@ -80,8 +99,6 @@ class LoteIngresoController extends Controller
                     ->first();
         return response()->json($loteIngreso);
     }
-   
-    
 
     public function update(Request $request, $id)
     {

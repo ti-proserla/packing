@@ -17,6 +17,7 @@ class CreateTipoTable extends Migration
             $table->increments('id');
             $table->string('nombre_tipo',50);
             $table->integer('materia_id');
+            $table->string('cod_cartilla',5)->nullable();
             $table->timestamps();
         });
     }
