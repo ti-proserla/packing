@@ -24,6 +24,8 @@
                         <thead>
                             <tr>
                                 <th>Cliente</th>
+                                <th>Fundo</th>
+                                <th>Parcela</th>
                                 <th>Viaje</th>
                                 <th>Guia</th>
                                 <th>Semana</th>
@@ -49,6 +51,8 @@
                         <tbody>
                             <tr v-for="(row,i) in table" :key="i">
                                 <td>{{row.cliente}}</td>
+                                <td>{{row.fundo}}</td>
+                                <td>{{row.parcela}}</td>
                                 <td>{{row.viaje}}</td>
                                 <td>{{row.guia}}</td>
                                 <td>{{row.semana}}</td>
