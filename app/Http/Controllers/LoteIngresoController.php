@@ -40,7 +40,14 @@ class LoteIngresoController extends Controller
         $loteIngreso=LoteIngreso::with('palets_salida')
                             ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
                             ->join('materia','materia.id','=','lote_ingreso.materia_id')
-                            ->select('lote_ingreso.*','cliente.descripcion as cliente','materia.nombre_materia as materia')
+                            ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
+                            ->join('tipo','tipo.id','=','lote_ingreso.tipo_id')
+                            ->select('lote_ingreso.*',
+                                    'cliente.descripcion as cliente',
+                                    'materia.nombre_materia as materia',
+                                    'variedad.nombre_variedad as variedad',
+                                    'tipo.nombre_tipo as tipo'
+                            )
                             ->where('estado',$request->estado)
                             ->get();
         return response()->json($loteIngreso);

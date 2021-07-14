@@ -20,7 +20,7 @@
                             <v-col cols="12" lg="8">
                                 <h4><b class="detalles">Cliente:</b> {{ lote.cliente}}</h4>
                                 <h4><b class="detalles">Lote:</b> {{ lote.codigo }}</h4>
-                                <h4><b class="detalles">Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h4>
+                                <h4><b class="detalles">Materia:</b> {{ lote.materia}} - {{ lote.variedad }}</h4>
                                 <h4><b class="detalles">Cosecha:</b> {{ lote.fecha_cosecha }}</h4>
                             </v-col>
                             <v-col cols="12" lg="4" class="text-right">
@@ -74,7 +74,7 @@ export default {
     },
     methods:{
         listar(){
-            axios.get(url_base+`/lote_ingreso/palets_salida?estado=lanzado`)
+            axios.get(url_base+`/lote_ingreso/palets_salida?estado=Pendiente`)
             .then(response => {
                 this.lotes=response.data
             });

@@ -4,6 +4,30 @@
             <v-card-title>
                 Acopio de Lotes
             </v-card-title>
+            <v-card-text>
+                <v-simple-table dense>
+                    <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Lote</th>
+                                <th>Materia</th>
+                                <th>Variedad</th>
+                                <th>Cosecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr cols="12" v-for="(lote,i) in lotes_ingreso" :key="i">
+                                <td>{{ lote.descripcion}}</td>
+                                <td>{{ lote.codigo}}</td>
+                                <td>{{ lote.nombre_materia}}</td>
+                                <td>{{ lote.nombre_variedad }}</td>
+                                <td>{{ lote.fecha_cosecha }}</td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+            </v-card-text>
         </v-card>
         <v-btn
             dark
@@ -15,23 +39,6 @@
             @click="nuevo">
               <v-icon>+</v-icon>
         </v-btn>
-        <v-row>
-            <v-col sm=4 cols="12" v-for="(lote,i) in lotes_ingreso" :key="i">
-                <v-card>
-                    <v-card-text>
-                        <h4><b class="detalles">Cliente:</b> {{ lote.descripcion}}</h4>
-                        <h4><b class="detalles">Lote:</b> {{ lote.codigo }}</h4>
-                        <h4><b class="detalles">Materia:</b> {{ lote.nombre_materia}} - {{ lote.nombre_variedad }}</h4>
-                        <h4><b class="detalles">Cosecha:</b> {{ lote.fecha_cosecha }}</h4>
-                        <div class="text-center my-3">
-                            <v-btn :outlined="true" color="info" @click="redirect(lote.id)">
-                                Detalles
-                            </v-btn>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
     </v-container>
 </template>
 <style>
@@ -51,11 +58,8 @@ export default {
         this.listarLotes()
     },
     methods: {
-        redirect(id){
-            this.$router.push('/acopio/lote/'+id);
-        },
         listarLotes(){
-            axios.get(url_base+'/lote_ingreso?estado=REGISTRADO')
+            axios.get(url_base+'/lote_ingreso?estado=Pendiente')
             .then(response => {
                 this.lotes_ingreso=response.data
             })

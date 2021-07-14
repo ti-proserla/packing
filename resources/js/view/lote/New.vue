@@ -217,7 +217,7 @@ export default {
                                 break;
                             case "OK":
                                 swal("Lote Creado", { icon: "success", timer: 2000, buttons: false });
-                                t.$router.push('/acopio/lote/'+respuesta.data.id);
+                                t.$router.push('/acopio/lote');
                                 t.lote_error={};
                                 break;
                             default:
