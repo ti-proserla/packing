@@ -10,11 +10,18 @@ class ClienteController extends Controller
    
     public function index(Request $request)
     {
+        if ($request->has('proceso')) {
+            $clientes=Cliente::join('lote_ingreso as L','L.cliente_id','=','cliente.id')
+                        ->where('L.estado','Pendiente')
+                        ->select('cliente.*')
+                        ->groupBy('cliente.id')
+                        ->get();
+            return response()->json($clientes);
+        }
         if ($request->has('all')) {
             $clientes=Cliente::all();
         }else{
-            $clientes=Cliente::paginate(10);
-            
+            $clientes=Cliente::paginate(10); 
         }
         return response()->json($clientes);
     }

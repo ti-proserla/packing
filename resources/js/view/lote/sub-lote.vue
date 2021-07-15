@@ -98,7 +98,6 @@
             </v-card>
         </v-dialog>
         <v-dialog 
-            transition="dialog-top-transition"
             max-width="600"
             v-model="open_nuevo" 
             persistent>
@@ -196,7 +195,18 @@
                                     Nuevo Sub Lote
                                 </v-btn>
                             </v-col>
-                            
+                            <v-col cols="12">
+                                <v-select
+                                @change="listarSublote"
+                                outlined
+                                dense
+                                v-model="s_cliente_id"
+                                label="Cliente:"
+                                :items="clientes"
+                                :item-text=" (item) => `${item.ruc} : ${item.descripcion}`"
+                                item-value="id">
+                                </v-select>
+                            </v-col>
                         </v-row>
                     </v-card-text>
                 </v-card>
@@ -295,8 +305,9 @@ export default {
             lotes: [],
             sub_lote: this.init(),
             sub_lote_error:{},
+            s_cliente_id: null,
             //listas
-            transportistas:[],
+            clientes:[],
             sub_lotes: [],
             palets: [],
             palets_entrada: [],
@@ -310,11 +321,14 @@ export default {
         }
     },
     mounted() {
+        axios.get(url_base+`/cliente?proceso`)
+        .then(response => {
+            this.clientes=response.data
+        });
         axios.get(url_base+`/lote_ingreso`)
         .then(response => {
             this.lotes=response.data
         });
-        this.listarSublote();
     },
     methods: {
         abrirEditar(){
@@ -336,7 +350,7 @@ export default {
             };
         },
         listarSublote(){
-            axios.get(`${url_base}/sub_lote?estado=Pendiente,Lanzado`)
+            axios.get(`${url_base}/sub_lote?estado=Pendiente,Lanzado&cliente_id=${this.s_cliente_id}`)
             .then(response => {
                 this.sub_lotes=response.data
             });

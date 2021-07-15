@@ -11,6 +11,7 @@ class SubLoteController extends Controller
     public function index(Request $request)
     {
         if ($request->has('estado')) {
+            // dd($request->cliente_id);
             $request->estado;
             $subLotes=SubLote::join('lote_ingreso','lote_ingreso.id','=','sub_lote.lote_id')
                         ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
@@ -20,6 +21,7 @@ class SubLoteController extends Controller
                         ->join('fundo','fundo.id','=','lote_ingreso.fundo_id')
                         ->leftJoin('parcela','parcela.id','=','lote_ingreso.parcela_id')
                         ->whereIn('sub_lote.estado',explode(',',$request->estado))
+                        // ->where('cliente_id',$request->cliente_id)    
                         ->select('sub_lote.*',
                             'lote_ingreso.codigo',
                             'cliente.descripcion as cliente',
@@ -28,11 +30,12 @@ class SubLoteController extends Controller
                             'tipo.nombre_tipo as tipo',
                             'fundo.nombre_fundo as fundo',
                             'parcela.nombre_parcela as parcela'
-                        )    
+                        )
                         ->get();
         }else{
             
         }
+    
         return response()->json($subLotes);
     }
 

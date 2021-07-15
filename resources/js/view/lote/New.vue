@@ -6,18 +6,6 @@
                 <v-form @submit.prevent="guardar()">
                     <v-row>
                         <v-col cols=12 sm=6>
-                            <v-text-field 
-                                label="Código Lote:" 
-                                v-model="lote.codigo"
-                                outlined
-                                dense
-                                clearable
-                                hide-details="auto"
-                                :error-messages="lote_error.codigo"
-                            ></v-text-field>
-                            <a @click="generar_codigo">GENERAR</a>
-                        </v-col>
-                        <v-col cols=12 sm=6>
                             <v-select
                                 outlined
                                 dense
@@ -109,6 +97,25 @@
                                 hide-details="auto"
                                 :error-messages="lote_error.fecha_cosecha"
                             ></v-text-field>
+                        </v-col>
+                        <v-col cols=8 sm=4>
+                            <v-text-field 
+                                label="Código Lote:" 
+                                v-model="lote.codigo"
+                                outlined
+                                dense
+                                clearable
+                                hide-details="auto"
+                                :error-messages="lote_error.codigo"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="4" sm="2">
+                            <v-btn 
+                                color="red"
+                                @click="generar_codigo"
+                                block>
+                                Generar
+                            </v-btn>
                         </v-col>
                     </v-row>
                     <div class="text-center my-3">
