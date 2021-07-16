@@ -15,7 +15,6 @@ class CreatePresentacionTable extends Migration
     {
         Schema::create('presentacion', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_presentacion',5)->nullable();
             $table->string('nombre_presentacion',50);
             $table->timestamps();
         });

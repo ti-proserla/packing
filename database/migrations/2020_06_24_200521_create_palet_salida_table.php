@@ -16,6 +16,7 @@ class CreatePaletSalidaTable extends Migration
         Schema::create('palet_salida', function (Blueprint $table) {
             $table->id();
             $table->integer('cliente_id');
+            $table->integer('etapas');
             $table->integer('numero')->nullable();
             $table->string('estado',30); //Abierto, Cerrado
             $table->date('fecha_cierre'); // Cierre de palet , fecha sistema.

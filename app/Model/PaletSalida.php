@@ -9,10 +9,18 @@ class PaletSalida extends Model
 {
     protected $table="palet_salida";
 
-    public function jabas()
+    public function cajas()
     {
-        return $this->hasMany('App\Model\JabaSalida')
-                    ->select('palet_salida_id','numero',DB::raw("GROUP_CONCAT(codigo_barras separator '|') as codigos"))    
-                    ->groupBy('palet_salida_id','numero');
+        return $this->hasMany('App\Model\Caja')
+                    ->leftJoin('rendimiento_personal','rendimiento_personal.caja_id','=','caja.id')
+                    ->select(
+                        'caja.id',
+                        'caja.calibre',
+                        'caja.categoria',
+                        'caja.presentacion',
+                        'caja.marca_caja',
+                        'palet_salida_id',
+                        DB::raw("GROUP_CONCAT(codigo_barras separator '|') as codigos"))    
+                    ->groupBy('caja.id');
     }
 }

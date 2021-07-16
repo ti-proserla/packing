@@ -23,6 +23,7 @@ class VariedadController extends Controller
     public function store(VariedadValidate $request)
     {
         $variedades=new Variedad();
+        $variedades->cod_cartilla=$request->cod_cartilla;
         $variedades->nombre_variedad=$request->nombre_variedad;
         $variedades->materia_id=$request->materia_id;
         $variedades->save();
@@ -44,6 +45,7 @@ class VariedadController extends Controller
     public function update(VariedadValidate $request, $id)
     {
         $variedades=Variedad::where('id',$id)->first();
+        $variedades->cod_cartilla=$request->cod_cartilla;
         $variedades->nombre_variedad=$request->nombre_variedad;
         $variedades->materia_id=$request->materia_id;
         $variedades->save();

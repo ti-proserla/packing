@@ -8,21 +8,10 @@
                         <v-select
                             outlined
                             dense
-                            v-model="palet_salida.lote_id"
+                            v-model="palet_salida.cliente_id"
                             label="Cliente - Lote:"
-                            :items="lote_ingreso"
-                            :item-text="lote => `${lote.descripcion} - ${lote.codigo}`"
-                            item-value="id">
-                            </v-select>
-                    </v-col>
-                     <v-col cols=12 sm=6>
-                        <v-select
-                            outlined
-                            dense
-                            v-model="palet_salida.producto_id"
-                            label="Producto:"
-                            :items="productos"
-                            item-text="nombre_producto"
+                            :items="clientes"
+                            :item-text="cliente => `${cliente.descripcion}`"
                             item-value="id">
                             </v-select>
                     </v-col>
@@ -63,15 +52,15 @@ export default {
         return {
             lote_ingreso:[],
             palet_salida: {
-                lote_id:    null,
-                producto_id: null
+                cliente_id: null
             },
             productos: [],
+            clientes: []
         }
     },
     mounted() {
-        this.listarProducto();
-        this.listarLoteIngreso();
+        this.listarClientes();
+        // this.listarLoteIngreso();
     },
     methods: {
         listarLoteIngreso(){
@@ -79,6 +68,12 @@ export default {
             .then(response => {
                 this.lote_ingreso=response.data
             });
+        },
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes=response.data
+            })
         },
         listarProducto(){
             axios.get(url_base+'/producto?all')
@@ -110,22 +105,6 @@ export default {
                                 break;
                         }
                     });
-                    /**
-                     * Operacion
-                     */
-                    // var request=BD_REQUEST.transaction(["PALET_SALIDA"], "readwrite")
-                    //     .objectStore("PALET_SALIDA").add(t.palet_salida);
-                    // /**
-                    //  * Registro Correcto
-                    //  */
-                    // request.onsuccess = function(event) {
-                    //     swal("Palet Creado", {
-                    //         icon: "success",
-                    //         timer: 2000,
-                    //         buttons: false,
-                    //     });
-                    //     t.$router.push('/paletizado/'+event.target.result);
-                    // };
                 }
             });
         }

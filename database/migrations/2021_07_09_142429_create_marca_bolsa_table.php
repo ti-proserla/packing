@@ -15,7 +15,6 @@ class CreateMarcaBolsaTable extends Migration
     {
         Schema::create('marca_bolsa', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_marca_bolsa',5)->nullable();
             $table->string('nombre_marca_bolsa',50);
             $table->timestamps();
         });

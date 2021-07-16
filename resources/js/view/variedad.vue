@@ -26,6 +26,12 @@
                     <v-card-text>
                         <v-text-field 
                             hide-details="auto"
+                            label="cod_cartilla" 
+                            v-model="variedad.cod_cartilla"
+                            :error-messages="error.cod_cartilla"
+                        ></v-text-field>
+                        <v-text-field 
+                            hide-details="auto"
                             label="Nombre" 
                             v-model="variedad.nombre_variedad"
                             :error-messages="error.nombre_variedad"
@@ -61,6 +67,12 @@
                 <v-card>
                     <v-card-title class="headline">Editar variedad</v-card-title>
                     <v-card-text>
+                        <v-text-field 
+                            hide-details="auto"
+                            label="cod_cartilla" 
+                            v-model="variedad_editar.cod_cartilla"
+                            :error-messages="error_editar.cod_cartilla"
+                        ></v-text-field>
                         <v-text-field 
                             required 
                             hide-details="auto"
@@ -103,6 +115,7 @@ export default {
             header:[
                 { text: 'Descripción', value: 'nombre_variedad' },
                 { text: 'Materia', value: 'nombre_materia' },
+                { text: 'Código Cartilla', value: 'cod_cartilla' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -135,6 +148,7 @@ export default {
     methods: {
         initForm(){
             return {
+                cod_cartilla: '',
                 nombre_variedad: '',
                 materia_id: '',
             }

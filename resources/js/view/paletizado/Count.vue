@@ -6,7 +6,7 @@
             </v-col>
             <v-col cols=12 sm=8 class="text-right">
                 <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
-                <v-btn @click="terminar()" color="success" v-if="palet.estado=='Abierto'">Cerrar</v-btn>
+                <v-btn @click="terminar()" color="success" v-if="palet.estado=='Pendiente'">Cerrar</v-btn>
                 <v-menu offset-y>
                     <template v-slot:activator="{ on }">
                         <v-btn
@@ -29,7 +29,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols=12 sm=6 v-if="palet.estado=='Abierto'">
+            <v-col cols=12 sm=6 v-if="palet.estado=='Pendiente'">
                 <v-card>
                     <v-card-text>
                         <label>Ingresar Código:</label>
@@ -37,7 +37,6 @@
                             <v-col cols=12>
                                 <v-form autocomplete="off" @submit.prevent="agregar()">
                                     <v-text-field 
-                                        type="number"
                                         dense 
                                         outlined 
                                         label="Código de Barras" 
@@ -66,16 +65,20 @@
             <v-col cols=12 sm=6>
                 <v-card>
                     <v-card-text>
-                        <h6>JABAS ESCANEADAS</h6>
+                        <h6>cajas ESCANEADAS</h6>
                         <v-simple-table>
                             <template v-slot:default>
                                 <tbody>
                                     <tr>
-                                        <td v-for="cell in fila_codigos">{{ cell }}</td>
+                                        <td :key="i" v-for="(cell,i) in fila_codigos">{{ cell }}</td>
                                     </tr>
-                                    <tr v-for="(fila,index) in matriz_codigos">
-                                        <td>{{ matriz_codigos.length - index }}</td>
-                                        <td v-for="row in fila">{{row}}</td>
+                                    <tr :key="index" v-for="(caja,index) in palet.cajas">
+                                        <td>{{ index+1 }}</td>
+                                        <td>
+                                            <label for="">{{caja.calibre}}</label>
+                                            <label for="">{{caja.categoria}}</label>
+                                            <label for="">{{caja.presentacion}}</label>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </template>
@@ -92,28 +95,35 @@ export default {
     data() {
         return {
             readonlyFocusInit: false,
-            palet: {},
+            palet: {
+                cajas: []
+            },
             alert: this.initAlert(),
             codigo_barras: null,
-            lista_codigos: [],
+            
+            // lista_codigos: [],
+            codigo_palet: '', 
             fila_codigos: [],
             matriz_codigos: [],
             extension: 16 
         }
     },
     mounted() {
-        axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
-        .then(response => {
-            this.palet=response.data
-            var jabas=this.palet.jabas.reverse();
-            for (let i = 0; i < jabas.length; i++) {
-                const jaba = jabas[i];
-                var codigos=jaba.codigos.split('|');
-                this.matriz_codigos.push(codigos);
-            }
-        });
+        this.getPaletSalida();
     },
     methods: {
+        getPaletSalida(){
+            axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
+            .then(response => {
+                this.palet=response.data
+                var cajas=this.palet.cajas;
+                for (let i = 0; i < cajas.length; i++) {
+                    const caja = cajas[i];
+                    var codigos=caja.codigos.split('|');
+                    this.matriz_codigos.push(codigos);
+                }
+            });
+        },
         initAlert(){
             return {
                 status: '',
@@ -121,110 +131,112 @@ export default {
                 message: ''
             }
         },
-        OpenFocus(){
-            // console.log("HOLA");
-            // if (this.focusSelect){
-                this.readonlyFocusInit=true;
-                setTimeout(() => {
-                    this.readonlyFocusInit=false;
-                },300 );
-            // }
+        OpenFocus(){            
+            this.readonlyFocusInit=true;
+            setTimeout(() => {
+                this.readonlyFocusInit=false;
+            },300 );
+        },
+        isCodigoTrabajador(sCodigo){
+            return (sCodigo.length==16) ? true : false;
+        },
+        isCodigoPalet(sCodigo){
+            return (sCodigo.indexOf('P-')>-1) ? true : false;
+        },
+        alerta(sMensaje){
+            var x = document.getElementById("myAudio");
+            x.play();
+            window.navigator.vibrate([500,100,500]);
+            this.alert.status= 'danger';
+            this.alert.visible= true;
+            this.alert.message= sMensaje;
+            this.timer=setTimeout(() => {
+                this.alert=this.initAlert();
+            }, 2000);
+        },
+        addCaja(){
+            axios.post(url_base+`/palet_salida/${this.$route.params.id}/caja`,{
+                codigos_trabajador: this.fila_codigos,
+                codigo_palet: this.codigo_palet,
+            }).then(res=>{
+                var data=res.data;
+                switch (data.status) {
+                    case "OK":
+                        this.fila_codigos=[];
+                        this.palet.cajas.push(data.data);
+                        // this.getPaletSalida();
+                        // var temp_array=[this.fila_codigos];
+                        // this.matriz_codigos=temp_array.concat(this.matriz_codigos);
+                        break;
+                
+                    default:
+                        break;
+                }
+            });
         },
         agregar(){
-            var repetido=0;
+            this.codigo_barras;
+            if (this.isCodigoTrabajador(this.codigo_barras)) {
+                if (this.fila_codigos.length==1) {
+                    this.alerta("Escanear codigo de palet.");
+                }else{
+                    var repetido=0;
 
-            if (this.codigo_barras.length==this.extension) {
-                for (let i = 0; i < this.matriz_codigos.length; i++) {
-                    var fila_codigos = this.matriz_codigos[i];
-                    for (let k = 0; k < fila_codigos.length; k++) {
-                        const element = fila_codigos[k];
+                    for (let i = 0; i < this.matriz_codigos.length; i++) {
+                        var fila_codigos = this.matriz_codigos[i];
+                        for (let k = 0; k < fila_codigos.length; k++) {
+                            const element = fila_codigos[k];
+                            if (this.codigo_barras==element) {
+                                repetido=1;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    for (let i = 0; i < this.fila_codigos.length; i++) {
+                        const element = this.fila_codigos[i];
                         if (this.codigo_barras==element) {
                             repetido=1;
                             break;
                         }
                     }
-                }
-                
-                for (let i = 0; i < this.fila_codigos.length; i++) {
-                    const element = this.fila_codigos[i];
-                    if (this.codigo_barras==element) {
-                        repetido=1;
-                        break;
-                    }
-                }
 
-                if (repetido==1) {
-                    var x = document.getElementById("myAudio");
-                    x.play();
-                    window.navigator.vibrate([500,100,500]);
-                    this.alert.status= 'danger';
-                    this.alert.visible= true;
-                    this.alert.message= "Código repetido.";
-                    this.timer=setTimeout(() => {
-                        this.alert=this.initAlert();
-                    }, 2000);
-                }else{
-                    // for (let j = 0; j < this.fila_codigos.length; j++) {
-                    //     const element2 = this.fila_codigos[j];
-                    //     if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
-                    //         swal("Labor ya registrada para esta jaba.", {
-                    //             icon: "error",
-                    //             timer: 3500
-                    //         });
-                    //         repetido=1;
-                    //         break;
-                    //     }
-                    // }
-                    
-                    if (repetido==0) {
-                        if (this.fila_codigos.length<this.palet.etapas) {
-                            this.fila_codigos.push(this.codigo_barras);
-                            this.codigo_barras="";
+                    if (repetido==1) {
+                        this.alerta("Código repetido.");
+                    }else{
+                        for (let j = 0; j < this.fila_codigos.length; j++) {
+                            const element2 = this.fila_codigos[j];
+                            if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
+                                this.alerta("Labor ya registrada para esta caja.");
+                                repetido=1;
+                                break;
+                            }
                         }
-                        if (this.fila_codigos.length==this.palet.etapas) {
-                            axios.post(url_base+`/palet_salida/${this.$route.params.id}/jaba`,{
-                                codigos_barras: this.fila_codigos
-                            }).then(res=>{
-                                var data=res.data;
-                                switch (data.status) {
-                                    case "OK":
-                                        var temp_array=[this.fila_codigos];
-                                        this.matriz_codigos=temp_array.concat(this.matriz_codigos);
-                                        this.fila_codigos=[];
-                                        break;
-                                
-                                    default:
-                                        break;
-                                }
-                                this.codigo_barras="";       
-                            });
-                        }    
+                        
+                        if (repetido==0) {
+                            if (this.fila_codigos.length<this.palet.etapas) {
+                                this.fila_codigos.push(this.codigo_barras);
+                                this.codigo_barras="";
+                            }  
+                        }
                     }
-                    
                 }
-                
+            }else if (this.isCodigoPalet(this.codigo_barras)) {
+                if (this.fila_codigos.length==1) {
+                    this.codigo_palet=this.codigo_barras
+                    this.addCaja();
+                }else{
+                    this.alerta("Terminar de escanear codigo trabajador.");
+                }
             }else{
-                this.alert.status= 'warning';
-                this.alert.visible= true;
-                this.alert.message= "Código no cumple con la estructura.";
-                this.timer=setTimeout(() => {
-                    this.alert=this.initAlert();
-                }, 2000);
-                // swal("Código no cumple con la estructura.", {
-                //     icon: "error",
-                //     timer: 3500
-                // });
+                this.alerta("Código no cumple con la estructura.");
             }
-            this.codigo_barras=null;
+            this.codigo_barras='';
         },
         terminar(){
             swal({
                 title: "Terminar Palet",
-                // text: "Once deleted, you will not be able to recover this imaginary file!",
-                // icon: "warning",
-                // buttons: true,
                 buttons: ['Cancelar',"Finalizar"],
-                // dangerMode: true,
             })
             .then((res) => {
                 if (res) {
@@ -245,7 +257,6 @@ export default {
                                 break;
                         }
                     });
-
                 }
             });
         }

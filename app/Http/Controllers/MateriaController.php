@@ -38,28 +38,30 @@ class MateriaController extends Controller
     public function store(MateriaValidate $request)
     {
         $materias=new Materia();
+        $materias->cod_cartilla=$request->cod_cartilla;
         $materias->nombre_materia=$request->nombre_materia;
         $materias->save();
-
+        
         return response()->json([
             "status" => "OK"
         ]);
-
+        
     }
-
-
-
+    
+    
+    
     public function show($id)
     {
         $materias=Materia::where('id',$id)->first();
         return response()->json($materias);
     }
-
-
-  
+    
+    
+    
     public function update(MateriaValidate $request, $id)
     {
         $materias=Materia::where('id',$id)->first();
+        $materias->cod_cartilla=$request->cod_cartilla;
         $materias->nombre_materia=$request->nombre_materia;
         $materias->save();
 

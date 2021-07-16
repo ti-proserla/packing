@@ -15,8 +15,8 @@ class CreateCalibreTable extends Migration
     {
         Schema::create('calibre', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_calibre',5)->nullable();
-            $table->string('nombre_calibre',50);
+            $table->integer('materia_id');
+            $table->string('nombre_calibre',5);
             $table->timestamps();
         });
     }

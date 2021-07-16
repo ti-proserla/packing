@@ -23,6 +23,7 @@ class TipoController extends Controller
     public function store(TipoValidate $request)
     {
         $tipo=new Tipo();
+        $tipo->cod_cartilla=$request->cod_cartilla;
         $tipo->nombre_tipo=$request->nombre_tipo;
         $tipo->materia_id=$request->materia_id;
         $tipo->save();
@@ -44,6 +45,7 @@ class TipoController extends Controller
     public function update(TipoValidate $request, $id)
     {
         $tipo=Tipo::where('id',$id)->first();
+        $tipo->cod_cartilla=$request->cod_cartilla;
         $tipo->nombre_tipo=$request->nombre_tipo;
         $tipo->materia_id=$request->materia_id;
         $tipo->save();

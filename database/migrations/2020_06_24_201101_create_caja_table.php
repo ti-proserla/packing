@@ -17,13 +17,20 @@ class CreateCajaTable extends Migration
             $table->id();
             $table->integer('palet_salida_id');
             $table->integer('lote_ingreso_id');
-            $table->integer('calibre_id');
-            $table->integer('categoria_id');
-            $table->integer('presentacion_id');
-            $table->integer('marca_caja_id');
-            $table->integer('plu_id')->nullable();
-            $table->integer('tipo_bolsa_id')->nullable();
-            $table->integer('marca_bolsa_id')->nullable();
+            $table->string('calibre',10);
+            $table->string('categoria',10);
+            $table->string('presentacion',20);
+            $table->string('marca_caja',30);
+            $table->string('plu',10);
+            $table->string('tipo_bolsa',10);
+            $table->string('marca_bolsa',10);
+            // $table->integer('calibre_id');
+            // $table->integer('categoria_id');
+            // $table->integer('presentacion_id');
+            // $table->integer('marca_caja_id');
+            // $table->integer('plu_id')->nullable();
+            // $table->integer('tipo_bolsa_id')->nullable();
+            // $table->integer('marca_bolsa_id')->nullable();
             $table->date('fecha_empaque'); // fecha sistema.
             $table->timestamps();
         });
@@ -36,6 +43,6 @@ class CreateCajaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jaba_salida');
+        Schema::dropIfExists('caja');
     }
 }

@@ -15,7 +15,6 @@ class CreatePluTable extends Migration
     {
         Schema::create('plu', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_plu',5)->nullable();
             $table->string('nombre_plu',50);
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\LoteIngreso;
 use App\Model\PaletSalida;
 use App\Model\JabaSalida;
+use App\Model\Caja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -21,19 +22,9 @@ class PaletSalidaController extends Controller
      */
     public function store(Request $request)
     {
-        $palet_contar=(PaletSalida::select(DB::raw('count(id) contar'))
-                            ->where('lote_id',$request->lote_id)
-                            ->first()->contar)+1;
         $paletSalida=new PaletSalida();
-        $paletSalida->lote_id=$request->lote_id;
-        $paletSalida->producto_id=$request->producto_id;
-        $paletSalida->proceso_id=1;
-        $paletSalida->numero=$palet_contar;
-        $paletSalida->fecha=Carbon::now();
-        $paletSalida->estado="Abierto";
-        $paletSalida->save();
-        $lote=LoteIngreso::where('id',$request->lote_id)->first();
-        $paletSalida->fecha=$lote->fecha_cosecha;
+        $paletSalida->cliente_id=$request->cliente_id;
+        $paletSalida->estado="Pendiente";
         $paletSalida->save();
         return response()->json([
             "status" => "OK",
@@ -41,11 +32,34 @@ class PaletSalidaController extends Controller
         ]);
     }
     
+    public function caja_store(Request $request,$id){
+        // dd($request->all());
+        $codigo_palet = $request->codigo_palet;
+        $array_palet= explode('-',$codigo_palet);
+        // dd($array_palet);
+        $caja=new Caja();
+        $caja->palet_salida_id=$id;
+        $caja->calibre=$array_palet[2];
+        $caja->categoria=$array_palet[3];
+        $caja->presentacion=$array_palet[4];
+        $caja->marca_caja=$array_palet[5];
+        $caja->plu=$array_palet[6];
+        $caja->tipo_bolsa=$array_palet[7];
+        $caja->marca_bolsa=$array_palet[8];
+        $caja->save();
+        return response()->json([
+            "status" => "OK",
+            "data"  => $caja
+        ]);
+        
+        // $caja->
+    }
+
     public function show(Request $request,$id){
-        $paletSalida=PaletSalida::with('jabas')
-                                ->join('producto','palet_salida.producto_id','=','producto.id')
+        $paletSalida=PaletSalida::with('cajas')
+                                // ->join('producto','palet_salida.producto_id','=','producto.id')
                                 ->where('palet_salida.id',$id)
-                                ->select('palet_salida.*','producto.etapas')
+                                ->select('palet_salida.*')
                                 ->first();
         return response()->json($paletSalida);
     }

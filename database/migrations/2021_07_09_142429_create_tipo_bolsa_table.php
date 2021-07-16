@@ -15,7 +15,6 @@ class CreateTipoBolsaTable extends Migration
     {
         Schema::create('tipo_bolsa', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_tipo_bolsa',5)->nullable();
             $table->string('nombre_tipo_bolsa',50);
             $table->timestamps();
         });
