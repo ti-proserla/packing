@@ -119,8 +119,10 @@ export default {
                 var cajas=this.palet.cajas;
                 for (let i = 0; i < cajas.length; i++) {
                     const caja = cajas[i];
-                    var codigos=caja.codigos.split('|');
-                    this.matriz_codigos.push(codigos);
+                    if (caja.codigos!=null) {
+                        var codigos=caja.codigos.split('|');
+                        this.matriz_codigos.push(codigos);
+                    }
                 }
             });
         },
@@ -162,12 +164,10 @@ export default {
                 var data=res.data;
                 switch (data.status) {
                     case "OK":
-                        this.fila_codigos=[];
                         this.palet.cajas.push(data.data);
-                        // this.getPaletSalida();
-                        // var temp_array=[this.fila_codigos];
-                        // this.matriz_codigos=temp_array.concat(this.matriz_codigos);
-                        break;
+                        this.matriz_codigos.push(this.fila_codigos);
+                        this.fila_codigos=[];
+                       break;
                 
                     default:
                         break;
@@ -175,11 +175,11 @@ export default {
             });
         },
         agregar(){
-            this.codigo_barras;
             if (this.isCodigoTrabajador(this.codigo_barras)) {
                 if (this.fila_codigos.length==1) {
                     this.alerta("Escanear codigo de palet.");
                 }else{
+
                     var repetido=0;
 
                     for (let i = 0; i < this.matriz_codigos.length; i++) {
@@ -200,10 +200,13 @@ export default {
                             break;
                         }
                     }
+                    console.log("hola",repetido);
 
                     if (repetido==1) {
                         this.alerta("Código repetido.");
                     }else{
+                        console.log("hola 01:",repetido);
+
                         for (let j = 0; j < this.fila_codigos.length; j++) {
                             const element2 = this.fila_codigos[j];
                             if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
@@ -212,9 +215,13 @@ export default {
                                 break;
                             }
                         }
-                        
+                    console.log("hola 02:",repetido);
+
                         if (repetido==0) {
+                            console.log("hola 03:",repetido);
+                            console.log("hola 03:",this.fila_codigos.length,this.palet.etapas);
                             if (this.fila_codigos.length<this.palet.etapas) {
+                                console.log("hola");
                                 this.fila_codigos.push(this.codigo_barras);
                                 this.codigo_barras="";
                             }  

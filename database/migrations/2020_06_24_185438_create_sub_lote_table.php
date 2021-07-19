@@ -19,13 +19,13 @@ class CreateSubLoteTable extends Migration
             //recepcin de materia
             $table->integer('viaje');
             $table->string('guia',50);            
-            $table->decimal('peso_guia',8,2);
+            $table->decimal('peso_guia',10,4);
             $table->datetime('fecha_recepcion');
             $table->string('estado',30)->nullable();
             //lanzado y descarte
             $table->datetime('fecha_proceso')->nullable();
-            $table->decimal('descarte_racimos',8,2)->nullable();
-            $table->decimal('descarte_granos',8,2)->nullable();
+            $table->decimal('descarte_racimos',10,4)->nullable();
+            $table->decimal('descarte_granos',10,4)->nullable();
             $table->integer('cantidad_jabas_descarte')->nullable();
             $table->timestamps();
         });

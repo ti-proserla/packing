@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SubLoteValidate;
 use Illuminate\Http\Request;
 use App\Model\SubLote;
+use Illuminate\Support\Facades\DB;
 
 class SubLoteController extends Controller
 {
@@ -20,6 +21,7 @@ class SubLoteController extends Controller
                         ->join('tipo','tipo.id','=','lote_ingreso.tipo_id')
                         ->join('fundo','fundo.id','=','lote_ingreso.fundo_id')
                         ->leftJoin('parcela','parcela.id','=','lote_ingreso.parcela_id')
+                        ->leftJoin('palet_entrada','palet_entrada.sub_lote_id','=','sub_lote.id')
                         ->whereIn('sub_lote.estado',explode(',',$request->estado))
                         // ->where('cliente_id',$request->cliente_id)    
                         ->select('sub_lote.*',
@@ -29,8 +31,12 @@ class SubLoteController extends Controller
                             'variedad.nombre_variedad as variedad',
                             'tipo.nombre_tipo as tipo',
                             'fundo.nombre_fundo as fundo',
-                            'parcela.nombre_parcela as parcela'
+                            'parcela.nombre_parcela as parcela',
+                            DB::raw('SUM(num_jabas) as total_jabas'),
+                            DB::raw('SUM(peso) as peso_bruto'),
+                            DB::raw('SUM(peso - peso_palet - num_jabas * peso_jaba) as peso_neto')
                         )
+                        ->groupBy('sub_lote.id')
                         ->get();
         }else{
             

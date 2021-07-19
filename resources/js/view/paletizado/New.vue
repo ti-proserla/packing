@@ -15,6 +15,17 @@
                             item-value="id">
                             </v-select>
                     </v-col>
+                    <v-col>
+                        <v-select
+                            outlined
+                            dense
+                            v-model="palet_salida.etapas"
+                            label="Procesos:"
+                            :items="procesos"
+                            :item-text="proceso => `${proceso.descripcion}`"
+                            item-value="etapas">
+                        </v-select>
+                    </v-col>
                 </v-row>
                 <v-btn color=primary @click="crear()">
                     Crear
@@ -52,10 +63,15 @@ export default {
         return {
             lote_ingreso:[],
             palet_salida: {
-                cliente_id: null
+                cliente_id: null,
+                etapas: null
             },
             productos: [],
-            clientes: []
+            clientes: [],
+            procesos: [
+                {'etapas' : 1 , "descripcion" : "Solo Empaque"},
+                {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
+            ]
         }
     },
     mounted() {

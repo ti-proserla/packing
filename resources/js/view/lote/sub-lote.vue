@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-dialog 
-            max-width="400"
+            max-width="500"
             v-model="open_palets" 
             persistent>
             <v-card>
@@ -42,7 +42,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-text-field 
-                                    label="Peso Palet:" 
+                                    label="Peso Palet (Kg):" 
                                     v-model="peso_palet"
                                     outlined
                                     dense
@@ -50,6 +50,18 @@
                                     type="number"
                                     hide-details="auto"
                                     :error-messages="palets_error.peso_palet"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-text-field 
+                                    label="Peso Jaba (Kg):" 
+                                    v-model="peso_jaba"
+                                    outlined
+                                    dense
+                                    clearable
+                                    type="text"
+                                    hide-details="auto"
+                                    :error-messages="palets_error.peso_jaba"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
@@ -70,6 +82,7 @@
                                             <th>N° Jabas</th>
                                             <th>Peso Total</th>
                                             <th>Peso Palet</th>
+                                            <th>Peso Jaba</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -78,6 +91,7 @@
                                             <td>{{ palet.num_jabas }}</td>
                                             <td>{{ palet.peso }}</td>
                                             <td>{{ palet.peso_palet }}</td>
+                                            <td>{{ palet.peso_jaba }}</td>
                                         </tr>
                                         <tr v-if="seleccionado_sub_lote==null">
                                             <td colspan="3"> Seleccione un Sub lote </td>
@@ -200,6 +214,7 @@
                                 @change="listarSublote"
                                 outlined
                                 dense
+                                hide-details="auto"
                                 v-model="s_cliente_id"
                                 label="Cliente:"
                                 :items="clientes"
@@ -207,14 +222,10 @@
                                 item-value="id">
                                 </v-select>
                             </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-                    <v-row>
-                        <v-col 
-                            cols=4 
-                            v-for="(sub,index) in sub_lotes" 
-                            :key="index">
+                            <v-col 
+                                cols=4 
+                                v-for="(sub,index) in sub_lotes" 
+                                :key="index">
                                 <v-card 
                                     outlined 
                                     class="mb-3" 
@@ -225,16 +236,22 @@
                                                     <v-row>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Viaje:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.viaje }}</v-col>
-                                                        <v-col class="pb-0 pt-0" cols="4"><b>Lote:</b></v-col>
-                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.codigo }} - {{ sub.cliente }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Código:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.codigo }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Materia:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.materia }} - {{ sub.variedad }} - {{ sub.tipo }}</v-col>
-                                                        <v-col class="pb-0 pt-0" cols="4"><b>Peso Guia:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Guia:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.guia }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Recepción:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.fecha_recepcion }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Peso Guia:</b></v-col>
-                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.peso_guia }} Kl</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.peso_guia }} Kg</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Total Jabas:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.total_jabas }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Peso Bruto:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.peso_bruto }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Peso Neto:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.peso_neto }}</v-col>
                                                         <v-col cols="12" class="text-center">
                                                             <v-btn 
                                                                 small
@@ -249,22 +266,15 @@
                                                                 <i class="far fa-edit"></i>
                                                             </v-btn>
                                                         </v-col>
-                                                        <!-- <v-col class="pb-0 pt-0" cols="2">
-                                                            
-                                                            <v-btn 
-                                                                small
-                                                                icon
-                                                                color="red">
-                                                                <i class="far fa-trash-alt"></i>
-                                                            </v-btn>
-                                                        </v-col> -->
                                                     </v-row>
                                                 </v-col>
                                             </v-row>
                                         </v-card-text>
                                 </v-card>
-                        </v-col>
-                    </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
@@ -301,6 +311,7 @@ export default {
             num_jabas: 0,
             peso: 0,
             peso_palet: 20.00,
+            peso_jaba: 1.2,
             lote: {},
             lotes: [],
             sub_lote: this.init(),
@@ -320,6 +331,20 @@ export default {
             seleccionado_estado_sub_lote: null
         }
     },
+    computed: {
+        jabas_totales(){
+            // var jabas_totales
+            for (let index = 0; index < this.sub_lote_seleccionado.palets.length; index++) {
+                const palet = this.sub_lote_seleccionado.palets[index];
+                
+            }
+        }
+    },
+    watch: {
+        open_palets: function() {
+            this.listarSublote()
+        }
+    },
     mounted() {
         axios.get(url_base+`/cliente?proceso`)
         .then(response => {
@@ -331,6 +356,19 @@ export default {
         });
     },
     methods: {
+        handleInput (e) {
+            let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+
+            // only allow number and one dot
+            if ((keyCode < 48 || keyCode > 57) && (keyCode !== 46 || e.toString().indexOf('.') != -1)) { // 46 is dot
+                $event.preventDefault();
+            }
+
+            // restrict to 2 decimal places
+            if(e.toString()!=null && e.toString().indexOf(".")>-1 && (e.toString().split('.')[1].length > 1)){
+                $event.preventDefault();
+            }
+        },
         abrirEditar(){
 
         },
@@ -391,7 +429,8 @@ export default {
             axios.post(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palet_entrada`,{
                 num_jabas: this.num_jabas,
                 peso: this.peso,
-                peso_palet: this.peso_palet
+                peso_palet: this.peso_palet,
+                peso_jaba: this.peso_jaba
             })
             .then(response => {
                 var res=response.data;

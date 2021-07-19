@@ -20,6 +20,7 @@ class PaletEntradaController extends Controller
         $paletEntradas->sub_lote_id=$sub_lote_id;
         $paletEntradas->peso=$request->peso;
         $paletEntradas->peso_palet=$request->peso_palet;
+        $paletEntradas->peso_jaba=$request->peso_jaba;
         $paletEntradas->num_jabas = $request->num_jabas;
         $paletEntradas->save();
         return response()->json([

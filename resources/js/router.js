@@ -8,6 +8,10 @@ var routes =[
         path: '/', 
         component: require('./view/Home.vue').default
     },
+    { 
+        path: '/lanzado', 
+        component: require('./view/lanzado/index.vue').default
+    },
     {
         path: '/acopio/new',
         component: require('./view/acopio/New.vue').default
