@@ -13,7 +13,7 @@ REQUERIMIENTOS
     Descarte Grano en kilos,===============(Solo Base)
     total de jabas descartadas,============(Solo Base)
 )
-* spinner decimal descuento palet acopio (Valor Fijo 20).
+* spinner decimal descuento palet acopio (Valor Fijo 20). (Terminado).
 * Lanzado por Sublote.
 * Descarte por Sublote.
 

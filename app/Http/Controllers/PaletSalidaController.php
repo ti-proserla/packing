@@ -7,15 +7,20 @@ use App\Model\PaletSalida;
 use App\Model\JabaSalida;
 use App\Model\RendimientoPersonal;
 use App\Model\Caja;
+use App\Model\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class PaletSalidaController extends Controller
 {
-    public function index($sub_lote_id)
+    public function index()
     {
-        $paletSalidas=PaletSalida::all();
+        $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
+                            ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
+                            ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
+                            ->groupBy('palet_salida.id')
+                            ->get();
         return response()->json($paletSalidas);
     }  
     /**
@@ -34,13 +39,19 @@ class PaletSalidaController extends Controller
         ]);
     }
     
-    public function caja_store(Request $request,$id){
+    public function caja_store($id,Request $request){
         // dd($request->all());
         $codigo_palet = $request->codigo_palet;
         $array_palet= explode('-',$codigo_palet);
-        // dd($array_palet);
+        $lote_ingreso=LoteIngreso::where('codigo',$array_palet[1])->first();
+        if ($lote_ingreso==null) {
+            return response()->json([
+                "status" => "ERROR",
+                "data"  => "Código no encontrado"
+            ]);
+        }
         $caja=new Caja();
-        $caja->palet_salida_id=$id;
+        $caja->palet_salida_id=(int)$id;
         $caja->lote_ingreso_id=LoteIngreso::where('codigo',$array_palet[1])->first()->id;
         $caja->calibre=$array_palet[2];
         $caja->categoria=$array_palet[3];
@@ -84,9 +95,22 @@ class PaletSalidaController extends Controller
     }
 
     public function update(Request $request,$id){
-        $paletSalida=PaletSalida::where('id',$id)->first();
-        $paletSalida->estado="Cerrado";
-        $paletSalida->save();
+        switch ($request->estado) {
+            case 'Cerrado':
+                $paletSalida=PaletSalida::where('id',$id)->first();
+                $cliente=Cliente::where('id',$paletSalida->cliente_id)->first();
+                $cliente->conteo_palets=$cliente->conteo_palets+1;
+                $paletSalida->numero=$cliente->conteo_palets;
+                $paletSalida->estado=$request->estado;
+                $paletSalida->save();
+                break;
+            
+            default:
+                $paletSalida=PaletSalida::where('id',$id)->first();
+                $paletSalida->estado=$request->estado;
+                $paletSalida->save();
+                break;
+        }
         return response()->json([
             "status" => "OK",
             "data"  => $paletSalida

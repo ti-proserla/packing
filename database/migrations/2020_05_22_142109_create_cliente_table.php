@@ -18,6 +18,7 @@ class CreateClienteTable extends Migration
             $table->string('ruc',11);
             $table->string('descripcion',40);
             $table->string('cod_cartilla',5)->nullable();
+            $table->integer('conteo_palets')->default(0);
             $table->timestamps();
         });
     }

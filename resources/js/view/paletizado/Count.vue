@@ -168,7 +168,9 @@ export default {
                         this.matriz_codigos.push(this.fila_codigos);
                         this.fila_codigos=[];
                        break;
-                
+                    case "ERROR":
+                        this.alerta("Código de caja no existe o Lote ya esta cerrado.");
+                        break;
                     default:
                         break;
                 }
@@ -247,7 +249,9 @@ export default {
             })
             .then((res) => {
                 if (res) {
-                    axios.post(url_base+`/palet_salida/${ this.$route.params.id }?_method=patch`)
+                    axios.post(url_base+`/palet_salida/${ this.$route.params.id }?_method=patch`,{
+                        estado: 'Cerrado'
+                    })
                     .then(response => {
                         var res=response.data;
                         switch (res.status) {
