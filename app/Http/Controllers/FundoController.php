@@ -31,9 +31,11 @@ class FundoController extends Controller
     public function store(FundoValidate $request)
     {
         $fundos=new Fundo();
+        $fundos->cod_cartilla=$request->cod_cartilla;
         $fundos->nombre_fundo=$request->nombre_fundo;
+        $fundos->lugar_produccion=$request->lugar_produccion;
+        $fundos->cod_lugar_produccion=$request->cod_lugar_produccion;
         $fundos->save();
-
         return response()->json([
             "status" => "OK"
         ]);
@@ -53,7 +55,10 @@ class FundoController extends Controller
     public function update(FundoValidate $request, $id)
     {
         $fundos=Fundo::where('id',$id)->first();
+        $fundos->cod_cartilla=$request->cod_cartilla;
         $fundos->nombre_fundo=$request->nombre_fundo;
+        $fundos->lugar_produccion=$request->lugar_produccion;
+        $fundos->cod_lugar_produccion=$request->cod_lugar_produccion;
         $fundos->save();
 
         return response()->json([

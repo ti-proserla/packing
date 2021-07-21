@@ -1,9 +1,9 @@
 <template>
     <v-container fluid>
         <v-card outlined>
-            <v-card-title>Lista de clientes</v-card-title>
+            <v-card-title>Lista de Fundos</v-card-title>
             <v-card-text>
-                <v-btn @click="open_nuevo=true" outlined color="info">Nuevo Cliente</v-btn>
+                <v-btn @click="open_nuevo=true" outlined color="info">Nueva Fundo</v-btn>
                 <v-data-table
                     :headers="header"
                     :items="table.data"
@@ -22,27 +22,31 @@
             <!-- Nuevo -->
             <v-dialog v-model="open_nuevo" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Nuevo Cliente</v-card-title>
+                    <v-card-title class="headline">Nueva fundo</v-card-title>
                     <v-card-text>
                         <v-text-field 
                             hide-details="auto"
                             label="cod_cartilla" 
-                            v-model="cliente.cod_cartilla"
+                            v-model="fundo.cod_cartilla"
                             :error-messages="error.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="RUC" 
-                            v-model="cliente.ruc"
-                            :error-messages="error.ruc"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
                             hide-details="auto"
                             label="Nombre" 
-                            v-model="cliente.descripcion"
-                            :error-messages="error.descripcion"
+                            v-model="fundo.nombre_fundo"
+                            :error-messages="error.nombre_fundo"
+                        ></v-text-field>
+                        <v-text-field 
+                            hide-details="auto"
+                            label="Lugar Producción:" 
+                            v-model="fundo.lugar_produccion"
+                            :error-messages="error.lugar_produccion"
+                        ></v-text-field>
+                        <v-text-field 
+                            hide-details="auto"
+                            label="COd Lugar Producción" 
+                            v-model="fundo.cod_lugar_produccion"
+                            :error-messages="error.cod_lugar_produccion"
                         ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -62,27 +66,34 @@
             <!-- Editar -->
             <v-dialog v-model="open_editar" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Editar Cliente</v-card-title>
+                    <v-card-title class="headline">Editar Fundo</v-card-title>
                     <v-card-text>
                         <v-text-field 
                             hide-details="auto"
                             label="cod_cartilla" 
-                            v-model="cliente_editar.cod_cartilla"
+                            v-model="fundo_editar.cod_cartilla"
                             :error-messages="error_editar.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
                             required 
                             hide-details="auto"
-                            label="RUC" 
-                            v-model="cliente_editar.ruc"
-                            :error-messages="error_editar.ruc"
+                            label="Lugar Producción:" 
+                            v-model="fundo_editar.lugar_produccion"
+                            :error-messages="error_editar.lugar_produccion"
+                        ></v-text-field>
+                        <v-text-field 
+                            required 
+                            hide-details="auto"
+                            label="Código Lugar Producción:" 
+                            v-model="fundo_editar.cod_lugar_produccion"
+                            :error-messages="error_editar.cod_lugar_produccion"
                         ></v-text-field>
                         <v-text-field 
                             required 
                             hide-details="auto"
                             label="Nombre" 
-                            v-model="cliente_editar.descripcion"
-                            :error-messages="error_editar.descripcion"
+                            v-model="fundo_editar.nombre_fundo"
+                            :error-messages="error_editar.nombre_fundo"
                         ></v-text-field>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -106,10 +117,12 @@
 export default {
     data() {
         return {
+            materias: [],
             header:[
-                { text: 'Cod Cartilla', value: 'cod_cartilla' },
-                { text: 'RUC', value: 'ruc' },
-                { text: 'Descripción', value: 'descripcion' },
+                { text: 'Código Cartilla', value: 'cod_cartilla' },
+                { text: 'Descripción', value: 'nombre_fundo' },
+                { text: 'Lugar de Producción', value: 'lugar_produccion' },
+                { text: 'Cod Lugar Producción', value: 'cod_lugar_produccion' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -120,42 +133,52 @@ export default {
             search: '',
             //Modal Nuevo
             open_nuevo: false,
-            cliente: this.initForm(),
+            fundo: this.initForm(),
             error: {},
             //Modal Editar
             open_editar: false,
-            cliente_editar: this.initForm(),
+            fundo_editar: this.initForm(),
             error_editar: {},
         }
     },
     mounted() {
+        axios.get(url_base+'/materia?all')
+        .then(response => {
+            this.materias = response.data;
+            this.materias.push({
+                id: '',
+                nombre_materia: 'Seleccione Materia'
+            })
+        })
         this.listar(1);
     },
     methods: {
         initForm(){
             return {
-                descripcion: '',
-                ruc: '',
+                cod_cartilla: '',
+                nombre_fundo: '',
+                lugar_produccion: '',
+                cod_lugar_produccion: ''
             }
         },
         listar(n=this.table.current_page){
-            axios.get(url_base+'/cliente?page='+n+'&search='+this.search)
+            axios.get(url_base+'/fundo?page='+n+'&search='+this.search)
             .then(response => {
                 this.table = response.data;
             })
         },
         guardar(){
-            axios.post(url_base+'/cliente',this.cliente)
+            axios.post(url_base+'/fundo',this.fundo)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("Cliente Creado", { 
+                        swal("fundo Creado", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
                         });
-                        this.cliente=this.initForm();
+                        this.fundo=this.initForm();
                         this.open_nuevo=false;
                         this.listar();
                         break;
@@ -171,24 +194,24 @@ export default {
             });
         },
         buscar(id){
-            axios.get(url_base+'/cliente/'+id)
+            axios.get(url_base+'/fundo/'+id)
             .then(response => {
                 this.open_editar=true;
-                this.cliente_editar = response.data;
+                this.fundo_editar = response.data;
             })
         },
         actualizar(){
-            axios.post(url_base+`/cliente/${this.cliente_editar.id}?_method=PUT`,this.cliente_editar)
+            axios.post(url_base+`/fundo/${this.fundo_editar.id}?_method=PUT`,this.fundo_editar)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("Cliente Actualizado", { 
+                        swal("fundo Actualizado", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
                         });
-                        this.cliente_editar=this.initForm();
+                        this.fundo_editar=this.initForm();
                         this.open_editar=false;
                         this.listar();
                         break;

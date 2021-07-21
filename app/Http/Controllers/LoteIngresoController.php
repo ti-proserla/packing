@@ -41,11 +41,13 @@ class LoteIngresoController extends Controller
         $materia_id=$request->materia_id;
         $variedad_id=$request->variedad_id;
         $cliente_id=$request->cliente_id;
+        $fundo_id=$request->fundo_id;
         $fecha_cosecha=$request->fecha_cosecha;
         $query="SELECT 
                 CONCAT(
                     'J',
                     (SELECT cod_cartilla FROM cliente where id=$cliente_id),
+                    (SELECT cod_cartilla FROM fundo where id=$fundo_id),
                     (SELECT cod_cartilla FROM materia where id=$materia_id),
                     (SELECT cod_cartilla FROM variedad where id=$variedad_id),
                     SUBSTRING(YEAR('$fecha_cosecha'),-1,1),

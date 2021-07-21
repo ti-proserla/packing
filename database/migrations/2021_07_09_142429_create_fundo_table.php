@@ -17,6 +17,8 @@ class CreateFundoTable extends Migration
             $table->id();
             $table->string('cod_cartilla',5)->nullable();
             $table->string('nombre_fundo',50);
+            $table->string('lugar_produccion',50);
+            $table->string('cod_lugar_produccion',50);
             $table->timestamps();
         });
     }

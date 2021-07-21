@@ -66,25 +66,12 @@
                                 v-model="lote.fundo_id"
                                 label="Fundo:"
                                 :items="fundos"
-                                item-text="nombre_fundo"
+                                :item-text="item => item.nombre_fundo + ' -'  + item.lugar_produccion"
                                 item-value="id"
                                 hide-details="auto"
                                 :error-messages="lote_error.fundo_id"
                                 >
                                 </v-select>
-                        </v-col>
-                        <v-col cols=12 sm=6>
-                            <v-select
-                                    outlined
-                                    dense
-                                    v-model="lote.parcela_id"
-                                    label="Parcelas:"
-                                    :items="parcelas"
-                                    item-text="nombre_parcela"
-                                    item-value="id"
-                                    hide-details="auto"
-                                    >
-                                    </v-select>
                         </v-col>
                         <v-col cols=12 sm=6>
                             <v-text-field 

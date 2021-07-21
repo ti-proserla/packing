@@ -32,6 +32,7 @@ class ClienteController extends Controller
     public function store(ClienteValidate $request)
     {
         $clientes=new Cliente();
+        $clientes->cod_cartilla=$request->cod_cartilla;
         $clientes->ruc=$request->ruc;
         $clientes->descripcion=$request->descripcion;
         $clientes->save();
@@ -52,6 +53,7 @@ class ClienteController extends Controller
     public function update(ClienteValidate $request, $id)
     {
         $clientes=Cliente::where('id',$id)->first();
+        $clientes->cod_cartilla=$request->cod_cartilla;
         $clientes->ruc=$request->ruc;
         $clientes->descripcion=$request->descripcion;
         $clientes->save();

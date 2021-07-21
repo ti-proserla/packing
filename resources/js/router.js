@@ -29,6 +29,10 @@ var routes =[
         component: require('./view/tipo.vue').default
     },
     {
+        path: '/fundo',
+        component: require('./view/fundo.vue').default
+    },
+    {
         path: '/impresora',
         component: require('./view/impresora.vue').default
     },
