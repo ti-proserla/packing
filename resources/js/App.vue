@@ -46,6 +46,14 @@
                     Impresoras
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link to="/fundo">
+                <v-list-item-icon>
+                    <i class="fas fa-seedling"></i>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    Fundo
+                </v-list-item-content>
+            </v-list-item>
             <v-list-item link to="/materia">
                 <v-list-item-icon>
                     <i class="fas fa-apple-alt"></i>
