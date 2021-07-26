@@ -88,7 +88,7 @@
             </v-list-item>
             <v-list-item link to="/cliente">
                 <v-list-item-icon>
-                    <i class="far fa-building"></i>
+                    <i class="fas fa-user-alt"></i>
                 </v-list-item-icon>
                 <v-list-item-content>
                     Cliente
