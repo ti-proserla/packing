@@ -17,14 +17,18 @@
                 <v-card>
                     <v-card-text>
                         <p class="mb-0"><b class="detalles">Cliente:</b> {{ lote.cliente}}</p>
-                        <p class="mb-0"><b class="detalles">Cajas Escaneadas:</b> {{ lote.cajas_contadas }}</p>
+                        <p class="mb-0"><b class="detalles">Cajas:</b> {{ lote.cajas_contadas }}</p>
                         <p class="mb-0"><b class="detalles">Estado:</b> {{ lote.estado }}</p>
-                        <v-btn :to="`/paletizado/${lote.id}`"
+                        <div class="text-center">
+                            <v-btn :to="`/paletizado/${lote.id}`"
                                 color="primary">Ver</v-btn>
+                        </div>
                     </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
+
+        
     </v-container>
 </template>
 <style>
@@ -50,7 +54,7 @@ export default {
     },
     methods:{
         listar(){
-            axios.get(url_base+`/palet_salida`)
+            axios.get(url_base+`/palet_salida?estado=Pendiente,Cerrado`)
             .then(response => {
                 this.lotes=response.data
             });

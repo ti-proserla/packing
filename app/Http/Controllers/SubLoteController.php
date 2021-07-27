@@ -18,7 +18,7 @@ class SubLoteController extends Controller
                         ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
                         ->join('materia','materia.id','=','lote_ingreso.materia_id')
                         ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
-                        ->join('tipo','tipo.id','=','lote_ingreso.tipo_id')
+                        ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
                         ->join('fundo','fundo.id','=','lote_ingreso.fundo_id')
                         ->leftJoin('parcela','parcela.id','=','lote_ingreso.parcela_id')
                         ->leftJoin('palet_entrada','palet_entrada.sub_lote_id','=','sub_lote.id')

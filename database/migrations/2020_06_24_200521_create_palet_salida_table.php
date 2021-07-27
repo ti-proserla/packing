@@ -21,6 +21,8 @@ class CreatePaletSalidaTable extends Migration
             $table->string('estado',30); //Abierto, Cerrado
             $table->date('fecha_cierre'); // Cierre de palet , fecha sistema.
             $table->integer('operacion_id');
+            $table->integer('nave')->nullable()->default(1);
+            $table->integer('camara')->nullable();
             $table->timestamps();
         });
     }

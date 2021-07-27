@@ -58,6 +58,10 @@ var routes =[
         component: require('./view/paletizado/List.vue').default
     },
     {
+        path: '/frio',
+        component: require('./view/paletizado/ListFrio.vue').default
+    },
+    {
         path: '/ini',
         component: require('./view/paletizado/List.vue').default
     },

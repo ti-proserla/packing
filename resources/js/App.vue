@@ -78,14 +78,14 @@
                     Tipo
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item link to="/producto">
+            <!-- <v-list-item link to="/producto">
                 <v-list-item-icon>
                     <i class="far fa-building"></i>
                 </v-list-item-icon>
                 <v-list-item-content>
                     Producto
                 </v-list-item-content>
-            </v-list-item>
+            </v-list-item> -->
             <v-list-item link to="/cliente">
                 <v-list-item-icon>
                     <i class="fas fa-user-alt"></i>
@@ -112,10 +112,18 @@
                 </v-list-item>
                 <v-list-item link to="/paletizado">
                     <v-list-item-icon>
-                        <i class="far fa-building"></i>
+                        <i class="fas fa-pallet"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        Palets de Salida
+                        Paletizado
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/frio">
+                    <v-list-item-icon>
+                        <i class="fas fa-icicles"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Cámara de Frío
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-group

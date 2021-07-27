@@ -126,7 +126,7 @@
                                 v-model="sub_lote.lote_id"
                                 label="Lote:"
                                 :items="lotes"
-                                :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}/${item.nombre_tipo}`"
+                                :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}`"
                                 item-value="id"
                                 hide-details="auto"
                                 :error-messages="sub_lote_error.lote_id"

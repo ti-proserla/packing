@@ -46,7 +46,7 @@
                                 >
                                 </v-select>
                         </v-col>
-                        <v-col cols=12 sm=6>
+                        <!-- <v-col cols=12 sm=6>
                             <v-select
                                     outlined
                                     dense
@@ -58,7 +58,7 @@
                                     hide-details="auto"
                                     >
                                     </v-select>
-                        </v-col>
+                        </v-col> -->
                         <v-col cols=12 sm=6>
                             <v-select
                                 outlined

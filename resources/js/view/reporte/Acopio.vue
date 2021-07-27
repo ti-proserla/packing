@@ -1,16 +1,30 @@
 <template>
     <v-container fluid>
         <v-card>
+            <v-card-title>Reporte Acopio</v-card-title>              
             <v-card-text>
                 <v-row>
                     <v-col cols="12" sm=4>
                         <v-text-field
                             outlined
                             dense
-                            label="Fecha Producción"
-                            v-model="fecha_produccion"
+                            label="Fecha Recepción"
+                            v-model="fecha_recepcion"
                             type="date">
                         </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=4>
+                        <v-select
+                                outlined
+                                dense
+                                v-model="cliente_id"
+                                label="Cliente:"
+                                :items="clientes"
+                                item-text="descripcion"
+                                item-value="id"
+                                hide-details="auto"
+                                >
+                                </v-select>
                     </v-col>
                     <v-col cols="12" sm=4>
                         <v-btn color="info" @click="buscar">
@@ -25,16 +39,15 @@
                             <tr>
                                 <th>Cliente</th>
                                 <th>Fundo</th>
-                                <th>Parcela</th>
                                 <th>Viaje</th>
                                 <th>Guia</th>
                                 <th>Semana</th>
                                 <th>Fecha Recepcion</th>
                                 <th>Hora Ingreso</th>
-                                <th>Fecha Proceso</th>
+                                <!-- <th>Fecha Proceso</th> -->
                                 <th>Materia</th>
                                 <th>Variedad</th>
-                                <th>Tipo</th>
+                                <!-- <th>Tipo</th> -->
                                 <th>Lote Materia</th>
                                 <th>Número Jabas</th>
                                 <th>Peso Promedio Jaba</th>
@@ -52,16 +65,15 @@
                             <tr v-for="(row,i) in table" :key="i">
                                 <td>{{row.cliente}}</td>
                                 <td>{{row.fundo}}</td>
-                                <td>{{row.parcela}}</td>
                                 <td>{{row.viaje}}</td>
                                 <td>{{row.guia}}</td>
                                 <td>{{row.semana}}</td>
                                 <td>{{row.fecha_recepcion}}</td>
                                 <td>{{row.hora_ingreso}}</td>
-                                <td>{{row.fecha_proceso}}</td>
+                                <!-- <td>{{row.fecha_proceso}}</td> -->
                                 <td>{{row.materia}}</td>
                                 <td>{{row.variedad}}</td>
-                                <td>{{row.tipo}}</td>
+                                <!-- <td>{{row.tipo}}</td> -->
                                 <td>{{row.lote_materia}}</td>
                                 <td>{{row.numero_jabas}}</td>
                                 <td>{{row.peso_promedio_jaba}}</td>
@@ -91,17 +103,27 @@ export default {
     data() {
         return {
             table: [],
-            fecha_produccion: moment().format('YYYY-MM-DD')
+            fecha_recepcion: moment().format('YYYY-MM-DD'),
+            cliente_id: null,
+            clientes: []
         }
     },
     mounted() {
+        this.listarClientes();
         this.buscar();
     },
     methods:{
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes = response.data;
+            })
+        },
         buscar(){
             axios.get(`${url_base}/reporte/acopio`,{
                 params: {
-                    fecha_produccion: this.fecha_produccion
+                    fecha_recepcion: this.fecha_recepcion,
+                    cliente_id: this.cliente_id
                 }
             })
             .then(response => {

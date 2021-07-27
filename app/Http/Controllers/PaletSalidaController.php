@@ -14,13 +14,22 @@ use Carbon\Carbon;
 
 class PaletSalidaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
-                            ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
-                            ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
-                            ->groupBy('palet_salida.id')
-                            ->get();
+        if ($request->has('estado')) {
+            $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
+                                ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
+                                ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
+                                ->groupBy('palet_salida.id')
+                                ->whereIn('estado',explode(',',$request->estado))
+                                ->get();
+        }else{
+            $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
+                                ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
+                                ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
+                                ->groupBy('palet_salida.id')
+                                ->get();
+        }
         return response()->json($paletSalidas);
     }  
     /**
@@ -31,6 +40,8 @@ class PaletSalidaController extends Controller
         $paletSalida=new PaletSalida();
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;
+        $paletSalida->nave=1;
+        $paletSalida->camara=null;
         $paletSalida->estado="Pendiente";
         $paletSalida->save();
         return response()->json([
@@ -100,11 +111,20 @@ class PaletSalidaController extends Controller
                 $paletSalida=PaletSalida::where('id',$id)->first();
                 $cliente=Cliente::where('id',$paletSalida->cliente_id)->first();
                 $cliente->conteo_palets=$cliente->conteo_palets+1;
+                $cliente->save();
                 $paletSalida->numero=$cliente->conteo_palets;
                 $paletSalida->estado=$request->estado;
+                $paletSalida->fecha_cierre=Carbon::now();
                 $paletSalida->save();
                 break;
             
+            case 'Frio':
+                $paletSalida=PaletSalida::where('id',$id)->first();
+                $paletSalida->estado=$request->estado;
+                $paletSalida->camara=$request->camara;
+                $paletSalida->save();
+                break;
+
             default:
                 $paletSalida=PaletSalida::where('id',$id)->first();
                 $paletSalida->estado=$request->estado;

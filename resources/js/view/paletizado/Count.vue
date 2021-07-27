@@ -65,20 +65,35 @@
             <v-col cols=12 sm=6>
                 <v-card>
                     <v-card-text>
-                        <h6>cajas ESCANEADAS</h6>
+                        <h6>CAJAS ESCANEADAS</h6>
                         <v-simple-table>
                             <template v-slot:default>
                                 <tbody>
                                     <tr>
                                         <td :key="i" v-for="(cell,i) in fila_codigos">{{ cell }}</td>
                                     </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
+                        <v-simple-table>
+                            <template v-slot:default>
+                                <tbody>
+                                    <tr>
+                                        <td><b>N°</b></td>
+                                        <td><b>Cal</b></td>
+                                        <td><b>Cat</b></td>
+                                        <td><b>Pre</b></td>
+                                    </tr>
                                     <tr :key="index" v-for="(caja,index) in palet.cajas">
                                         <td>{{ index+1 }}</td>
-                                        <td>
-                                            <label for="">{{caja.calibre}}</label>
-                                            <label for="">{{caja.categoria}}</label>
-                                            <label for="">{{caja.presentacion}}</label>
-                                        </td>
+                                        <td>{{ caja.calibre }}</td>
+                                        <!-- <td>
+                                            <label for=""><b>Cal:</b> {{caja.calibre}}</label><br>
+                                            <label for=""><b>Cat:</b> </label><br>
+                                            <label for=""><b>Pre:</b> {{caja.presentacion}}</label><br>
+                                        </td> -->
+                                        <td>{{caja.categoria}}</td>
+                                        <td>{{caja.presentacion}}</td>
                                     </tr>
                                 </tbody>
                             </template>
@@ -217,13 +232,9 @@ export default {
                                 break;
                             }
                         }
-                    console.log("hola 02:",repetido);
-
+                    
                         if (repetido==0) {
-                            console.log("hola 03:",repetido);
-                            console.log("hola 03:",this.fila_codigos.length,this.palet.etapas);
                             if (this.fila_codigos.length<this.palet.etapas) {
-                                console.log("hola");
                                 this.fila_codigos.push(this.codigo_barras);
                                 this.codigo_barras="";
                             }  

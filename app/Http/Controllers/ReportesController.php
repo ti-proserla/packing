@@ -80,41 +80,45 @@ class ReportesController extends Controller
         return response()->json($data);  
     }
     public function acopio(Request $request){
+        $cliente_id=$request->cliente_id;
+        $fecha_recepcion=$request->fecha_recepcion;
         $query="SELECT 
-        CL.descripcion cliente,
-        FU.nombre_fundo fundo,
-        PA.nombre_parcela parcela,
-        SL.viaje,
-        SL.guia,
-        WEEK(SL.fecha_recepcion) semana,
-        DATE(SL.fecha_recepcion) fecha_recepcion,
-        CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
-        fecha_proceso,
-        MA.nombre_materia materia,
-        VA.nombre_variedad variedad,
-        TI.nombre_tipo tipo,
-        LI.codigo lote_materia,
-        SUM(PE.num_jabas) numero_jabas,
-        SUM(PE.peso-PE.peso_palet)/SUM(PE.num_jabas) peso_promedio_jaba,
-        SL.peso_guia,
-        SUM(PE.peso-PE.peso_palet) peso_neto,
-        SUM(PE.peso-PE.peso_palet) peso_neto_proceso,
-        SL.descarte_granos,
-        SL.descarte_racimos,
-        SL.descarte_granos+SL.descarte_racimos total_descarte,
-        (SL.descarte_granos+SL.descarte_racimos)/SUM(PE.peso-PE.peso_palet) descarte_porcentaje,
-        SL.cantidad_jabas_descarte
-FROM lote_ingreso LI
-LEFT JOIN sub_lote SL ON LI.id = SL.lote_id
-INNER JOIN fundo FU ON FU.id = LI.fundo_id
-LEFT JOIN parcela PA ON PA.id = LI.parcela_id 
-INNER JOIN cliente CL ON CL.id=LI.cliente_id
-INNER JOIN materia MA ON MA.id=LI.materia_id
-INNER JOIN variedad VA ON VA.id=LI.variedad_id
-INNER JOIN tipo TI ON TI.id=LI.tipo_id
-LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
-GROUP BY LI.id, SL.id";
-        $data=DB::select(DB::raw("$query"),[]);      
+                        CL.descripcion cliente,
+                        FU.nombre_fundo fundo,
+                                FU.lugar_produccion lugar_produccion,
+                        SL.viaje,
+                        SL.guia,
+                                FU.cod_lugar_produccion cod_lugar_produccion,
+                        WEEK(SL.fecha_recepcion) semana,
+                        DATE(SL.fecha_recepcion) fecha_recepcion,
+                        CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
+                        fecha_proceso,
+                        MA.nombre_materia materia,
+                        VA.nombre_variedad variedad,
+                        LI.codigo lote_materia,
+                        SUM(PE.num_jabas) numero_jabas,
+                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas) peso_promedio_jaba,
+                        SL.peso_guia,
+                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto,
+                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto_proceso,
+                        SL.descarte_granos,
+                        SL.descarte_racimos,
+                        SL.descarte_granos+SL.descarte_racimos total_descarte,
+                        (SL.descarte_granos+SL.descarte_racimos)/SUM(PE.peso-PE.peso_palet) descarte_porcentaje,
+                        SL.cantidad_jabas_descarte
+                FROM lote_ingreso LI
+                LEFT JOIN sub_lote SL ON LI.id = SL.lote_id
+                INNER JOIN fundo FU ON FU.id = LI.fundo_id
+                LEFT JOIN parcela PA ON PA.id = LI.parcela_id 
+                INNER JOIN cliente CL ON CL.id=LI.cliente_id
+                INNER JOIN materia MA ON MA.id=LI.materia_id
+                INNER JOIN variedad VA ON VA.id=LI.variedad_id
+                LEFT JOIN tipo TI ON TI.id=LI.tipo_id
+                LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
+                where CL.id=?
+                AND DATE(SL.fecha_recepcion)=?
+                GROUP BY LI.id, SL.id";
+        $data=DB::select(DB::raw("$query"),[$cliente_id,$fecha_recepcion]);      
         return response()->json($data);  
     }
 }

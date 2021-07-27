@@ -22,7 +22,7 @@ class LoteIngresoController extends Controller
             $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
                             ->join('materia','materia.id','=','lote_ingreso.materia_id')
                             ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
-                            ->join('tipo','tipo.id','=','lote_ingreso.tipo_id')
+                            ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
                             ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
                             ->where('estado',$request->estado)
                             ->get();
@@ -30,7 +30,7 @@ class LoteIngresoController extends Controller
                 $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
                             ->join('materia','materia.id','=','lote_ingreso.materia_id')
                             ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
-                            ->join('tipo','tipo.id','=','lote_ingreso.tipo_id')
+                            ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
                             ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
                             ->get();
         }
@@ -81,7 +81,7 @@ class LoteIngresoController extends Controller
         $loteIngreso->cliente_id=$request->cliente_id;
         $loteIngreso->materia_id=$request->materia_id;
         $loteIngreso->variedad_id=$request->variedad_id;
-        $loteIngreso->tipo_id=$request->tipo_id;
+        $loteIngreso->tipo_id=0;
         $loteIngreso->fundo_id=$request->fundo_id;
         $loteIngreso->parcela_id=$request->parcela_id;
         $loteIngreso->fecha_cosecha=$request->fecha_cosecha;
