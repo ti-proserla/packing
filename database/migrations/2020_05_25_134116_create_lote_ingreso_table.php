@@ -23,6 +23,7 @@ class CreateLoteIngresoTable extends Migration
             $table->integer('fundo_id');
             $table->integer('parcela_id')->nullable();
             $table->date('fecha_cosecha');
+            $table->date('fecha_proceso')->nullable();
             $table->string('estado',30)->nullable();
             $table->timestamps();
         });

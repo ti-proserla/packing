@@ -28,6 +28,7 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Conteo</th>
+                                <th>Labor</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,6 +40,7 @@
                                 <td>{{ fila.nom_operador }}</td>
                                 <td>{{ fila.ape_operador }}</td>
                                 <td>{{ fila.conteo }}</td>
+                                <td>{{ fila.labor }}</td>
                             </tr>
                         </tbody>
                     </template>

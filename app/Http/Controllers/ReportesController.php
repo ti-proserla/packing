@@ -66,15 +66,18 @@ class ReportesController extends Controller
     }
     public function rendimiento_personal(Request $request){
         $query="SELECT 
-                        js.codigo_operador,
+                        RP.codigo_operador,
                         op.nom_operador,
                         op.ape_operador,
-                        COUNT(*) conteo
-                FROM jaba_salida js 
-                INNER JOIN palet_salida ps ON ps.id=js.palet_salida_id
-                INNER JOIN db_asistencia_produccion.operador op ON op.dni=js.codigo_operador
-                WHERE ps.fecha=?
-                GROUP BY js.codigo_operador
+                        COUNT(*) conteo,
+                        LA.descripcion labor
+                FROM caja CA 
+                INNER JOIN lote_ingreso LI on LI.id=CA.lote_ingreso_id
+                INNER JOIN rendimiento_personal RP ON RP.caja_id=CA.id
+                INNER JOIN labor LA ON LA.codigo_labor=RP.codigo_labor
+                INNER JOIN db_asistencia_produccion.operador op ON op.dni=RP.codigo_operador
+                WHERE LI.fecha_proceso=?
+                GROUP BY RP.codigo_operador
                 ORDER BY conteo DESC";
         $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);      
         return response()->json($data);  
