@@ -95,7 +95,7 @@ class ReportesController extends Controller
                         WEEK(SL.fecha_recepcion) semana,
                         DATE(SL.fecha_recepcion) fecha_recepcion,
                         CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
-                        fecha_proceso,
+                        LI.fecha_proceso,
                         MA.nombre_materia materia,
                         VA.nombre_variedad variedad,
                         LI.codigo lote_materia,
