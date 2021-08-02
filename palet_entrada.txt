@@ -1,0 +1,28 @@
+ZPL_PALET_ENTRADA (6 x 2 inch) 3 etiquetas por 
+
+^XA
+^FT0,30
+^AAN,21,10
+^FB420,1,0,C
+^FD[empresa]^FS
+
+^FT10,60
+^AAN,21,10
+^FD[materia]^FS
+
+^FT10,90
+^AAN,21,10
+^FDNo Jabas: [No jabas]^FS
+
+^FT0,70
+^AAN,30,10
+^FB400,1,0,R
+^FD[palet]^FS
+
+^BY2,2,30
+^FT10,140
+^BCN,,Y,N
+^FH\
+^FDP-[palet_id]^FS
+^PQ1,0,1,Y
+^XZ

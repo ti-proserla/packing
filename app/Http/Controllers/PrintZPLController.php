@@ -84,6 +84,74 @@ class PrintZPLController extends Controller
         }
     }
 
+    public function cajas(Request $request){
+        $ip_print = $request->ip_print;
+        $codigo_operador = $request->codigo_operador;
+
+        $tareo=Tareo::where('codigo_operador',$codigo_operador)
+                    ->orderBy('id','DESC')
+                   ->first();
+
+        if ($tareo==null) {
+           return response()->json([
+               "status"    => "ERROR",
+               "data"      => "Tareo no existe."
+           ]);
+        }
+        //dd($tareo->labor_id);
+        $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
+            ->first();
+        if ($labor==null) {
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Labor no permitida."
+            ]);
+        }
+        //dd($labor);
+        $labor_id=$labor->codigo_labor;
+        // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
+        $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
+        if ($this->ping($ip_print)){            
+            $string="^XA
+                    ^BY2,1,80
+                    ^FO40,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^BY2,1,80
+                    ^FO200,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^BY2,1,80
+                    ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^BY2,1,80
+                    ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^XZ";
+            $string="^XA
+                    ^FO10,10
+                    ^BY3,2,70
+                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FO430,10
+                    ^BY3,2,70
+                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^XZ";
+            $parametros=array(
+                'linea'     =>  $linea_id,
+                'operador'  =>  $codigo_operador,
+                'labor'     =>  $labor_id
+            );
+        
+            $this->print_red($ip_print,9100,$this->cast_zpl($string,$parametros));
+
+            return response()->json([
+                "status" => "OK",
+                "data"   => "Imprimiendo."
+
+            ]);
+        }
+        else {
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Impresora Desconectada."
+            ]);
+        }
+    }
+
     public function print_red($ip,$port,$string_print){
         try
         {    
