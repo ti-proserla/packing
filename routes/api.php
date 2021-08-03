@@ -51,3 +51,4 @@ Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
 Route::get('reporte/acopio', 'ReportesController@acopio');
 Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
+Route::get('print/zpl/palet_entrada', 'PrintZPLController@palet_entrada');

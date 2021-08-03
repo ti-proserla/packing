@@ -85,58 +85,68 @@ class PrintZPLController extends Controller
     }
 
     public function palet_entrada(Request $request){
+        $ip_print = $request->ip_print;
         $sub_lote_id=$request->sub_lote_id;
+
+        $w_etiqueta=410;
         if ($this->ping($ip_print)){            
-            $string="^XA
-                    ^FT0,30
+            $string_zpl="^XA
+                    ^FT25,30
                     ^AAN,21,10
-                    ^FB420,1,0,C
+                    ^FB360,1,0,C
                     ^FD[empresa]^FS
                     
-                    ^FT10,60
+                    ^FT25,60
                     ^AAN,21,10
-                    ^FD[materia]^FS
+                    ^FD[variedad]^FS
                     
-                    ^FT10,90
+                    ^FT25,90
                     ^AAN,21,10
-                    ^FDNo Jabas: [jabas]^FS
+                    ^FDNo Jabas: [num_jabas]^FS
                     
-                    ^FT0,70
+                    ^FT25,70
                     ^AAN,30,10
-                    ^FB400,1,0,R
-                    ^FD[palet]^FS
+                    ^FB360,1,0,R
+                    ^FD[num_palet]^FS
                     
                     ^BY2,2,30
-                    ^FT10,140
+                    ^FT25,140
                     ^BCN,,Y,N
                     ^FH\
                     ^FDP-[palet_id]^FS
                     ^PQ1,0,1,Y
                     ^XZ";
+            $this->columnaEtiqueta($string_zpl);
 
-            $query="SELECT codigo, CL.descripcion empresa,PE.peso
+            $query="SELECT 	(@row_number:=@row_number + 1) AS num_palet,
+                                codigo, 
+                                CL.descripcion empresa,
+                                PE.peso peso, 
+                                VA.nombre_variedad variedad,
+                                PE.num_jabas,
+                                PE.id palet_id
                     FROM lote_ingreso LI 
                     INNER JOIN cliente CL ON CL.id=LI.cliente_id
                     INNER JOIN sub_lote SL ON SL.lote_id=LI.id
                     INNER JOIN palet_entrada PE ON PE.sub_lote_id=SL.id
-                    INNER JOIN variedad VA on LI.variedad_id=VA.id
-                    WHERE sub_lote_id=1";
-            $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);
-            foreach ($variable as $key => $value) {
-                # code...
+                    INNER JOIN variedad VA on LI.variedad_id=VA.id ,(SELECT @row_number:=0) AS t
+                    WHERE sub_lote_id=3
+                    ORDER BY palet_id ASC";
+            $data=DB::select(DB::raw("$query"),[]);
+            $string_zpl_new="";
+            foreach ($data as $key => $row) {
+                $string_zpl_bk=$string_zpl;
+                foreach($row as $key=>$value){
+                    $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+                }
+                $string_zpl_new.=$string_zpl_bk;
             }
-            $parametros=array(
-                'linea'     =>  $linea_id,
-                'operador'  =>  $codigo_operador,
-                'labor'     =>  $labor_id
-            );
-        
-            $this->print_red($ip_print,9100,$this->cast_zpl($string,$parametros));
+            
+            $this->print_red($ip_print,9100,$string_zpl_new);
 
             return response()->json([
                 "status" => "OK",
                 "data"   => "Imprimiendo."
-
             ]);
         }
         else {
@@ -144,6 +154,19 @@ class PrintZPLController extends Controller
                 "status"    => "ERROR",
                 "data"      => "Impresora Desconectada."
             ]);
+        }
+    }
+
+    public function columnaEtiqueta($zpl)
+    {
+        $zpl=str_replace("\r\n","",ltrim($zpl));
+        $zpl=str_replace("^XA","",ltrim($zpl));
+        $zpl=str_replace("^XZ","",ltrim($zpl));
+        $arrayFT=explode("^FT",ltrim($zpl));
+        dd($arrayFT);
+        foreach ($arrayFT as $key => $filaFT) {
+            // $numero=
+            dd($arrayFT,explode(",",$arrayFT[$key],1));
         }
     }
 
