@@ -84,52 +84,47 @@ class PrintZPLController extends Controller
         }
     }
 
-    public function cajas(Request $request){
-        $ip_print = $request->ip_print;
-        $codigo_operador = $request->codigo_operador;
-
-        $tareo=Tareo::where('codigo_operador',$codigo_operador)
-                    ->orderBy('id','DESC')
-                   ->first();
-
-        if ($tareo==null) {
-           return response()->json([
-               "status"    => "ERROR",
-               "data"      => "Tareo no existe."
-           ]);
-        }
-        //dd($tareo->labor_id);
-        $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
-            ->first();
-        if ($labor==null) {
-            return response()->json([
-                "status"    => "ERROR",
-                "data"      => "Labor no permitida."
-            ]);
-        }
-        //dd($labor);
-        $labor_id=$labor->codigo_labor;
-        // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
-        $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
+    public function palet_entrada(Request $request){
+        $sub_lote_id=$request->sub_lote_id;
         if ($this->ping($ip_print)){            
             $string="^XA
-                    ^BY2,1,80
-                    ^FO40,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO200,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+                    ^FT0,30
+                    ^AAN,21,10
+                    ^FB420,1,0,C
+                    ^FD[empresa]^FS
+                    
+                    ^FT10,60
+                    ^AAN,21,10
+                    ^FD[materia]^FS
+                    
+                    ^FT10,90
+                    ^AAN,21,10
+                    ^FDNo Jabas: [jabas]^FS
+                    
+                    ^FT0,70
+                    ^AAN,30,10
+                    ^FB400,1,0,R
+                    ^FD[palet]^FS
+                    
+                    ^BY2,2,30
+                    ^FT10,140
+                    ^BCN,,Y,N
+                    ^FH\
+                    ^FDP-[palet_id]^FS
+                    ^PQ1,0,1,Y
                     ^XZ";
-            $string="^XA
-                    ^FO10,10
-                    ^BY3,2,70
-                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^FO430,10
-                    ^BY3,2,70
-                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^XZ";
+
+            $query="SELECT codigo, CL.descripcion empresa,PE.peso
+                    FROM lote_ingreso LI 
+                    INNER JOIN cliente CL ON CL.id=LI.cliente_id
+                    INNER JOIN sub_lote SL ON SL.lote_id=LI.id
+                    INNER JOIN palet_entrada PE ON PE.sub_lote_id=SL.id
+                    INNER JOIN variedad VA on LI.variedad_id=VA.id
+                    WHERE sub_lote_id=1";
+            $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);
+            foreach ($variable as $key => $value) {
+                # code...
+            }
             $parametros=array(
                 'linea'     =>  $linea_id,
                 'operador'  =>  $codigo_operador,
