@@ -159,6 +159,8 @@ class PrintZPLController extends Controller
 
     public function columnaEtiqueta($zpl)
     {
+        preg_match_all("/\^FT(.*?),/",$zpl,$arr);
+        dd($arr);
         $zpl=str_replace("\r\n","",ltrim($zpl));
         $zpl=str_replace("^XA","",ltrim($zpl));
         $zpl=str_replace("^XZ","",ltrim($zpl));
