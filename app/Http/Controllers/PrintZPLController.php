@@ -21,8 +21,11 @@ class PrintZPLController extends Controller
         $codigo_operador = $request->codigo_operador;
 
         $tareo=Tareo::where('codigo_operador',$codigo_operador)
+                    ->select('tareo.*','operador.ape_operador')
+                    ->join('operador','tareo.codigo_operador','=','operador.dni')
                     ->orderBy('id','DESC')
-                   ->first();
+                    ->first();
+        $nombre_operador=$tareo->ape_operador;
 
         if ($tareo==null) {
            return response()->json([
@@ -33,6 +36,8 @@ class PrintZPLController extends Controller
         //dd($tareo->labor_id);
         $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
             ->first();
+        $labor_letra=($labor->descripcion)[0];
+        
         if ($labor==null) {
             return response()->json([
                 "status"    => "ERROR",
@@ -54,21 +59,52 @@ class PrintZPLController extends Controller
                     ^BY2,1,80
                     ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^XZ";
-            $string="^XA
-                    ^FO10,10
-                    ^BY3,2,70
-                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^FO430,10
-                    ^BY3,2,70
-                    ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+            $string_zpl="^XA
+                    ^FT10,50
+                    ^AAN,21,10
+                    ^FB250,1,0,R
+                    ^FD{nombre_operador}^FS
+
+                    ^FT10,50
+                    ^AAN,40,15
+                    ^FD{labor_letra}^FS
+
+                    ^FT10,130
+                    ^BY2,2,60
+                    ^BCN,,,,,A
+                    ^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^XZ";
+
+            // $string="^XA
+            //         ^FO10,10
+            //         ^BY2,2,70
+            //         ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+            //         ^FO430,10
+            //         ^BY2,2,70
+            //         ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
+            //         ^XZ";
             $parametros=array(
-                'linea'     =>  $linea_id,
-                'operador'  =>  $codigo_operador,
-                'labor'     =>  $labor_id
+                'linea'         =>  $linea_id,
+                'operador'      =>  $codigo_operador,
+                'labor'         =>  $labor_id,
+                'labor_letra'   =>  $labor_letra,
+                'nombre_operador'=> $nombre_operador
             );
-        
-            $this->print_red($ip_print,9100,$this->cast_zpl($string,$parametros));
+            // foreach($data[$i*$columna+$j] as $key=>$value){
+            //     $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+            // }
+            $columna=3;
+            $string_zpl=str_replace('^XA','',$string_zpl);
+            $string_zpl=str_replace('^XZ','',$string_zpl);
+            
+            $string_zpl_new="";
+            $string_zpl_new.="^XA";
+            for ($j=0; $j < $columna; $j++) {
+                $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,280);
+            }
+            $string_zpl_new.="^XZ";
+            
+            $this->print_red($ip_print,9100,$this->cast_zpl($string_zpl_new,$parametros));
 
             return response()->json([
                 "status" => "OK",
@@ -116,7 +152,8 @@ class PrintZPLController extends Controller
                     ^FDP-[palet_id]^FS
                     ^PQ1,0,1,Y
                     ^XZ";
-            $this->columnaEtiqueta($string_zpl);
+            $string_zpl=str_replace('^XA','',$string_zpl);
+            $string_zpl=str_replace('^XZ','',$string_zpl);
 
             $query="SELECT 	(@row_number:=@row_number + 1) AS num_palet,
                                 codigo, 
@@ -130,17 +167,27 @@ class PrintZPLController extends Controller
                     INNER JOIN sub_lote SL ON SL.lote_id=LI.id
                     INNER JOIN palet_entrada PE ON PE.sub_lote_id=SL.id
                     INNER JOIN variedad VA on LI.variedad_id=VA.id ,(SELECT @row_number:=0) AS t
-                    WHERE sub_lote_id=3
+                    WHERE sub_lote_id=?
                     ORDER BY palet_id ASC";
-            $data=DB::select(DB::raw("$query"),[]);
+            $data=DB::select(DB::raw("$query"),[$sub_lote_id]);
             $string_zpl_new="";
-            foreach ($data as $key => $row) {
-                $string_zpl_bk=$string_zpl;
-                foreach($row as $key=>$value){
-                    $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+
+            $columna=2;
+            
+            for ($i=0; $i < count($data)/$columna; $i++) {
+                $recorrido=($i+1)*$columna<count($data) ? $columna : (count($data)-($i)*$columna);
+                $string_zpl_new.="^XA";
+                for ($j=0; $j < $recorrido; $j++) {
+                    
+                    $string_zpl_bk=$this->columnaEtiqueta($string_zpl,$j);
+                    foreach($data[$i*$columna+$j] as $key=>$value){
+                        $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+                    }
+                    $string_zpl_new.=$string_zpl_bk;
                 }
-                $string_zpl_new.=$string_zpl_bk;
-            }
+                $string_zpl_new.="^XZ";
+            }            
+            // dd($string_zpl_new);
             
             $this->print_red($ip_print,9100,$string_zpl_new);
 
@@ -157,19 +204,15 @@ class PrintZPLController extends Controller
         }
     }
 
-    public function columnaEtiqueta($zpl)
+    public function columnaEtiqueta($zpl,$columna,$width=420)
     {
         preg_match_all("/\^FT(.*?),/",$zpl,$arr);
-        dd($arr);
-        $zpl=str_replace("\r\n","",ltrim($zpl));
-        $zpl=str_replace("^XA","",ltrim($zpl));
-        $zpl=str_replace("^XZ","",ltrim($zpl));
-        $arrayFT=explode("^FT",ltrim($zpl));
-        dd($arrayFT);
-        foreach ($arrayFT as $key => $filaFT) {
-            // $numero=
-            dd($arrayFT,explode(",",$arrayFT[$key],1));
+        $modificado=$zpl;
+        for ($i=0; $i < count($arr[0]); $i++) { 
+            $x=($arr[1][$i]+$width*$columna);
+            $modificado=preg_replace("/\\".$arr[0][$i]."/",'^FT'.$x.',',$modificado,1);
         }
+        return $modificado;
     }
 
     public function print_red($ip,$port,$string_print){
