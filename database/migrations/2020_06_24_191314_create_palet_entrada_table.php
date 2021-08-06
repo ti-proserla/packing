@@ -21,6 +21,9 @@ class CreatePaletEntradaTable extends Migration
             $table->decimal('peso_palet',8,4);
             $table->decimal('peso_jaba',8,4);
             $table->integer('producto_id');
+            $table->string('estado',30)->default('Pendiente');
+            $table->integer('linea_lanzado')->nullable();
+            $table->datetime()->nullable();
             $table->timestamps();
         });
     }

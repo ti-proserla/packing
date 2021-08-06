@@ -54,11 +54,6 @@
                                 </v-form>
                             </v-col>
                         </v-row>
-                        <audio id="myAudio">
-                            <!-- <source src="horse.ogg" type="audio/ogg"> -->
-                            <source src="/mp3/error.mp3" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
                     </v-card-text>
                 </v-card>
             </v-col>

@@ -110,6 +110,14 @@
                         Acopio - Sub Lotes
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/lanzado">
+                    <v-list-item-icon>
+                        <i class="fas fa-eject"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Lanzado
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/paletizado">
                     <v-list-item-icon>
                         <i class="fas fa-pallet"></i>
@@ -172,6 +180,11 @@
             <!-- <notifications group="foo" position="top center"/> -->
             <router-view class="pa-6"></router-view>
         </v-main>
+        <audio id="myAudio">
+            <!-- <source src="horse.ogg" type="audio/ogg"> -->
+            <source src="/mp3/error.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
   </v-app>
 </template>
 <style>

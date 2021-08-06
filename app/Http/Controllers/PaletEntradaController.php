@@ -26,5 +26,5 @@ class PaletEntradaController extends Controller
         return response()->json([
             "status" => "OK"
         ]);
-    }  
+    }
 }
