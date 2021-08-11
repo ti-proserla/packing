@@ -25,6 +25,10 @@ var routes =[
         component: require('./view/variedad.vue').default
     },
     {
+        path: '/calibre',
+        component: require('./view/calibre.vue').default
+    },
+    {
         path: '/tipo',
         component: require('./view/tipo.vue').default
     },
@@ -43,6 +47,18 @@ var routes =[
     {
         path: '/producto',
         component: require('./view/producto.vue').default
+    },
+    {
+        path: '/despacho',
+        component: require('./view/despacho.vue').default
+    },
+    {
+        path: '/despacho/new',
+        component: require('./view/despacho.new.vue').default
+    },
+    {
+        path: '/despacho/:id',
+        component: require('./view/despacho.count.vue').default
     },
     //Paletizado
     {
@@ -98,6 +114,10 @@ var routes =[
     {
         path: '/dispensador',
         component: require('./view/Dispensador.vue').default
+    },
+    {
+        path: '/etiqueta.caja',
+        component: require('./view/etiqueta.caja.vue').default
     },
 
 ];

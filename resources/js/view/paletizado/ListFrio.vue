@@ -1,7 +1,7 @@
 <template>
     <v-container class="frio" fluid>
         <v-row>
-            <v-col>
+            <v-col cols="12">
                 <v-card>
                     <v-card-title>PALETS FUERA DE CAMARA DE FRIO</v-card-title>
                 </v-card>

@@ -70,6 +70,14 @@
                     Variedad
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link to="/calibre">
+                <v-list-item-icon>
+                    <i class="fas fa-ruler-vertical"></i>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    Calibre
+                </v-list-item-content>
+            </v-list-item>
             <v-list-item link to="/tipo">
                 <v-list-item-icon>
                     <i class="fas fa-leaf"></i>
@@ -132,6 +140,14 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                         Cámara de Frío
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/despacho">
+                    <v-list-item-icon>
+                        <i class="fas fa-icicles"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Despacho
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-group

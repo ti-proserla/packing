@@ -18,6 +18,7 @@ class CreateOperacionTable extends Migration
             $table->string('descripcion',100);
             $table->integer('cliente_id');
             $table->date('fecha_operacion');
+            $table->string('estado',30)->default('Pendiente');
             $table->timestamps();
         });
     }

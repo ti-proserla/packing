@@ -24,7 +24,10 @@ Route::get('materia/detallado', 'MateriaController@detallado');
 Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
+Route::resource('calibre', 'CalibreController');
 Route::resource('tipo', 'TipoController');
+Route::post('operacion/addPalet', 'OperacionController@addPalet');
+Route::resource('operacion', 'OperacionController');
 
 Route::get('fundo/detallado', 'FundoController@detallado');
 Route::resource('fundo', 'FundoController');
@@ -51,5 +54,6 @@ Route::get('rendimiento-personal', 'ReportesController@rendimiento_personal');
 Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
 Route::get('reporte/acopio', 'ReportesController@acopio');
+Route::get('print/cajas', 'PrintZPLController@caja_palet');
 Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
 Route::get('print/zpl/palet_entrada', 'PrintZPLController@palet_entrada');

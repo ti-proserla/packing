@@ -30,6 +30,7 @@ class MateriaController extends Controller
     public function detallado(){
         $materias=Materia::with('variedad')
                             ->with('tipo')
+                            ->with('calibre')
                             ->get();
         return response()->json($materias);
     }

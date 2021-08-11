@@ -119,7 +119,27 @@ class PrintZPLController extends Controller
             ]);
         }
     }
-
+    public function caja_palet(Request $request){
+        $ip_print=$request->ip_print;
+        $codigo="P-".$request->codigo;
+        if ($this->ping($ip_print)){            
+            $string_zpl="^XA
+                        ^FO15,15
+                        ^BQN,2,4
+                        ^FDQA,$codigo^FS
+                        ^XZ";
+            $this->print_red($ip_print,9100,$string_zpl);
+            return response()->json([
+                "status" => "OK",
+                "data"   => "Imprimiendo."
+            ]);
+        }else{
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Impresora Desconectada."
+            ]);
+        }
+    }
     public function palet_entrada(Request $request){
         $ip_print = $request->ip_print;
         $sub_lote_id=$request->sub_lote_id;

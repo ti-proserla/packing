@@ -16,4 +16,8 @@ class Materia extends Model
     {
         return $this->hasMany('App\Model\Tipo');
     }
+    public function calibre()
+    {
+        return $this->hasMany('App\Model\Calibre');
+    }
 }
