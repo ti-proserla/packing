@@ -33,10 +33,10 @@ class PrintZPLController extends Controller
                "data"      => "Tareo no existe."
            ]);
         }
-        //dd($tareo->labor_id);
+        // dd($tareo);
         $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
             ->first();
-        $labor_letra=($labor->descripcion)[0];
+        // dd($labor);
         
         if ($labor==null) {
             return response()->json([
@@ -44,6 +44,7 @@ class PrintZPLController extends Controller
                 "data"      => "Labor no permitida."
             ]);
         }
+        $labor_letra=($labor->descripcion)[0];
         //dd($labor);
         $labor_id=$labor->codigo_labor;
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
@@ -60,16 +61,16 @@ class PrintZPLController extends Controller
                     ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
                     ^XZ";
             $string_zpl="^XA
-                    ^FT10,50
+                    ^FT20,50
                     ^AAN,21,10
                     ^FB250,1,0,R
                     ^FD{nombre_operador}^FS
 
-                    ^FT10,50
+                    ^FT20,50
                     ^AAN,40,15
                     ^FD{labor_letra}^FS
 
-                    ^FT10,130
+                    ^FT20,130
                     ^BY2,2,60
                     ^BCN,,,,,A
                     ^FD{linea}{labor}{operador}{autonumerico}^FS
