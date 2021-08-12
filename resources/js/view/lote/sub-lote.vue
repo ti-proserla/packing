@@ -73,6 +73,16 @@
                                 </v-btn>
                             </v-col>
                         </v-row>
+                        <v-row v-else>
+                            <v-col cols=12>
+                                <v-btn 
+                                    color="primary"
+                                    block 
+                                    @click="print(sub_lote_seleccionado.id)">
+                                    IMPRIMIR
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                         <div class="text-center">
                             <v-simple-table dense>
                                 <template v-slot:default>
@@ -486,6 +496,33 @@ export default {
                     default:
                         break;
                 }
+            });
+        },
+        print(id){
+            axios.get(`${url_base}/print/zpl/palet_entrada`,{
+                params: {
+                    sub_lote_id: id,
+                    ip_print: localStorage.getItem('ip_print') || null,
+                }
+            })
+            .then(response => {
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case 'OK':
+                        this.alert.status= 'primary';
+                        this.alert.visible= true;
+                        this.alert.message= respuesta.data;
+                        break;
+                    case 'ERROR':
+                        this.alert.status= 'warning';
+                        this.alert.visible= true;
+                        this.alert.message= respuesta.data;
+                        break;
+                }
+                // this.timer=setTimeout(() => {
+                //     this.alert=this.initAlert();
+                // }, 10000);
+
             });
         }    
     },

@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <v-row>
+        <v-row class="">
             <v-col cols=12 sm=4>
                 PALETIZADO
             </v-col>
