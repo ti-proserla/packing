@@ -24,13 +24,7 @@ class CreateCajaTable extends Migration
             $table->string('plu',10);
             $table->string('tipo_bolsa',10);
             $table->string('marca_bolsa',10);
-            // $table->integer('calibre_id');
-            // $table->integer('categoria_id');
-            // $table->integer('presentacion_id');
-            // $table->integer('marca_caja_id');
-            // $table->integer('plu_id')->nullable();
-            // $table->integer('tipo_bolsa_id')->nullable();
-            // $table->integer('marca_bolsa_id')->nullable();
+            
             $table->date('fecha_empaque'); // fecha sistema.
             $table->timestamps();
         });

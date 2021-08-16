@@ -233,7 +233,9 @@
                                 </v-select>
                             </v-col>
                             <v-col 
-                                cols=4 
+                                cols=12 
+                                sm="12"
+                                lg="4"
                                 v-for="(sub,index) in sub_lotes" 
                                 :key="index">
                                 <v-card 
@@ -449,6 +451,7 @@ export default {
                         this.peso=0;
                         this.num_jabas=0;
                         this.palets_error={};
+                        this.printUnitario(res.data.id);
                         this.listarPaletEntrada();
                         break;
 
@@ -498,8 +501,35 @@ export default {
                 }
             });
         },
-        print(id){
+        printUnitario(id){
             axios.get(`${url_base}/print/zpl/palet_entrada`,{
+                params: {
+                    palet_entrada_id: id,
+                    ip_print: localStorage.getItem('ip_print') || null,
+                }
+            })
+            .then(response => {
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case 'OK':
+                        this.alert.status= 'primary';
+                        this.alert.visible= true;
+                        this.alert.message= respuesta.data;
+                        break;
+                    case 'ERROR':
+                        this.alert.status= 'warning';
+                        this.alert.visible= true;
+                        this.alert.message= respuesta.data;
+                        break;
+                }
+                // this.timer=setTimeout(() => {
+                //     this.alert=this.initAlert();
+                // }, 10000);
+
+            });
+        },    
+        print(id){
+            axios.get(`${url_base}/print/zpl/palet_entrada/all`,{
                 params: {
                     sub_lote_id: id,
                     ip_print: localStorage.getItem('ip_print') || null,

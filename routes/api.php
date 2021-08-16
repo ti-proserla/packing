@@ -57,3 +57,4 @@ Route::get('reporte/acopio', 'ReportesController@acopio');
 Route::get('print/cajas', 'PrintZPLController@caja_palet');
 Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
 Route::get('print/zpl/palet_entrada', 'PrintZPLController@palet_entrada');
+Route::get('print/zpl/palet_entrada/all', 'PrintZPLController@palet_entrada');

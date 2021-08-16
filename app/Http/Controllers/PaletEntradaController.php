@@ -16,7 +16,9 @@ class PaletEntradaController extends Controller
   
     public function store(PaletEntradaValidate $request,$sub_lote_id)
     {
+        $num_palet=PaletEntrada::where('sub_lote_id',$sub_lote_id)->count();
         $paletEntradas=new PaletEntrada();
+        $paletEntradas->num_palet=$num_palet+1;
         $paletEntradas->sub_lote_id=$sub_lote_id;
         $paletEntradas->peso=$request->peso;
         $paletEntradas->peso_palet=$request->peso_palet;
@@ -24,7 +26,8 @@ class PaletEntradaController extends Controller
         $paletEntradas->num_jabas = $request->num_jabas;
         $paletEntradas->save();
         return response()->json([
-            "status" => "OK"
+            "status"    => "OK",
+            "data"      =>  $paletEntradas
         ]);
     }
 }
