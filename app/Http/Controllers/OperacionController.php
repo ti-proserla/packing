@@ -15,12 +15,18 @@ class OperacionController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->all());
-        $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
-                        ->where('fecha_operacion','>=',$request->desde)
-                        ->where('fecha_operacion','<=',$request->hasta)
-                        ->select('operacion.*','cliente.descripcion as cliente')
-                        ->paginate(10);
+        if ($request->has('estado')) {
+            $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
+                            ->where('estado','>=',$request->estado)
+                            ->select('operacion.*','cliente.descripcion as cliente')
+                            ->get();
+        }else{
+            $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
+                            ->where('fecha_operacion','>=',$request->desde)
+                            ->where('fecha_operacion','<=',$request->hasta)
+                            ->select('operacion.*','cliente.descripcion as cliente')
+                            ->paginate(10);
+        }
         return response()->json($operaciones);
     }
 

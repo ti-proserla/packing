@@ -26,6 +26,17 @@
                             item-value="etapas">
                         </v-select>
                     </v-col>
+                    <v-col>
+                        <v-select
+                            outlined
+                            dense
+                            v-model="palet_salida.operacion_id"
+                            label="Procesos:"
+                            :items="operaciones"
+                            :item-text="operacion => `${operacion.descripcion}`"
+                            item-value="id">
+                        </v-select>
+                    </v-col>
                 </v-row>
                 <v-btn color=primary @click="crear()">
                     Crear
@@ -33,29 +44,6 @@
             </v-card-text>
         </v-card>
     </v-container>
-        <!-- <div class="col-sm-6 form-group">
-            <label for="">Cliente - Lote</label>
-            <select name="" id="" class="form-control" v-model="palet_salida.lote_id">
-                <option v-for="(lote,index) in lote_ingreso" :value="lote.id">{{ `${lote.descripcion} - ${lote.codigo}` }}</option>
-            </select>
-        </div> -->
-        <!-- <div class="col-sm-3 form-group">
-            <label for="">Producto</label>
-            <select name="" id="" class="form-control" v-model="palet_salida.producto_id">
-                <option v-for="producto in productos" :value="producto.id">{{ producto.nombre_producto }}</option>
-            </select>
-        </div> -->
-        <!-- <div class="col-sm-3 form-group">
-            <label>Proceso</label>
-            <select class="form-control" name="" id="">
-                <option value="">Empaque 3 Etapas</option>
-                <option value="">Clanshell</option>
-            </select>
-        </div> -->
-        <!-- <div class="col-sm-12 col-lg-3">
-            <button class="form-control btn-danger" @click="crear()">Crear</button>
-        </div> -->
-    <!-- </div> -->
 </template>
 <script>
 export default {
@@ -71,12 +59,13 @@ export default {
             procesos: [
                 {'etapas' : 1 , "descripcion" : "Solo Empaque"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
-            ]
+            ],
+            operaciones: []
         }
     },
     mounted() {
         this.listarClientes();
-        // this.listarLoteIngreso();
+        this.listarOperaciones();
     },
     methods: {
         listarLoteIngreso(){
@@ -95,6 +84,12 @@ export default {
             axios.get(url_base+'/producto?all')
             .then(response => {
                 this.productos=response.data
+            })
+        },
+        listarOperaciones(){
+            axios.get(url_base+'/operacion?estado=Pendiente')
+            .then(response => {
+                this.operaciones=response.data
             })
         },
         crear(){
