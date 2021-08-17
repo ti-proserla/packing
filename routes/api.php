@@ -25,9 +25,12 @@ Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('variedad', 'VariedadController');
 Route::resource('calibre', 'CalibreController');
+Route::resource('categoria', 'CategoriaController');
+Route::resource('presentacion', 'PresentacionController');
 Route::resource('tipo', 'TipoController');
 Route::post('operacion/addPalet', 'OperacionController@addPalet');
 Route::resource('operacion', 'OperacionController');
+Route::resource('etiqueta-caja', 'EtiquetaCajaController');
 
 Route::get('fundo/detallado', 'FundoController@detallado');
 Route::resource('fundo', 'FundoController');

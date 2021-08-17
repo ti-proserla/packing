@@ -75,13 +75,15 @@ class PaletSalidaController extends Controller
         $caja->save();
 
         foreach ($request->codigos_trabajador as $key => $codigo) {
-            $rendimientoPersonal=new RendimientoPersonal();
-            $rendimientoPersonal->caja_id=$caja->id;
-            $rendimientoPersonal->codigo_barras=$codigo;
-            $rendimientoPersonal->codigo_operador=substr($codigo,4,8);
-            $rendimientoPersonal->linea=substr($codigo,0,2);
-            $rendimientoPersonal->codigo_labor=substr($codigo,2,2);
-            $rendimientoPersonal->save();
+            if (!strpos($codigo,"00000000")) {
+                $rendimientoPersonal=new RendimientoPersonal();
+                $rendimientoPersonal->caja_id=$caja->id;
+                $rendimientoPersonal->codigo_barras=$codigo;
+                $rendimientoPersonal->codigo_operador=substr($codigo,4,8);
+                $rendimientoPersonal->linea=substr($codigo,0,2);
+                $rendimientoPersonal->codigo_labor=substr($codigo,2,2);
+                $rendimientoPersonal->save();
+            }
         }
 
         return response()->json([

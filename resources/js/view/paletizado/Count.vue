@@ -61,7 +61,7 @@
                 <v-card>
                     <v-card-text>
                         <h6>CAJAS ESCANEADAS</h6>
-                        <v-simple-table>
+                        <!-- <v-simple-table>
                             <template v-slot:default>
                                 <tbody>
                                     <tr>
@@ -69,7 +69,32 @@
                                     </tr>
                                 </tbody>
                             </template>
+                        </v-simple-table> -->
+                        <v-simple-table>
+                            <template v-slot:default>
+                                <tbody>
+                                    <tr>
+                                        <td :key="i" v-for="(cell,i) in escaneadosLabores">{{ cell.labor }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td :key="i" v-for="(cell,i) in escaneadosLabores">
+                                            <i class="fas fa-check" v-if="cell.estado"></i>
+                                            <i class="fas fa-times" v-else></i>
+                                        </td>
+                                        <td>
+                                            <v-btn
+                                                small
+                                                @click="completar"
+                                                color="primary">
+                                                LLenar
+                                            </v-btn>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </template>
                         </v-simple-table>
+                        <br>
                         <v-simple-table>
                             <template v-slot:default>
                                 <tbody>
@@ -82,11 +107,6 @@
                                     <tr :key="index" v-for="(caja,index) in palet.cajas">
                                         <td>{{ index+1 }}</td>
                                         <td>{{ caja.calibre }}</td>
-                                        <!-- <td>
-                                            <label for=""><b>Cal:</b> {{caja.calibre}}</label><br>
-                                            <label for=""><b>Cat:</b> </label><br>
-                                            <label for=""><b>Pre:</b> {{caja.presentacion}}</label><br>
-                                        </td> -->
                                         <td>{{caja.categoria}}</td>
                                         <td>{{caja.presentacion}}</td>
                                     </tr>
@@ -115,13 +135,59 @@ export default {
             codigo_palet: '', 
             fila_codigos: [],
             matriz_codigos: [],
-            extension: 16 
+            extension: 16,
+            labores: [
+                {codigo: '01',descripcion: 'EMPAQUE'},
+                {codigo: '02',descripcion: 'PESADO'},
+                {codigo: '03',descripcion: 'SELECCION'},
+            ] 
         }
     },
     mounted() {
         this.getPaletSalida();
     },
+    computed:{
+        escaneadosLabores(){
+            var avance= [];
+            for (let i = 0; i < this.labores.length; i++) {
+                const labor = this.labores[i];
+                var encontrado=0;
+                for (let j = 0; j < this.fila_codigos.length; j++) {
+                    
+                    const codigo = this.fila_codigos[j];
+                    
+                    if (labor.codigo==codigo.substring(2,4)) {
+                        avance.push({labor: labor.descripcion.substring(0,1), estado: true});
+                        encontrado=1;
+                        break;
+                    }
+                }
+                if (encontrado==0) {
+                    avance.push({labor: labor.descripcion.substring(0,1), estado: false});
+                }
+            }
+            return avance;
+        }
+    },
     methods: {
+        completar(){
+            for (let i = 0; i < this.labores.length; i++) {
+                const labor = this.labores[i];
+                var encontrado=0;
+                for (let j = 0; j < this.fila_codigos.length; j++) {
+                    
+                    const codigo = this.fila_codigos[j];
+                    
+                    if (labor.codigo==codigo.substring(2,4)) {
+                        encontrado=1;
+                        break;
+                    }
+                }
+                if (encontrado==0) {
+                    this.fila_codigos.push('00XX000000000000'.replace('XX',labor.codigo));
+                }
+            }
+        },
         getPaletSalida(){
             axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
             .then(response => {
@@ -188,7 +254,7 @@ export default {
         },
         agregar(){
             if (this.isCodigoTrabajador(this.codigo_barras)) {
-                if (this.fila_codigos.length==1) {
+                if (this.fila_codigos.length==this.palet.etapas) {
                     this.alerta("Escanear codigo de palet.");
                 }else{
 
@@ -221,7 +287,9 @@ export default {
 
                         for (let j = 0; j < this.fila_codigos.length; j++) {
                             const element2 = this.fila_codigos[j];
-                            if (element2.substring(0,2)==this.codigo_barras.substring(0,2)) {
+                            console.log(element2.toString().substring(2,4));
+                            console.log(this.codigo_barras.substring(2,4));
+                            if (element2.substring(2,4)==this.codigo_barras.substring(2,4)) {
                                 this.alerta("Labor ya registrada para esta caja.");
                                 repetido=1;
                                 break;
@@ -237,7 +305,7 @@ export default {
                     }
                 }
             }else if (this.isCodigoPalet(this.codigo_barras)) {
-                if (this.fila_codigos.length==1) {
+                if (this.fila_codigos.length==this.palet.etapas) {
                     this.codigo_palet=this.codigo_barras
                     this.addCaja();
                 }else{
