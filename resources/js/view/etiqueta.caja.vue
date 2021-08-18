@@ -77,6 +77,19 @@
                                     item-value="id">
                                 </v-select>
                             </v-col>
+                            <v-col 
+                                cols="12"
+                                lg="4">
+                                <v-select
+                                    label="PLU:"
+                                    hide-details="auto"
+                                    v-model="etiqueta_caja.plu_id"
+                                    :error-messages="error.plu_id"
+                                    :items="plus"
+                                    item-text="nombre_plu"
+                                    item-value="id">
+                                </v-select>
+                            </v-col>
                         </v-row>
                         <v-text-field 
                             hide-details="auto"
@@ -162,6 +175,7 @@ export default {
             calibres: [],
             categorias: [],
             presentaciones: [],
+            plus: [],
             materias: [],
             header:[
                 { text: 'Descripción', value: 'nombre_etiqueta_caja' },
@@ -197,6 +211,7 @@ export default {
         this.listar(1);
         this.listarLotes();
         this.listarCalibres();
+        this.listarPLUs();
         this.listarCategorias();
         this.listarPresentaciones();
     },
@@ -246,6 +261,12 @@ export default {
             axios.get(url_base+`/presentacion?all`)
             .then(response => {
                 this.presentaciones=response.data
+            });
+        },
+        listarPLUs(){
+            axios.get(url_base+`/plu?all`)
+            .then(response => {
+                this.plus=response.data
             });
         },
         listarCategorias(){

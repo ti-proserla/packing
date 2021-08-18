@@ -110,6 +110,14 @@
                     Acopio de Lotes
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link to="/etiqueta.caja">
+                <v-list-item-icon>
+                    <i class="fas fa-ticket-alt"></i>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    Etiqueta Cajas
+                </v-list-item-content>
+            </v-list-item>
                 <v-list-item link to="/acopio/sublote">
                     <v-list-item-icon>
                         <i class="far fa-building"></i>

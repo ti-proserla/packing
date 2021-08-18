@@ -27,6 +27,8 @@ Route::resource('variedad', 'VariedadController');
 Route::resource('calibre', 'CalibreController');
 Route::resource('categoria', 'CategoriaController');
 Route::resource('presentacion', 'PresentacionController');
+Route::resource('plu', 'PLUController');
+Route::resource('marca-caja', 'MarcaCajaController');
 Route::resource('tipo', 'TipoController');
 Route::post('operacion/addPalet', 'OperacionController@addPalet');
 Route::resource('operacion', 'OperacionController');

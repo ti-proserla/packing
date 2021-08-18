@@ -16,11 +16,11 @@ class CreateEtiquetaCajaTable extends Migration
         Schema::create('etiqueta_caja', function (Blueprint $table) {
             $table->id();
             $table->integer('lote_ingreso_id');
-            $table->integer('calibre_id');
-            $table->integer('categoria_id');
-            $table->integer('presentacion_id');
-            $table->integer('marca_caja_id');
-            $table->integer('plu_id')->nullable();
+            $table->integer('calibre_id');          //
+            $table->integer('categoria_id');        //
+            $table->integer('presentacion_id');     //
+            $table->integer('marca_caja_id');       //
+            $table->integer('plu_id')->nullable();  //
             $table->integer('tipo_bolsa_id')->nullable();
             $table->integer('marca_bolsa_id')->nullable();
             $table->date('fecha_empaque');

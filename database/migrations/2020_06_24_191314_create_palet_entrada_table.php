@@ -24,7 +24,6 @@ class CreatePaletEntradaTable extends Migration
             $table->integer('producto_id');
             $table->string('estado',30)->default('Pendiente');
             $table->integer('linea_lanzado')->nullable();
-            $table->datetime()->nullable();
             $table->timestamps();
         });
     }
