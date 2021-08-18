@@ -21,8 +21,8 @@ class CreateEtiquetaCajaTable extends Migration
             $table->integer('presentacion_id');     //
             $table->integer('marca_caja_id');       //
             $table->integer('plu_id')->nullable();  //
-            $table->integer('tipo_bolsa_id')->nullable();
-            $table->integer('marca_bolsa_id')->nullable();
+            $table->integer('tipo_empaque_id')->nullable(); //
+            $table->integer('marca_empaque_id')->nullable(); //
             $table->date('fecha_empaque');
             $table->string('estado',30)->default('Pendiente');
             $table->timestamps();

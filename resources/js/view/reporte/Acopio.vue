@@ -22,7 +22,6 @@
                                 :items="clientes"
                                 item-text="descripcion"
                                 item-value="id"
-                                hide-details="auto"
                                 >
                                 </v-select>
                     </v-col>

@@ -37,7 +37,6 @@
                                 :items="camaras"
                                 item-text="camara"
                                 item-value="camara"
-                                hide-details="auto"
                                 >
                                 </v-select>
                         </v-col>

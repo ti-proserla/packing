@@ -77,6 +77,43 @@ window.store=new Vuex.Store({
 // };
 
 
+import { VTextField } from 'vuetify/lib';
+import { VSelect } from 'vuetify/lib';
+
+Vue.component('VTextField', {
+  extends: VTextField,
+  props: {
+    outlined: {
+      type: Boolean,
+      default: true
+    },
+    dense: {
+      type: Boolean,
+      default: true
+    },
+    'hide-details': {
+      type: String,
+      default: 'auto'
+    },
+  }
+})
+Vue.component('VSelect', {
+  extends: VSelect,
+  props: {
+    outlined: {
+      type: Boolean,
+      default: true
+    },
+    dense: {
+      type: Boolean,
+      default: true
+    },
+    'hide-details': {
+      type: String,
+      default: 'auto'
+    },
+  }
+})
 
 new Vue({
   el: '#app',

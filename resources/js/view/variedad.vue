@@ -25,13 +25,11 @@
                     <v-card-title class="headline">Nueva variedad</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="variedad.cod_cartilla"
                             :error-messages="error.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="variedad.nombre_variedad"
                             :error-messages="error.nombre_variedad"
@@ -39,7 +37,6 @@
                         <div>
                             <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="variedad.materia_id"
                                 :error-messages="error.materia_id"
                                 :items="materias"
@@ -68,21 +65,18 @@
                     <v-card-title class="headline">Editar variedad</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="variedad_editar.cod_cartilla"
                             :error-messages="error_editar.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="variedad_editar.nombre_variedad"
                             :error-messages="error_editar.nombre_variedad"
                         ></v-text-field>
                         <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="variedad_editar.materia_id"
                                 :error-messages="error_editar.materia_id"
                                 :items="materias"

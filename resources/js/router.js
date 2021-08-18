@@ -18,7 +18,8 @@ var routes =[
     },
     {
         path: '/materia',
-        component: require('./view/materia.vue').default
+        name: 'administracion.materia',
+        component: require('./view/materia.vue').default,
     },
     {
         path: '/variedad',

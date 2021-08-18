@@ -7,39 +7,20 @@
             <v-col cols=12 sm=8 class="text-right">
                 <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
                 <v-btn @click="terminar()" color="success" v-if="palet.estado=='Pendiente'">Cerrar</v-btn>
-                <v-menu offset-y>
-                    <template v-slot:activator="{ on }">
-                        <v-btn
-                        icon
-                        dark
-                        v-on="on"
-                        >
-                        <v-icon>more_vert</v-icon>
-                        </v-btn>
-                    </template>
-                    <!-- <v-list>
-                        <v-list-tile
-                        v-for="(item, index) in items"
-                        :key="index"
-                        >
-                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                        </v-list-tile>
-                    </v-list> -->
-                </v-menu>
+                
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols=12 sm=6 v-if="palet.estado=='Pendiente'">
+            <v-col cols=12 sm=6>
                 <v-card>
                     <v-card-text>
-                        <label>Ingresar Código:</label>
-                        <v-row>
+                        <v-row v-if="palet.estado=='Pendiente'">
                             <v-col cols=12>
                                 <v-form autocomplete="off" @submit.prevent="agregar()">
                                     <v-text-field 
                                         dense 
                                         outlined 
-                                        label="Código de Barras" 
+                                        label="Lectura" 
                                         autofocus
                                         @focus="OpenFocus()" 
                                         :readonly="readonlyFocusInit"
@@ -53,66 +34,58 @@
                                     >{{ alert.message }}</v-alert>
                                 </v-form>
                             </v-col>
+                            <v-col cols="12">
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <tbody>
+                                            <tr>
+                                                <td :key="i" v-for="(cell,i) in escaneadosLabores">{{ cell.labor }}</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td :key="i" v-for="(cell,i) in escaneadosLabores">
+                                                    <i class="fas fa-check" v-if="cell.estado"></i>
+                                                    <i class="fas fa-times" v-else></i>
+                                                </td>
+                                                <td>
+                                                    <v-btn
+                                                        small
+                                                        @click="completar"
+                                                        color="primary">
+                                                        LLenar
+                                                    </v-btn>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
+                            </v-col>
                         </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols=12 sm=6>
-                <v-card>
-                    <v-card-text>
-                        <h6>CAJAS ESCANEADAS</h6>
+                        <v-data-table
+                            :disable-sort="false"
+                            :headers="header"
+                            :items="palet.cajas"
+                            hide-default-footer
+                            >
+                        </v-data-table>
                         <!-- <v-simple-table>
                             <template v-slot:default>
                                 <tbody>
                                     <tr>
-                                        <td :key="i" v-for="(cell,i) in fila_codigos">{{ cell }}</td>
+                                        <td><b>Calibre</b></td>
+                                        <td><b>Categoria</b></td>
+                                        <td><b>Presentación</b></td>
+                                        <td><b>Cantidad</b></td>
+                                    </tr>
+                                    <tr :key="index" v-for="(caja,index) in palet.cajas">
+                                        <td>{{ caja.nombre_calibre }}</td>
+                                        <td>{{caja.nombre_categoria}}</td>
+                                        <td>{{caja.nombre_presentacion}}</td>
+                                        <td>{{caja.cantidad}}</td>
                                     </tr>
                                 </tbody>
                             </template>
                         </v-simple-table> -->
-                        <v-simple-table>
-                            <template v-slot:default>
-                                <tbody>
-                                    <tr>
-                                        <td :key="i" v-for="(cell,i) in escaneadosLabores">{{ cell.labor }}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td :key="i" v-for="(cell,i) in escaneadosLabores">
-                                            <i class="fas fa-check" v-if="cell.estado"></i>
-                                            <i class="fas fa-times" v-else></i>
-                                        </td>
-                                        <td>
-                                            <v-btn
-                                                small
-                                                @click="completar"
-                                                color="primary">
-                                                LLenar
-                                            </v-btn>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table>
-                        <br>
-                        <v-simple-table>
-                            <template v-slot:default>
-                                <tbody>
-                                    <tr>
-                                        <td><b>N°</b></td>
-                                        <td><b>Cal</b></td>
-                                        <td><b>Cat</b></td>
-                                        <td><b>Pre</b></td>
-                                    </tr>
-                                    <tr :key="index" v-for="(caja,index) in palet.cajas">
-                                        <td>{{ index+1 }}</td>
-                                        <td>{{ caja.calibre }}</td>
-                                        <td>{{caja.categoria}}</td>
-                                        <td>{{caja.presentacion}}</td>
-                                    </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -140,7 +113,13 @@ export default {
                 {codigo: '01',descripcion: 'EMPAQUE'},
                 {codigo: '02',descripcion: 'PESADO'},
                 {codigo: '03',descripcion: 'SELECCION'},
-            ] 
+            ],
+            header:[
+                { text: 'Calibre', value: 'nombre_calibre' },
+                { text: 'Categoria', value: 'nombre_categoria' },
+                { text: 'Presentación', value: 'nombre_presentacion' },
+                { text: 'Cantidad', value: 'cantidad' },
+            ],
         }
     },
     mounted() {
@@ -219,7 +198,7 @@ export default {
             return (sCodigo.length==16) ? true : false;
         },
         isCodigoPalet(sCodigo){
-            return (sCodigo.indexOf('P-')>-1) ? true : false;
+            return (sCodigo.indexOf('C-')>-1) ? true : false;
         },
         alerta(sMensaje){
             var x = document.getElementById("myAudio");
@@ -240,8 +219,9 @@ export default {
                 var data=res.data;
                 switch (data.status) {
                     case "OK":
-                        this.palet.cajas.push(data.data);
-                        this.matriz_codigos.push(this.fila_codigos);
+                        this.getPaletSalida();
+                        // this.palet.cajas.push(data.data);
+                        // this.matriz_codigos.push(this.fila_codigos);
                         this.fila_codigos=[];
                        break;
                     case "ERROR":

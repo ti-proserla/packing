@@ -18,7 +18,6 @@
                                         :items="prints"
                                         :item-text="print => `${print.ip} = ${print.nombre}`"
                                         item-value="ip"
-                                        hide-details="auto"
                                         v-on:change="changePrint"
                                         >
                                         </v-select>

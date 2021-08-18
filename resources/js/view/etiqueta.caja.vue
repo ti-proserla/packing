@@ -5,14 +5,19 @@
             <v-card-text>
                 <v-btn @click="open_nuevo=true" outlined color="info">Nueva Etiqueta Caja</v-btn>
                 <v-data-table
+                    :sort-desc="false"
+                    :disable-sort="false"
                     :headers="header"
                     :items="table.data"
                     :page.sync="table.current_page"
                     hide-default-footer
                     >
-                    <template v-slot:item.editar="{ item }">
-                        <v-btn text color="warning" @click="buscar(item.id)">
-                            <i class="far fa-edit"></i>
+                    <template v-slot:item.ver="{ item }">
+                        <v-btn 
+                            text 
+                            color="info" 
+                            @click="buscar(item.id)">
+                            <i class="fas fa-search"></i>
                         </v-btn>
                     </template>
                 </v-data-table>
@@ -30,7 +35,6 @@
                                 lg="12">
                                 <v-select
                                     label="Lote:"
-                                    hide-details="auto"
                                     v-model="etiqueta_caja.lote_id"
                                     :error-messages="error.lote_id"
                                     :items="lotes"
@@ -41,9 +45,19 @@
                             <v-col 
                                 cols="12"
                                 lg="4">
+                                <v-text-field 
+                                    label="Fecha Recepcion:" 
+                                    v-model="etiqueta_caja.fecha_empaque"
+                                    clearable
+                                    type="date"
+                                    :error-messages="error.fecha_recepcion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col 
+                                cols="12"
+                                lg="4">
                                 <v-select
                                     label="Calibre:"
-                                    hide-details="auto"
                                     v-model="etiqueta_caja.calibre_id"
                                     :error-messages="error.calibre_id"
                                     :items="calibresMateria"
@@ -56,7 +70,6 @@
                                 lg="4">
                                 <v-select
                                     label="Categoria:"
-                                    hide-details="auto"
                                     v-model="etiqueta_caja.categoria_id"
                                     :error-messages="error.categoria_id"
                                     :items="categorias"
@@ -69,7 +82,6 @@
                                 lg="4">
                                 <v-select
                                     label="Presentacion:"
-                                    hide-details="auto"
                                     v-model="etiqueta_caja.presentacion_id"
                                     :error-messages="error.presentacion_id"
                                     :items="presentaciones"
@@ -81,8 +93,43 @@
                                 cols="12"
                                 lg="4">
                                 <v-select
+                                    label="Marca Caja:"
+                                    v-model="etiqueta_caja.marca_caja_id"
+                                    :error-messages="error.marca_caja_id"
+                                    :items="marca_cajas"
+                                    item-text="nombre_marca_caja"
+                                    item-value="id">
+                                </v-select>
+                            </v-col>
+                            <v-col 
+                                cols="12"
+                                lg="4">
+                                <v-select
+                                    label="Tipo Empaque:"
+                                    v-model="etiqueta_caja.tipo_empaque_id"
+                                    :error-messages="error.tipo_empaque_id"
+                                    :items="tipo_empaques"
+                                    item-text="nombre_tipo_empaque"
+                                    item-value="id">
+                                </v-select>
+                            </v-col>
+                            <v-col 
+                                cols="12"
+                                lg="4">
+                                <v-select
+                                    label="Marca Empaque:"
+                                    v-model="etiqueta_caja.marca_empaque_id"
+                                    :error-messages="error.marca_empaque_id"
+                                    :items="marca_empaques"
+                                    item-text="nombre_marca_empaque"
+                                    item-value="id">
+                                </v-select>
+                            </v-col>
+                            <v-col 
+                                cols="12"
+                                lg="4">
+                                <v-select
                                     label="PLU:"
-                                    hide-details="auto"
                                     v-model="etiqueta_caja.plu_id"
                                     :error-messages="error.plu_id"
                                     :items="plus"
@@ -91,22 +138,7 @@
                                 </v-select>
                             </v-col>
                         </v-row>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="etiqueta_caja.cod_cartilla"
-                            :error-messages="error.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="etiqueta_caja.nombre_etiqueta_caja"
-                            :error-messages="error.nombre_etiqueta_caja"
-                        ></v-text-field>
                         
-                        <div>
-                            
-                        </div>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -123,37 +155,32 @@
                 </v-card>               
             </v-dialog>
             <!-- Editar -->
-            <v-dialog v-model="open_editar" persistent max-width="350">
+            <v-dialog v-model="open_ver" persistent max-width="350">
                 <v-card>
                     <v-card-title class="headline">Editar etiqueta_caja</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="etiqueta_caja_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="etiqueta_caja_editar.nombre_etiqueta_caja"
-                            :error-messages="error_editar.nombre_etiqueta_caja"
-                        ></v-text-field>
-                        <v-select
-                                label="Materia:"
-                                hide-details="auto"
-                                v-model="etiqueta_caja_editar.materia_id"
-                                :error-messages="error_editar.materia_id"
-                                :items="materias"
-                                item-text="nombre_materia"
-                                item-value="id">
-                                </v-select>
+                        <v-row>
+                            <v-col 
+                                cols="12"
+                                sm="4">
+                                <v-text-field 
+                                    label="Cantidad" 
+                                    v-model="etiqueta_caja_editar.cod_cartilla"
+                                    :error-messages="error_editar.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-img
+                                :src="url_label"
+                                ></v-img>
+                                <!-- <img class="img-responsive" src="" alt=""> -->
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
                                 color="secondary" 
-                                @click="open_editar=false"
+                                @click="open_ver=false"
                                 >Cancelar</v-btn>
                             <v-btn 
                                 outlined 
@@ -175,26 +202,36 @@ export default {
             calibres: [],
             categorias: [],
             presentaciones: [],
+            marca_cajas: [],
+            tipo_empaques: [],
+            marca_empaques: [],
             plus: [],
             materias: [],
             header:[
-                { text: 'Descripción', value: 'nombre_etiqueta_caja' },
+                { text: 'Cod. Caja', value: 'codigo_caja' },
+                { text: 'Registrado', value: 'created_at' },
+                { text: 'Fecha Empaque', value: 'fecha_empaque' },
+                { text: 'Lote', value: 'codigo' },
+                { text: 'Calibre', value: 'nombre_calibre' },
+                { text: 'Categoria', value: 'nombre_categoria' },
                 { text: 'Materia', value: 'nombre_materia' },
-                { text: 'Código Cartilla', value: 'cod_cartilla' },
-                { text: 'Editar', value: 'editar' },
+                { text: 'Variedad', value: 'nombre_variedad' },
+                { text: 'Estado', value: 'estado' },
+                { text: 'Ver', value: 'ver' },
             ],
             table: {
                 current_page: 1,
                 last_page: 1,
                 data: []
             },
+            url_label: '',
             search: '',
             //Modal Nuevo
             open_nuevo: false,
             etiqueta_caja: this.initForm(),
             error: {},
             //Modal Editar
-            open_editar: false,
+            open_ver: false,
             etiqueta_caja_editar: this.initForm(),
             error_editar: {},
         }
@@ -212,8 +249,11 @@ export default {
         this.listarLotes();
         this.listarCalibres();
         this.listarPLUs();
+        this.listarMarcaCajas();
         this.listarCategorias();
         this.listarPresentaciones();
+        this.listarTipoEmpaque();
+        this.listarMarcaEmpaque();
     },
     computed:{
         getMateriaId(){
@@ -257,6 +297,12 @@ export default {
                 this.calibres=response.data
             });
         },
+        listarMarcaCajas(){
+            axios.get(url_base+`/marca-caja?all`)
+            .then(response => {
+                this.marca_cajas=response.data
+            });
+        },
         listarPresentaciones(){
             axios.get(url_base+`/presentacion?all`)
             .then(response => {
@@ -275,19 +321,39 @@ export default {
                 this.categorias=response.data
             });
         },
+        listarMarcaEmpaque(){
+            axios.get(url_base+`/marca-empaque?all`)
+            .then(response => {
+                this.marca_empaques=response.data
+            });
+        },
+        listarTipoEmpaque(){
+            axios.get(url_base+`/tipo-empaque?all`)
+            .then(response => {
+                this.tipo_empaques=response.data
+            });
+        },
         listar(n=this.table.current_page){
             axios.get(url_base+'/etiqueta-caja?page='+n+'&search='+this.search)
             .then(response => {
                 this.table = response.data;
             })
         },
+        getZpl(id){
+            axios.get(url_base+'/print/muestra_etiqueta_caja?etiqueta_caja_id='+id)
+            .then(response => {
+
+                this.url_label="http://api.labelary.com/v1/printers/8dpmm/labels/3x2/0/"+response.data;
+                console.log(this.url_label);
+            })
+        },
         guardar(){
-            axios.post(url_base+'/etiqueta_caja',this.etiqueta_caja)
+            axios.post(url_base+'/etiqueta-caja',this.etiqueta_caja)
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("etiqueta_caja Creado", { 
+                        swal("Etiqueta Caja Creada", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
@@ -308,11 +374,12 @@ export default {
             });
         },
         buscar(id){
-            axios.get(url_base+'/etiqueta_caja/'+id)
-            .then(response => {
-                this.open_editar=true;
-                this.etiqueta_caja_editar = response.data;
-            })
+            this.getZpl(id);
+                this.open_ver=true;
+            // axios.get(url_base+'/etiqueta_caja/'+id)
+            // .then(response => {
+            //     this.etiqueta_caja_editar = response.data;
+            // })
         },
         actualizar(){
             axios.post(url_base+`/etiqueta_caja/${this.etiqueta_caja_editar.id}?_method=PUT`,this.etiqueta_caja_editar)
@@ -326,7 +393,7 @@ export default {
                             buttons: false
                         });
                         this.etiqueta_caja_editar=this.initForm();
-                        this.open_editar=false;
+                        this.open_ver=false;
                         this.listar();
                         break;
                     case 'VALIDATION':

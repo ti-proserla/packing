@@ -14,7 +14,6 @@
                                     outlined
                                     dense
                                     required 
-                                    hide-details="auto"
                                     label="Código:" 
                                     v-model="operacion.descripcion"
                                 ></v-text-field>
@@ -24,7 +23,6 @@
                                     outlined
                                     dense
                                     type="date"
-                                    hide-details="auto"
                                     label="Fecha Operación" 
                                     v-model="operacion.fecha_operacion"
                                 ></v-text-field>
@@ -38,7 +36,6 @@
                                     :items="clientes"
                                     item-text="descripcion"
                                     item-value="id"
-                                    hide-details="auto"
                                     >
                                     </v-select>
                             </v-col>

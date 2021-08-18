@@ -54,24 +54,10 @@ class PaletSalidaController extends Controller
         // dd($request->all());
         $codigo_palet = $request->codigo_palet;
         $array_palet= explode('-',$codigo_palet);
-        $lote_ingreso=LoteIngreso::where('codigo',$array_palet[1])->first();
-        if ($lote_ingreso==null) {
-            return response()->json([
-                "status" => "ERROR",
-                "data"  => "Código no encontrado"
-            ]);
-        }
+        
         $caja=new Caja();
         $caja->palet_salida_id=(int)$id;
-        $caja->lote_ingreso_id=LoteIngreso::where('codigo',$array_palet[1])->first()->id;
-        $caja->calibre=$array_palet[2];
-        $caja->categoria=$array_palet[3];
-        $caja->presentacion=$array_palet[4];
-        $caja->marca_caja=$array_palet[5];
-        $caja->plu=$array_palet[6];
-        $caja->tipo_bolsa=$array_palet[7];
-        $caja->marca_bolsa=$array_palet[8];
-        $caja->fecha_empaque=Carbon::now();
+        $caja->etiqueta_caja_id=$array_palet[1];
         $caja->save();
 
         foreach ($request->codigos_trabajador as $key => $codigo) {
@@ -100,7 +86,6 @@ class PaletSalidaController extends Controller
 
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
-                                // ->join('producto','palet_salida.producto_id','=','producto.id')
                                 ->where('palet_salida.id',$id)
                                 ->select('palet_salida.*')
                                 ->first();

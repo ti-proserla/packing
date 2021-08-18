@@ -26,14 +26,12 @@
                     <v-card-text>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="IP" 
                             v-model="impresora.ip"
                             :error-messages="error.ip"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="impresora.nombre"
                             :error-messages="error.nombre"
@@ -60,14 +58,12 @@
                     <v-card-text>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="IP" 
                             v-model="impresora_editar.ip"
                             :error-messages="error_editar.ip"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="impresora_editar.nombre"
                             :error-messages="error_editar.nombre"

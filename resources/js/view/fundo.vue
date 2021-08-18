@@ -24,30 +24,37 @@
                 <v-card>
                     <v-card-title class="headline">Nueva fundo</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="fundo.cod_cartilla"
-                            :error-messages="error.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="fundo.nombre_fundo"
-                            :error-messages="error.nombre_fundo"
-                        ></v-text-field>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="Lugar Producción:" 
-                            v-model="fundo.lugar_produccion"
-                            :error-messages="error.lugar_produccion"
-                        ></v-text-field>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="COd Lugar Producción" 
-                            v-model="fundo.cod_lugar_produccion"
-                            :error-messages="error.cod_lugar_produccion"
-                        ></v-text-field>
+                        <v-row>
+
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="fundo.cod_cartilla"
+                                    :error-messages="error.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Nombre" 
+                                    v-model="fundo.nombre_fundo"
+                                    :error-messages="error.nombre_fundo"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Lugar Producción:" 
+                                    v-model="fundo.lugar_produccion"
+                                    :error-messages="error.lugar_produccion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="COd Lugar Producción" 
+                                    v-model="fundo.cod_lugar_produccion"
+                                    :error-messages="error.cod_lugar_produccion"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -68,33 +75,39 @@
                 <v-card>
                     <v-card-title class="headline">Editar Fundo</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="fundo_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Lugar Producción:" 
-                            v-model="fundo_editar.lugar_produccion"
-                            :error-messages="error_editar.lugar_produccion"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Código Lugar Producción:" 
-                            v-model="fundo_editar.cod_lugar_produccion"
-                            :error-messages="error_editar.cod_lugar_produccion"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="fundo_editar.nombre_fundo"
-                            :error-messages="error_editar.nombre_fundo"
-                        ></v-text-field>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="fundo_editar.cod_cartilla"
+                                    :error-messages="error_editar.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Lugar Producción:" 
+                                    v-model="fundo_editar.lugar_produccion"
+                                    :error-messages="error_editar.lugar_produccion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Código Lugar Producción:" 
+                                    v-model="fundo_editar.cod_lugar_produccion"
+                                    :error-messages="error_editar.cod_lugar_produccion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="fundo_editar.nombre_fundo"
+                                    :error-messages="error_editar.nombre_fundo"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 

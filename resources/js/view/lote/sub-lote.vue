@@ -23,7 +23,6 @@
                                     outlined
                                     dense
                                     clearable
-                                    hide-details="auto"
                                     type="number"
                                     :error-messages="palets_error.num_jabas"
                                 ></v-text-field>
@@ -36,7 +35,6 @@
                                     dense
                                     clearable
                                     type="number"
-                                    hide-details="auto"
                                     :error-messages="palets_error.peso"
                                 ></v-text-field>
                             </v-col>
@@ -48,7 +46,6 @@
                                     dense
                                     clearable
                                     type="number"
-                                    hide-details="auto"
                                     :error-messages="palets_error.peso_palet"
                                 ></v-text-field>
                             </v-col>
@@ -56,11 +53,8 @@
                                 <v-text-field 
                                     label="Peso Jaba (Kg):" 
                                     v-model="peso_jaba"
-                                    outlined
-                                    dense
                                     clearable
                                     type="text"
-                                    hide-details="auto"
                                     :error-messages="palets_error.peso_jaba"
                                 ></v-text-field>
                             </v-col>
@@ -131,14 +125,11 @@
                     <v-row>
                         <v-col cols=12>
                             <v-select
-                                outlined
-                                dense
                                 v-model="sub_lote.lote_id"
                                 label="Lote:"
                                 :items="lotes"
                                 :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}`"
                                 item-value="id"
-                                hide-details="auto"
                                 :error-messages="sub_lote_error.lote_id"
                                 >
                                 </v-select>
@@ -149,7 +140,6 @@
                                 type="number"
                                 v-model="sub_lote.viaje"
                                 :outlined="true"
-                                hide-details="auto"
                                 dense
                                 clearable
                             ></v-text-field>
@@ -159,8 +149,6 @@
                                 label="Guia:" 
                                 v-model="sub_lote.guia"
                                 :outlined="true"
-                                hide-details="auto"
-                                dense
                                 clearable
                                 :error-messages="sub_lote_error.guia"
                             ></v-text-field>
@@ -170,7 +158,6 @@
                                 label="Peso Guia (Kg):" 
                                 v-model="sub_lote.peso_guia"
                                 :outlined="true"
-                                hide-details="auto"
                                 dense
                                 type="number"
                                 clearable
@@ -185,7 +172,6 @@
                                 dense
                                 clearable
                                 type="datetime-local"
-                                hide-details="auto"
                                 :error-messages="sub_lote_error.fecha_recepcion"
                             ></v-text-field>
                         </v-col>
@@ -224,7 +210,6 @@
                                 @change="listarSublote"
                                 outlined
                                 dense
-                                hide-details="auto"
                                 v-model="s_cliente_id"
                                 label="Cliente:"
                                 :items="clientes"

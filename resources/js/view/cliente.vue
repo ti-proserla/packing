@@ -25,21 +25,18 @@
                     <v-card-title class="headline">Nuevo Cliente</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="cliente.cod_cartilla"
                             :error-messages="error.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="RUC" 
                             v-model="cliente.ruc"
                             :error-messages="error.ruc"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="cliente.descripcion"
                             :error-messages="error.descripcion"
@@ -65,21 +62,18 @@
                     <v-card-title class="headline">Editar Cliente</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="cliente_editar.cod_cartilla"
                             :error-messages="error_editar.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="RUC" 
                             v-model="cliente_editar.ruc"
                             :error-messages="error_editar.ruc"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="cliente_editar.descripcion"
                             :error-messages="error_editar.descripcion"

@@ -16,16 +16,7 @@ class CreateCajaTable extends Migration
         Schema::create('caja', function (Blueprint $table) {
             $table->id();
             $table->integer('palet_salida_id');
-            $table->integer('lote_ingreso_id');
-            $table->string('calibre',10);
-            $table->string('categoria',10);
-            $table->string('presentacion',20);
-            $table->string('marca_caja',30);
-            $table->string('plu',10);
-            $table->string('tipo_bolsa',10);
-            $table->string('marca_bolsa',10);
-            
-            $table->date('fecha_empaque'); // fecha sistema.
+            $table->integer('etiqueta_caja_id');
             $table->timestamps();
         });
     }

@@ -31,14 +31,12 @@
                         v-on:submit.prevent="guardar">
                         <v-select
                             label="Linea:"
-                            hide-details="auto"
                             v-model="lanzado.linea"
                             :items="lineas"
                             :item-text="(item) => item.numero"
                             item-value="numero">
                             </v-select>
                         <v-text-field 
-                            hide-details="auto"
                             label="Código de Palet:" 
                             v-model="lanzado.codigo"
                         ></v-text-field>

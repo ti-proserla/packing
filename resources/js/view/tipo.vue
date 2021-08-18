@@ -25,13 +25,11 @@
                     <v-card-title class="headline">Nuevo tipo</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="tipo.cod_cartilla"
                             :error-messages="error.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="tipo.nombre_tipo"
                             :error-messages="error.nombre_tipo"
@@ -39,7 +37,6 @@
                         <div>
                             <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="tipo.materia_id"
                                 :error-messages="error.materia_id"
                                 :items="materias"
@@ -68,21 +65,18 @@
                     <v-card-title class="headline">Editar tipo</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="cod_cartilla" 
                             v-model="tipo_editar.cod_cartilla"
                             :error-messages="error_editar.cod_cartilla"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="tipo_editar.nombre_tipo"
                             :error-messages="error_editar.nombre_tipo"
                         ></v-text-field>
                         <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="tipo_editar.materia_id"
                                 :error-messages="error_editar.materia_id"
                                 :items="materias"

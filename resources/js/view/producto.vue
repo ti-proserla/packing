@@ -26,28 +26,24 @@
                     <v-card-text>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre:" 
                             v-model="producto.nombre_producto"
                             :error-messages="error.nombre_producto"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Peso Neto:" 
                             v-model="producto.peso_neto"
                             :error-messages="error.peso_neto"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Peso Pote:" 
                             v-model="producto.peso_pote"
                             :error-messages="error.peso_pote"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Potes:"
                             type="number" 
                             v-model="producto.potes"
@@ -55,7 +51,6 @@
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Etapas:"
                             type="number" 
                             v-model="producto.etapas"
@@ -83,28 +78,24 @@
                     <v-card-text>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="producto_editar.nombre_producto"
                             :error-messages="error_editar.nombre_producto"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Peso Neto:" 
                             v-model="producto_editar.peso_neto"
                             :error-messages="error_editar.peso_neto"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Peso Pote:" 
                             v-model="producto_editar.peso_pote"
                             :error-messages="error_editar.peso_pote"
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Potes:"
                             type="number" 
                             v-model="producto_editar.potes"
@@ -112,7 +103,6 @@
                         ></v-text-field>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Etapas:"
                             type="number" 
                             v-model="producto_editar.etapas"

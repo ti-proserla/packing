@@ -25,7 +25,6 @@
                     <v-card-title class="headline">Nuevo calibre</v-card-title>
                     <v-card-text>
                         <v-text-field 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="calibre.nombre_calibre"
                             :error-messages="error.nombre_calibre"
@@ -33,7 +32,6 @@
                         <div>
                             <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="calibre.materia_id"
                                 :error-messages="error.materia_id"
                                 :items="materias"
@@ -63,14 +61,12 @@
                     <v-card-text>
                         <v-text-field 
                             required 
-                            hide-details="auto"
                             label="Nombre" 
                             v-model="calibre_editar.nombre_calibre"
                             :error-messages="error_editar.nombre_calibre"
                         ></v-text-field>
                         <v-select
                                 label="Materia:"
-                                hide-details="auto"
                                 v-model="calibre_editar.materia_id"
                                 :error-messages="error_editar.materia_id"
                                 :items="materias"

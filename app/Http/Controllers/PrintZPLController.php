@@ -8,6 +8,7 @@ use App\Model\Parametro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Model\Labor;
+use App\Model\EtiquetaCaja;
 
 
 class PrintZPLController extends Controller
@@ -388,5 +389,64 @@ class PrintZPLController extends Controller
         }
 
         return false;
+    }
+
+    public function muestra_etiqueta_caja(Request $request){
+        $etiqueta_id=$request->etiqueta_caja_id;
+        $etiquetaCaja=EtiquetaCaja::select(
+                        DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
+                        'etiqueta_caja.*',
+                        'LI.codigo',
+                        'CLI.descripcion as nombre_productor',
+                        'CL.nombre_calibre',
+                        'MA.nombre_materia',
+                        'VA.nombre_variedad',
+                        'CT.nombre_categoria')
+                    ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
+                    ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
+                    ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
+                    ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
+                    ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
+                    ->join('materia as MA','MA.id','=','LI.materia_id')
+                    ->join('variedad as VA','VA.id','=','LI.variedad_id')
+                    ->where('etiqueta_caja.id',$etiqueta_id)
+                    ->orderBy('id','DESC')
+                    ->first();
+        $zpl="CT~~CD,~CC^~CT~
+        ^XA
+        ~TA000
+        ~JSN
+        ^LT0
+        ^MNW
+        ^MTT
+        ^PON
+        ^PMN
+        ^LH0,0
+        ^JMA
+        ^PR2,2
+        ~SD15
+        ^JUS
+        ^LRN
+        ^CI27
+        ^PA0,1,1,0
+        ^XZ
+        ^XA
+        ^MMT
+        ^PW600
+        ^LL359
+        ^LS0
+        ^FT196,47^A0N,16,23^FB206,1,4,C^FH\^CI28^FD[direccion_productor]^FS^CI27
+        ^FO1,0^GB599,69,1^FS
+        ^FT184,24^A0N,16,18^FB231,1,4,C^FH\^CI28^FDEXPORTER: [nombre_productor]^FS^CI27
+        ^PQ1,0,1,Y
+        ^XZ        
+        ";
+        foreach($etiquetaCaja->toArray() as $key=>$value){
+            
+            $zpl=str_replace('['.$key.']',$value,$zpl);
+        }
+        $ip_print='192.168.1.161';
+        $this->print_red($ip_print,9100,$zpl);
+        return response()->json($zpl);
     }
 }

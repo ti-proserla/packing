@@ -24,19 +24,23 @@
                 <v-card>
                     <v-card-title class="headline">Nueva Materia</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="materia.cod_cartilla"
-                            :error-messages="error.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="materia.nombre_materia"
-                            :error-messages="error.nombre_materia"
-                        ></v-text-field>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="materia.cod_cartilla"
+                                    :error-messages="error.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="materia.nombre_materia"
+                                    :error-messages="error.nombre_materia"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -57,19 +61,23 @@
                 <v-card>
                     <v-card-title class="headline">Editar Materia</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            hide-details="auto"
-                            label="cod_cartilla" 
-                            v-model="materia_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            hide-details="auto"
-                            label="Nombre" 
-                            v-model="materia_editar.nombre_materia"
-                            :error-messages="error_editar.nombre_materia"
-                        ></v-text-field>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="materia_editar.cod_cartilla"
+                                    :error-messages="error_editar.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="materia_editar.nombre_materia"
+                                    :error-messages="error_editar.nombre_materia"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 

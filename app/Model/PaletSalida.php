@@ -12,15 +12,17 @@ class PaletSalida extends Model
     public function cajas()
     {
         return $this->hasMany('App\Model\Caja')
-                    ->leftJoin('rendimiento_personal','rendimiento_personal.caja_id','=','caja.id')
+                    ->join('etiqueta_caja as EC','EC.id','=','caja.etiqueta_caja_id')
+                    ->join('calibre as CL','CL.id','=','EC.calibre_id')
+                    ->join('categoria as CT','CT.id','=','EC.categoria_id')    
+                    ->join('presentacion as PE','PE.id','=','EC.presentacion_id')
                     ->select(
-                        'caja.id',
-                        'caja.calibre',
-                        'caja.categoria',
-                        'caja.presentacion',
-                        'caja.marca_caja',
-                        'palet_salida_id',
-                        DB::raw("GROUP_CONCAT(codigo_barras separator '|') as codigos"))    
-                    ->groupBy('caja.id');
+                        'caja.palet_salida_id',
+                        DB::raw('count(caja.id) cantidad'),
+                        'CL.nombre_calibre',
+                        'CT.nombre_categoria',
+                        'PE.nombre_presentacion'
+                    )
+                    ->groupBy('caja.etiqueta_caja_id');
     }
 }

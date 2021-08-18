@@ -38,70 +38,73 @@
             class="py-0"
             >
             <v-divider></v-divider>
-            <v-list-item link to="/impresora">
-                <v-list-item-icon>
-                    <i class="fas fa-print"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Impresoras
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item link to="/fundo">
-                <v-list-item-icon>
-                    <i class="fas fa-seedling"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Fundo
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item link to="/materia">
-                <v-list-item-icon>
-                    <i class="fas fa-apple-alt"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Materia
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item link to="/variedad">
-                <v-list-item-icon>
-                    <i class="fas fa-seedling"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Variedad
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item link to="/calibre">
-                <v-list-item-icon>
-                    <i class="fas fa-ruler-vertical"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Calibre
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item link to="/tipo">
+            <v-list-group
+                :value="false"
+                no-action>
+                <template v-slot:activator>
+                        <v-list-item-icon>
+                            <i class="far fa-file-alt"></i>
+                        </v-list-item-icon>
+                    <v-list-item-content>Administración</v-list-item-content>
+                </template>
+                <v-list-item link to="/materia">
+                    <v-list-item-icon>
+                        <i class="fas fa-apple-alt"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Materia
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/impresora">
+                    <v-list-item-icon>
+                        <i class="fas fa-print"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Impresoras
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/fundo">
+                    <v-list-item-icon>
+                        <i class="fas fa-seedling"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Fundo
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/variedad">
+                    <v-list-item-icon>
+                        <i class="fas fa-seedling"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Variedad
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/calibre">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Calibre
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/cliente">
+                    <v-list-item-icon>
+                        <i class="fas fa-user-alt"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Cliente
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-group>
+            
+            <!-- <v-list-item link to="/tipo">
                 <v-list-item-icon>
                     <i class="fas fa-leaf"></i>
                 </v-list-item-icon>
                 <v-list-item-content>
                     Tipo
                 </v-list-item-content>
-            </v-list-item>
-            <!-- <v-list-item link to="/producto">
-                <v-list-item-icon>
-                    <i class="far fa-building"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Producto
-                </v-list-item-content>
             </v-list-item> -->
-            <v-list-item link to="/cliente">
-                <v-list-item-icon>
-                    <i class="fas fa-user-alt"></i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    Cliente
-                </v-list-item-content>
-            </v-list-item>
             <v-list-item link to="/acopio/lote">
                 <v-list-item-icon>
                     <i class="far fa-building"></i>
@@ -214,6 +217,11 @@
 <style>
     .v-application.theme--light{
         background-color: rgba(203,203,210,.15)!important;
+    }
+    .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+    .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
+    .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+        font-size: 12px !important;
     }
 </style>
 <script>

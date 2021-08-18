@@ -14,7 +14,6 @@
                                 :items="clientes"
                                 item-text="descripcion"
                                 item-value="id"
-                                hide-details="auto"
                                 :error-messages="lote_error.cliente_id"
                                 >
                                 </v-select>
@@ -28,7 +27,6 @@
                                 :items="materias"
                                 item-text="nombre_materia"
                                 item-value="id"
-                                hide-details="auto"
                                 :error-messages="lote_error.materia_id"
                                 >
                                 </v-select>
@@ -42,7 +40,6 @@
                                 :items="variedades"
                                 item-text="nombre_variedad"
                                 item-value="id"
-                                hide-details="auto"
                                 >
                                 </v-select>
                         </v-col>
@@ -55,7 +52,6 @@
                                     :items="tipos"
                                     item-text="nombre_tipo"
                                     item-value="id"
-                                    hide-details="auto"
                                     >
                                     </v-select>
                         </v-col> -->
@@ -68,7 +64,6 @@
                                 :items="fundos"
                                 :item-text="item => item.nombre_fundo + ' -'  + item.lugar_produccion"
                                 item-value="id"
-                                hide-details="auto"
                                 :error-messages="lote_error.fundo_id"
                                 >
                                 </v-select>
@@ -81,7 +76,6 @@
                                 dense
                                 clearable
                                 type="date"
-                                hide-details="auto"
                                 :error-messages="lote_error.fecha_cosecha"
                             ></v-text-field>
                         </v-col>
@@ -92,7 +86,6 @@
                                 outlined
                                 dense
                                 clearable
-                                hide-details="auto"
                                 :error-messages="lote_error.codigo"
                             ></v-text-field>
                         </v-col>
