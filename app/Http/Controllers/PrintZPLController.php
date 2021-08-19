@@ -330,7 +330,7 @@ class PrintZPLController extends Controller
 
         $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
         $index_db=(int)$parametro->valor;
-        $cantidad=10;
+        $cantidad=100;
         
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);
