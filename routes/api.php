@@ -61,6 +61,7 @@ Route::get('rendimiento-personal', 'ReportesController@rendimiento_personal');
 Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
 Route::get('reporte/acopio', 'ReportesController@acopio');
+Route::get('reporte/avance_lote', 'ReportesController@avance_lote');
 Route::get('print/muestra_etiqueta_caja', 'PrintZPLController@muestra_etiqueta_caja');
 Route::get('print/cajas', 'PrintZPLController@caja_palet');
 Route::get('print/zpl/cajas', 'PrintZPLController@cajas');

@@ -15,7 +15,7 @@ class CreatePaletEntradaTable extends Migration
     {
         Schema::create('palet_entrada', function (Blueprint $table) {
             $table->id();
-            $table->integer('numero')->nullable();
+            $table->integer('num_palet')->nullable();
             $table->integer('sub_lote_id');
             $table->decimal('peso',8,4);
             $table->integer('num_jabas');
@@ -24,6 +24,8 @@ class CreatePaletEntradaTable extends Migration
             $table->integer('producto_id');
             $table->string('estado',30)->default('Pendiente');
             $table->integer('linea_lanzado')->nullable();
+            $table->datetime('fecha_lanzado')->nullable();
+            $table->datetime('fecha_fin_lanzado')->nullable();
             $table->timestamps();
         });
     }

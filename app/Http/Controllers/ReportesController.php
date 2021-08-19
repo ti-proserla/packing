@@ -124,4 +124,24 @@ class ReportesController extends Controller
         $data=DB::select(DB::raw("$query"),[$cliente_id,$fecha_recepcion]);      
         return response()->json($data);  
     }
+
+    public function avance_lote(Request $request){
+        $fecha_produccion=$request->fecha_produccion;
+        $query="SELECT 	LI.codigo,
+                        CL.descripcion,
+                        MA.nombre_materia,
+                        VA.nombre_variedad,
+                        SUM(PE.peso-PE.peso_palet-PE.peso_jaba*PE.num_jabas) peso_entrada,
+                        SUM(PE.num_jabas) num_jabas_entrada,
+                        SUM(IF(PE.estado='LANZADO',PE.peso-PE.peso_palet-PE.peso_jaba*PE.num_jabas,0)) peso_lanzado,
+                        SUM(IF(PE.estado='LANZADO',PE.num_jabas,0)) num_jabas_lanzadas
+                FROM lote_ingreso LI 
+                INNER JOIN materia MA ON MA.id=LI.materia_id
+                INNER JOIN variedad VA ON VA.id=LI.variedad_id
+                INNER JOIN cliente CL ON CL.id=LI.cliente_id
+                LEFT JOIN sub_lote SL ON SL.lote_id=LI.id
+                LEFT JOIN palet_entrada PE ON PE.sub_lote_id=SL.id";
+        $data=DB::select(DB::raw("$query"),[]);      
+        return response()->json($data);
+    }
 }

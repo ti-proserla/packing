@@ -120,7 +120,10 @@ var routes =[
         path: '/etiqueta.caja',
         component: require('./view/etiqueta.caja.vue').default
     },
-
+    {
+        path: '/reporte/avance-lote',
+        component: require('./view/reporte/AvanceLote.vue').default
+    },
 ];
 var router=new VueRouter({
     mode: 'history',
