@@ -13,6 +13,32 @@
                                     <v-select
                                         outlined
                                         dense
+                                        v-model="printing_local"
+                                        label="Printers:"
+                                        :items="[
+                                            { value: true, descripcion: 'Impresión Local'},
+                                            { value: false, descripcion: 'Impresión Red'},
+                                        ]"
+                                        item-text="descripcion"
+                                        item-value="value"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12" v-if="printing_local">
+                                    <v-select
+                                        outlined
+                                        dense
+                                        v-model="printer_uid"
+                                        label="Printers:"
+                                        :items="printers_local"
+                                        :item-text="print => `${print.name}`"
+                                        item-value="uid"
+                                        >
+                                        </v-select>
+                                </v-col>
+                                <v-col cols="12" v-else>
+                                    <v-select
+                                        outlined
+                                        dense
                                         v-model="form.ip_print"
                                         label="Printers:"
                                         :items="prints"
@@ -47,9 +73,13 @@ export default {
         return {
             alert: this.initAlert(),
             timer: null,
+            printing_local: true,
             prints: [
                 {nombre: 'ZT410 Linea 06', ip: '192.168.1.164'}
             ],
+            printers_local: [],
+            printer_select: null,
+            printer_uid: null,
             form: {
                 codigo_operador: null,
                 ip_print: localStorage.getItem('ip_print') || null,
@@ -61,8 +91,25 @@ export default {
         .then(response => {
             this.prints = response.data;
         })
+        this.getLocalDevices();
+    },
+    watch:{
+
     },
     methods: {
+        getLocalDevices(){
+            var t=this;
+            BrowserPrint.getDefaultDevice("printer", function(device){
+                t.printer_select=device;
+                t.printer_uid=t.printer_select.uid;
+            });
+            BrowserPrint.getLocalDevices(function(device_list){
+                for(var i = 0; i < device_list.length; i++)
+                {
+                    t.printers_local.push(device_list[i]);
+                }                
+            }, function(){alert("Error getting local devices")},"printer");
+        },
         initAlert(){
             return {
                 status: '',
@@ -74,28 +121,41 @@ export default {
             if (this.timer) {
                 clearTimeout(this.timer);
             }
-            axios.get(`${url_base}/print/zpl/cajas/`,{
+            var str_return = (this.printing_local) ? 'return': '';
+            axios.get(`${url_base}/print/zpl/cajas?${str_return}`,{
                 params: this.form
             })
             .then(response => {
                 var respuesta=response.data;
-                switch (respuesta.status) {
-                    case 'OK':
-                        this.alert.status= 'primary';
-                        this.alert.visible= true;
-                        this.alert.message= respuesta.data;
-                        break;
-                    case 'ERROR':
-                        this.alert.status= 'warning';
-                        this.alert.visible= true;
-                        this.alert.message= respuesta.data;
-                        break;
+                if (this.printing_local) {
+                    switch (respuesta.status) {
+                        case 'OK':
+                            this.printer_select.send(respuesta.data, undefined, function(errorMessage){
+                                alert("Error: " + errorMessage);	
+                            });
+                            this.alert.status= 'primary';
+                            this.alert.visible= true;
+                            this.alert.message= 'Imprimiendo.';
+                            break;
+                    }
+                }else{
+                    switch (respuesta.status) {
+                        case 'OK':
+                            this.alert.status= 'primary';
+                            this.alert.visible= true;
+                            this.alert.message= respuesta.data;
+                            break;
+                        case 'ERROR':
+                            this.alert.status= 'warning';
+                            this.alert.visible= true;
+                            this.alert.message= respuesta.data;
+                            break;
+                    }
                 }
                 this.form.codigo_operador='';
                 this.timer=setTimeout(() => {
                     this.alert=this.initAlert();
                 }, 10000);
-
             });
         },
         changePrint(){

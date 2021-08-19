@@ -155,9 +155,9 @@
                 </v-card>               
             </v-dialog>
             <!-- Editar -->
-            <v-dialog v-model="open_ver" persistent max-width="350">
+            <v-dialog v-model="open_ver" persistent max-width="450">
                 <v-card>
-                    <v-card-title class="headline">Editar etiqueta_caja</v-card-title>
+                    <v-card-title class="headline">IMPRIMIR ETIQUETA</v-card-title>
                     <v-card-text>
                         <v-row>
                             <v-col 
@@ -165,8 +165,8 @@
                                 sm="4">
                                 <v-text-field 
                                     label="Cantidad" 
-                                    v-model="etiqueta_caja_editar.cod_cartilla"
-                                    :error-messages="error_editar.cod_cartilla"
+                                    type="number"
+                                    v-model="print_count"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -185,8 +185,8 @@
                             <v-btn 
                                 outlined 
                                 color="primary" 
-                                @click="actualizar()"
-                                >Guardar</v-btn>
+                                @click="print()"
+                                >IMPRIMIR</v-btn>
                         </div>
                     </v-card-text>
                 </v-card>               
@@ -198,6 +198,9 @@
 export default {
     data() {
         return {
+            print_count: 1,
+            zpl: '',
+            printer_select: {},
             lotes: [],
             calibres: [],
             categorias: [],
@@ -254,6 +257,10 @@ export default {
         this.listarPresentaciones();
         this.listarTipoEmpaque();
         this.listarMarcaEmpaque();
+        var t = this;
+        BrowserPrint.getDefaultDevice("printer", function(device){
+            t.printer_select=device;
+        });
     },
     computed:{
         getMateriaId(){
@@ -284,6 +291,15 @@ export default {
                 nombre_etiqueta_caja: '',
                 materia_id: '',
             }
+        },
+        print(){
+            var zplPrint='';
+            for (let i = 0; i < this.print_count; i++) {
+                zplPrint+=this.zpl;
+            }
+            this.printer_select.send(zplPrint, undefined, function(errorMessage){
+                alert("Error: " + errorMessage);	
+            });
         },
         listarLotes(){
             axios.get(url_base+`/lote_ingreso`)
@@ -343,8 +359,8 @@ export default {
             axios.get(url_base+'/print/muestra_etiqueta_caja?etiqueta_caja_id='+id)
             .then(response => {
 
-                this.url_label="http://api.labelary.com/v1/printers/8dpmm/labels/3x2/0/"+response.data;
-                console.log(this.url_label);
+                this.url_label="http://api.labelary.com/v1/printers/8dpmm/labels/4x3/0/"+response.data;
+                this.zpl=response.data;
             })
         },
         guardar(){

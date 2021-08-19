@@ -19,6 +19,14 @@ class PrintZPLController extends Controller
      */
     public function cajas(Request $request){
         $ip_print = $request->ip_print;
+        if (!$request->has('return')) {
+            if (!$this->ping($ip_print)){
+                return response()->json([
+                    "status"    => "ERROR",
+                    "data"      => "Impresora Desconectada."
+                ]);
+            }
+        }
         $codigo_operador = $request->codigo_operador;
 
         $tareo=Tareo::where('codigo_operador',$codigo_operador)
@@ -49,38 +57,18 @@ class PrintZPLController extends Controller
         $labor_id=$labor->codigo_labor;
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
         $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
-        if ($this->ping($ip_print)){            
-            $string="^XA
-                    ^BY2,1,80
-                    ^FO40,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO200,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO360,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^BY2,1,80
-                    ^FO520,35^BCR,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-                    ^XZ";
             $string_zpl="^XA
-                        ^FT20,30
-                        ^AAN,21,10
-                        ^FB240,1,0,C
-                        ^FD{nombre_operador}^FS
-                        ^FT140,100
-                        ^AAN,40,15
-                        ^FD{labor_letra}^FS
-                        ^FT20,170
-                        ^BQN,2,5
-                        ^FDMA,{linea}{labor}{operador}{autonumerico}^FS
-                        ^XZ";
-
-            // $string="^XA
-            //         ^FO10,10
-            //         ^BY2,2,70
-            //         ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-            //         ^FO430,10
-            //         ^BY2,2,70
-            //         ^BCN,,,,,A^FD{linea}{labor}{operador}{autonumerico}^FS
-            //         ^XZ";
+                ^FT20,30
+                ^AAN,21,10
+                ^FB240,1,0,C
+                ^FD{nombre_operador}^FS
+                ^FT140,100
+                ^AAN,40,15
+                ^FD{labor_letra}^FS
+                ^FT20,170
+                ^BQN,2,5
+                ^FDMA,{linea}{labor}{operador}{autonumerico}^FS
+                ^XZ";
             $parametros=array(
                 'linea'         =>  $linea_id,
                 'operador'      =>  $codigo_operador,
@@ -88,6 +76,7 @@ class PrintZPLController extends Controller
                 'labor_letra'   =>  $labor_letra,
                 'nombre_operador'=> $nombre_operador
             );
+        
             // foreach($data[$i*$columna+$j] as $key=>$value){
             //     $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
             // }
@@ -101,19 +90,17 @@ class PrintZPLController extends Controller
                 $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,280);
             }
             $string_zpl_new.="^XZ";
-            
+        if ($request->has('return')) {
+            return response()->json([
+                "status"    =>  "OK",
+                "data"      =>  $this->cast_zpl($string_zpl_new,$parametros)
+            ]);
+        }else{
             $this->print_red($ip_print,9100,$this->cast_zpl($string_zpl_new,$parametros));
-
             return response()->json([
                 "status" => "OK",
                 "data"   => "Imprimiendo."
 
-            ]);
-        }
-        else {
-            return response()->json([
-                "status"    => "ERROR",
-                "data"      => "Impresora Desconectada."
             ]);
         }
     }
@@ -343,7 +330,7 @@ class PrintZPLController extends Controller
 
         $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
         $index_db=(int)$parametro->valor;
-        $cantidad=3;
+        $cantidad=10;
         
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);
@@ -396,7 +383,7 @@ class PrintZPLController extends Controller
         $etiquetaCaja=EtiquetaCaja::select(
                         DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
                         'etiqueta_caja.*',
-                        'LI.codigo',
+                        'LI.codigo as codigo_lote',
                         'CLI.descripcion as nombre_productor',
                         'CL.nombre_calibre',
                         'MA.nombre_materia',
@@ -412,41 +399,65 @@ class PrintZPLController extends Controller
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
-        $zpl="CT~~CD,~CC^~CT~
-        ^XA
-        ~TA000
-        ~JSN
-        ^LT0
-        ^MNW
-        ^MTT
-        ^PON
-        ^PMN
-        ^LH0,0
-        ^JMA
-        ^PR2,2
-        ~SD15
-        ^JUS
-        ^LRN
-        ^CI27
-        ^PA0,1,1,0
-        ^XZ
-        ^XA
-        ^MMT
-        ^PW600
-        ^LL359
-        ^LS0
-        ^FT196,47^A0N,16,23^FB206,1,4,C^FH\^CI28^FD[direccion_productor]^FS^CI27
-        ^FO1,0^GB599,69,1^FS
-        ^FT184,24^A0N,16,18^FB231,1,4,C^FH\^CI28^FDEXPORTER: [nombre_productor]^FS^CI27
-        ^PQ1,0,1,Y
-        ^XZ        
-        ";
+        $zpl="^XA
+                ~TA000
+                ~JSN
+                ^LT0
+                ^MNW
+                ^MTT
+                ^PON
+                ^PMN
+                ^LH0,0
+                ^JMA
+                ^PR8,8
+                ~SD15
+                ^JUS
+                ^LRN
+                ^CI27
+                ^PA0,1,1,0
+                ^XZ
+                ^XA
+                ^MMT
+                ^PW831
+                ^LL609
+                ^LS0
+                ^FO162,1^GB0,608,3^FS
+                ^FPH,1^FT87,430^A0B,14,15^FH\^CI28^FDPACKED BY: JAYANCA FRUITS SAC^FS^CI27
+                ^FPH,1^FT149,406^A0B,25,30^FB204,1,6,C^FH\^CI28^FDTABLE GRAPES^FS^CI27
+                ^FPH,1^FT191,289^A0B,20,20^FH\^CI28^FDSize: [nombre_calibre]^FS^CI27
+                ^FPH,1^FT191,242^A0B,20,20^FB229,1,5,R^FH\^CI28^FDCat: [nombre_categoria]^FS^CI27
+                ^FO116,1^GB0,608,3^FS
+                ^FO67,1^GB0,608,3^FS
+                ^FO165,294^GB57,0,3^FS
+                ^FPH,1^FT191,595^A0B,20,20^FH\^CI28^FDVariety: [nombre_variedad]^FS^CI27
+                ^FO220,1^GB0,608,3^FS
+                ^FT233,131^BQN,2,5
+                ^FH\^FDLA,[codigo_caja]^FS
+                ^FPH,1^FT31,434^A0B,17,18^FH\^CI28^FDEXPORTED AND PRODUCED BY:^FS^CI27
+                ^FPH,1^FT52,436^A0B,17,23^FH\^CI28^FD[nombre_productor]^FS^CI27
+                ^FPH,1^FT105,551^A0B,14,15^FH\^CI28^FDCa. ANtigua Panamericana Norte Km. 37 - Jayanca - Lambayeque^FS^CI27
+                ^FPH,1^FT215,595^A0B,20,20^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
+                ^FO580,1^GB0,608,3^FS
+                ^FPH,1^FT505,430^A0B,14,15^FH\^CI28^FDPACKED BY: JAYANCA FRUITS SAC^FS^CI27
+                ^FPH,1^FT568,406^A0B,25,30^FB204,1,6,C^FH\^CI28^FDTABLE GRAPES^FS^CI27
+                ^FPH,1^FT609,289^A0B,20,20^FH\^CI28^FDSize: [nombre_calibre]^FS^CI27
+                ^FPH,1^FT609,242^A0B,20,20^FB229,1,5,R^FH\^CI28^FDCat: [nombre_categoria]^FS^CI27
+                ^FO535,1^GB0,608,3^FS
+                ^FO485,1^GB0,608,3^FS
+                ^FO583,294^GB57,0,3^FS
+                ^FPH,1^FT609,595^A0B,20,20^FH\^CI28^FDVariety: [nombre_variedad]^FS^CI27
+                ^FO638,1^GB0,608,3^FS
+                ^FT651,131^BQN,2,5
+                ^FH\^FDLA,[codigo_caja]^FS
+                ^FPH,1^FT449,434^A0B,17,18^FH\^CI28^FDEXPORTED AND PRODUCED BY:^FS^CI27
+                ^FPH,1^FT470,436^A0B,17,23^FH\^CI28^FD[nombre_productor]^FS^CI27
+                ^FPH,1^FT523,551^A0B,14,15^FH\^CI28^FDCa. ANtigua Panamericana Norte Km. 37 - Jayanca - Lambayeque^FS^CI27
+                ^FPH,1^FT633,595^A0B,20,20^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
+                ^PQ1,0,1,Y
+                ^XZ";
         foreach($etiquetaCaja->toArray() as $key=>$value){
-            
             $zpl=str_replace('['.$key.']',$value,$zpl);
         }
-        $ip_print='192.168.1.161';
-        $this->print_red($ip_print,9100,$zpl);
         return response()->json($zpl);
     }
 }

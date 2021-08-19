@@ -144,4 +144,14 @@ class ReportesController extends Controller
         $data=DB::select(DB::raw("$query"),[]);      
         return response()->json($data);
     }
+
+    public function avance_personal(){
+        $query="SELECT RP.linea,RP.codigo_labor,L.descripcion,COUNT(RP.id) contador
+                FROM rendimiento_personal RP
+                INNER JOIN (SELECT * FROM labor GROUP BY codigo_labor)
+                L ON L.codigo_labor=RP.codigo_labor
+                GROUP BY RP.linea,RP.codigo_labor";
+        $data=DB::select(DB::raw("$query"),[]);      
+        return response()->json($data);
+    }
 }
