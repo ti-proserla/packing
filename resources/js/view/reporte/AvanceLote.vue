@@ -39,6 +39,33 @@
                 </v-simple-table>
             </v-card-text>
         </v-card>
+        <br>
+        <v-card>
+            <v-card-title>Avance de Personal</v-card-title>              
+            <v-card-text>       
+                <v-simple-table
+                    class="table-lineal">
+                    <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th>Linea</th>
+                                <th>Cod Labor</th>
+                                <th>Labor</th>
+                                <th>Cajas Contabilizadas</th>
+                            </tr>   
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in table2">
+                                <td>{{ item.linea }}</td>
+                                <td>{{ item.codigo_labor }}</td>
+                                <td>{{ item.descripcion }}</td>
+                                <td>{{ item.contador }}</td>
+                            </tr>
+                        </tbody>
+                    </template> 
+                </v-simple-table>
+            </v-card-text>
+        </v-card>
     </v-container>
 </template>
 <script>
@@ -46,13 +73,22 @@ export default {
     data() {
         return {
             table: [],
+            table2: [],
             fecha_produccion: moment().format('YYYY-MM-DD'),
         }
     },
     mounted(){
-        this.buscar();
+        this.cargar();
     },
     methods:{
+        cargar(){
+            var t=this;
+            t.buscar();
+            t.buscar2();
+            setTimeout(() => {
+                t.cargar();
+            }, 5000);
+        },
         buscar(){
             axios.get(`${url_base}/reporte/avance_lote`,{
                 params: {
@@ -61,6 +97,16 @@ export default {
             })
             .then(response => {
                 this.table=response.data;
+            });
+        },
+        buscar2(){
+            axios.get(`${url_base}/reporte/avance_personal`,{
+                params: {
+                    fecha_produccion: this.fecha_produccion,
+                }
+            })
+            .then(response => {
+                this.table2=response.data;
             });
         }
     }
