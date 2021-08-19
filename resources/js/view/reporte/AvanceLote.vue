@@ -17,10 +17,10 @@
                                 <th>Productor</th>
                                 <th>Materia</th>
                                 <th>Variedad</th>
-                                <th>peso_entrada</th>
-                                <th>num_jabas_entrada</th>
-                                <th>peso_lanzado</th>
-                                <th>num_jabas_lanzadas</th>
+                                <th>Peso (Kg)</th>
+                                <th>N° Jabas</th>
+                                <th>Peso (Kg)</th>
+                                <th>N° Jabas</th>
                             </tr>   
                         </thead>
                         <tbody>

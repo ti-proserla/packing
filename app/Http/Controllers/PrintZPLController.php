@@ -158,15 +158,17 @@ class PrintZPLController extends Controller
                             ^BQN,2,5
                             ^FDMA,P-[palet_id]^FS
                         ^XZ";
+            dd(preg_replace("[\n|\r|\n\r|/\s+/g]", "",$string_zpl));      
+            $string_zpl=
             $string_zpl=str_replace('^XA','',$string_zpl);
             $string_zpl=str_replace('^XZ','',$string_zpl);
-
             $query="SELECT 	PE.num_palet,
                             codigo, 
                             CL.descripcion empresa,
                             PE.peso peso, 
                             VA.nombre_variedad variedad,
                             PE.num_jabas,
+                            SL.viaje,
                             PE.id palet_id
                     FROM lote_ingreso LI 
                     INNER JOIN cliente CL ON CL.id=LI.cliente_id
@@ -176,10 +178,22 @@ class PrintZPLController extends Controller
                     WHERE sub_lote_id=?
                     ORDER BY palet_id DESC";
             $data=DB::select(DB::raw("$query"),[$sub_lote_id]);
-            $string_zpl_new="";
-
-            $columna=2;
             
+            $columna=2;
+            $string_zpl_new="";
+            $data_part=array_chunk($data,$columna);
+            for ($i=0; $i < count($data_part); $i++) {
+                $data_row=$data_part[$i];
+                for ($j=0; $j < count($data_row); $j++) { 
+                    
+                    $string_zpl_bk=$this->columnaEtiqueta($string_zpl,$j);
+                    foreach($data_row[$j] as $key=>$value){
+                        $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+                    }
+                    $string_zpl_new.=$string_zpl_bk;
+                }
+                $string_zpl_new.="^XA$string_zpl_bk^XZ";
+            }
             for ($i=0; $i < count($data)/$columna; $i++) {
                 $recorrido=($i+1)*$columna<count($data) ? $columna : (count($data)-($i)*$columna);
                 $string_zpl_new.="^XA";
@@ -192,11 +206,11 @@ class PrintZPLController extends Controller
                     $string_zpl_new.=$string_zpl_bk;
                 }
                 $string_zpl_new.="^XZ";
+                $this->print_red($ip_print,9100,$string_zpl_new);
+                $string_zpl_new="";
             }            
-            // dd($string_zpl_new);
             
-            $this->print_red($ip_print,9100,$string_zpl_new);
-
+            dd(preg_replace("[\n|\r|\n\r]", "",$string_zpl_new));
             return response()->json([
                 "status" => "OK",
                 "data"   => "Imprimiendo."
@@ -279,7 +293,6 @@ class PrintZPLController extends Controller
                 }
                 $string_zpl_new.="^XZ";
             }            
-            // dd($string_zpl_new);
             
             $this->print_red($ip_print,9100,$string_zpl_new);
 
@@ -316,6 +329,7 @@ class PrintZPLController extends Controller
         }
         catch (Exception $e) 
         {
+            dd($e->getMessage());
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
     }
