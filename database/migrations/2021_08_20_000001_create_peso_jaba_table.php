@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePluTable extends Migration
+class CreatepesojabaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreatePluTable extends Migration
      */
     public function up()
     {
-        Schema::create('plu', function (Blueprint $table) {
+        Schema::create('pesojaba', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_plu',50);
+            $table->string('nombre_pesojaba',50);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreatePluTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plu');
+        Schema::dropIfExists('pesojaba');
     }
 }
