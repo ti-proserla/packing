@@ -108,7 +108,7 @@ export default {
                 {
                     t.printers_local.push(device_list[i]);
                 }                
-            }, function(){alert("Error getting local devices")},"printer");
+            }, function(){},"printer");
         },
         initAlert(){
             return {
