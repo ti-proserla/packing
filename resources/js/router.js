@@ -61,6 +61,18 @@ var routes =[
         path: '/despacho/:id',
         component: require('./view/despacho.count.vue').default
     },
+    {
+        path: '/produccion',
+        component: require('./view/produccion.vue').default
+    },
+    {
+        path: '/produccion/new',
+        component: require('./view/produccion.new.vue').default
+    },
+    // {
+    //     path: '/produccion/:id',
+    //     component: require('./view/produccion.count.vue').default
+    // },
     //Paletizado
     {
         path: '/paletizado/new',
