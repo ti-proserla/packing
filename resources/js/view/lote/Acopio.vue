@@ -2,14 +2,15 @@
     <v-container fluid>
         <v-card>
             <v-card-title>
-                Acopio de Lotes
+                Lotes Productor
             </v-card-title>
             <v-card-text>
+                
                 <v-simple-table dense>
                     <template v-slot:default>
                         <thead>
                             <tr>
-                                <th>Cliente</th>
+                                <th>Productor</th>
                                 <th>Lote</th>
                                 <th>Materia</th>
                                 <th>Variedad</th>

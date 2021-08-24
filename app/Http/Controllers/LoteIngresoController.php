@@ -17,23 +17,15 @@ class LoteIngresoController extends Controller
      */
     public function index(Request $request)
     {
-
+        $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
+            ->join('materia','materia.id','=','lote_ingreso.materia_id')
+            ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
+            ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
+            ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo');
         if ($request->has('estado')) {
-            $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
-                            ->join('materia','materia.id','=','lote_ingreso.materia_id')
-                            ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
-                            ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
-                            ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
-                            ->where('estado',$request->estado)
-                            ->get();
-            }else{
-                $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
-                            ->join('materia','materia.id','=','lote_ingreso.materia_id')
-                            ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
-                            ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
-                            ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
-                            ->get();
+            $lotesIngreso=$lotesIngreso->whereIn('estado',explode(',',$request->estado));
         }
+        $lotesIngreso=$lotesIngreso->get();
         return response()->json($lotesIngreso); 
     }
 
@@ -104,13 +96,23 @@ class LoteIngresoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $loteIngreso=LoteIngreso::where('id',$id)->first();
-        $loteIngreso->estado=$request->estado;
-        $loteIngreso->save();
-        return response()->json([
-            "status" => "OK",
-            "data"   => "Lote Ingreso Registrado."
-        ]);
+        if ($request->has('estado')) {
+            $loteIngreso=LoteIngreso::where('id',$id)->first();
+            $loteIngreso->estado=$request->estado;
+            $loteIngreso->save();
+            return response()->json([
+                "status" => "OK",
+                "data"   => "Lote Ingreso Actulizado."
+            ]);
+        }else {
+            $loteIngreso=LoteIngreso::where('id',$id)->first();
+            $loteIngreso->fecha_proceso=$request->fecha_proceso;
+            $loteIngreso->save();
+            return response()->json([
+                "status" => "OK",
+                "data"   => "Lote Ingreso Actulizado."
+            ]);
+        }
     }
 
    

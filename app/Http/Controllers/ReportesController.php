@@ -84,19 +84,21 @@ class ReportesController extends Controller
     }
     public function acopio(Request $request){
         $cliente_id=$request->cliente_id;
-        $fecha_recepcion=$request->fecha_recepcion;
+        $desde=$request->desde;
+        $hasta=$request->hasta;
+        $queryProductor="";
         $query="SELECT 
-                        CL.descripcion cliente,
-                        FU.nombre_fundo fundo,
-                                FU.lugar_produccion lugar_produccion,
+                        CL.descripcion nombre_productor,
+                        FU.nombre_fundo,
+                        FU.lugar_produccion lugar_produccion,
                         SL.viaje,
                         SL.guia,
-                                FU.cod_lugar_produccion cod_lugar_produccion,
+                        FU.cod_lugar_produccion cod_lugar_produccion,
                         WEEK(SL.fecha_recepcion) semana,
                         DATE(SL.fecha_recepcion) fecha_recepcion,
                         CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
                         LI.fecha_proceso,
-                        MA.nombre_materia materia,
+                        MA.nombre_materia,
                         VA.nombre_variedad variedad,
                         LI.codigo lote_materia,
                         SUM(PE.num_jabas) numero_jabas,
@@ -119,9 +121,11 @@ class ReportesController extends Controller
                 LEFT JOIN tipo TI ON TI.id=LI.tipo_id
                 LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
                 where CL.id=?
-                AND DATE(SL.fecha_recepcion)=?
+                AND DATE(SL.fecha_recepcion)>=?
+                AND DATE(SL.fecha_recepcion)<=?
                 GROUP BY LI.id, SL.id";
-        $data=DB::select(DB::raw("$query"),[$cliente_id,$fecha_recepcion]);      
+        $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
+
         return response()->json($data);  
     }
 

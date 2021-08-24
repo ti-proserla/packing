@@ -4,40 +4,58 @@
             <v-card-title>Reporte Acopio</v-card-title>              
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" sm=4>
+                    <v-col cols="12" sm=3>
                         <v-text-field
                             outlined
                             dense
-                            label="Fecha Recepción"
-                            v-model="fecha_recepcion"
+                            label="Desde:"
+                            v-model="consulta.desde"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=3>
+                        <v-text-field
+                            outlined
+                            dense
+                            label="Hasta:"
+                            v-model="consulta.hasta"
                             type="date">
                         </v-text-field>
                     </v-col>
                     <v-col cols="12" sm=4>
                         <v-select
+                            @change="buscar"
                                 outlined
                                 dense
-                                v-model="cliente_id"
-                                label="Cliente:"
+                                v-model="consulta.cliente_id"
+                                label="Productor:"
                                 :items="clientes"
                                 item-text="descripcion"
                                 item-value="id"
                                 >
                                 </v-select>
                     </v-col>
-                    <v-col cols="12" sm=4>
+                    <v-col cols="12" sm=2>
                         <v-btn color="info" @click="buscar">
                             Buscar
                         </v-btn>
                     </v-col>
                 </v-row>
+                <v-data-table
+                    class="table-lineal"
+                    :headers="header"
+                    :items="table"
+                    hide-default-footer
+                    >
+                </v-data-table>
                 <v-simple-table
                     class="table-lineal">
                     <template v-slot:default>
                         <thead>
                             <tr>
-                                <th>Cliente</th>
+                                <th>Productor</th>
                                 <th>Fundo</th>
+                                <th>Lugar Producción</th>
                                 <th>Viaje</th>
                                 <th>Guia</th>
                                 <th>Semana</th>
@@ -64,6 +82,7 @@
                             <tr v-for="(row,i) in table" :key="i">
                                 <td>{{row.cliente}}</td>
                                 <td>{{row.fundo}}</td>
+                                <td>{{row.lugar}}</td>
                                 <td>{{row.viaje}}</td>
                                 <td>{{row.guia}}</td>
                                 <td>{{row.semana}}</td>
@@ -101,7 +120,25 @@
 export default {
     data() {
         return {
+            consulta:{
+                desde: moment().startOf('month').format('YYYY-MM-DD'),
+                hasta: moment().endOf('month').format('YYYY-MM-DD')
+            },
             table: [],
+            header: [
+                { text: 'Productor', value: 'nombre_productor' },
+                { text: 'Fundo', value: 'nombre_fundo' },
+                { text: 'Lugar Producción', value: 'lugar_produccion' },
+                { text: 'N° Viaje', value: 'viaje' },
+                { text: 'N° Guia', value: 'guia' },
+                { text: 'Código Lugar Producción', value: 'cod_lugar_produccion' },
+                { text: 'Semana', value: 'semana' },
+                { text: 'Fecha Recepción', value: 'fecha_recepcion' },
+                { text: 'Hr. Ingreso Camión', value: 'hora_ingreso' },
+                { text: 'Fecha Proceso', value: 'fecha_proceso' },
+                { text: 'Materia', value: 'nombre_materia' },
+
+            ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,
             clientes: []
@@ -120,10 +157,7 @@ export default {
         },
         buscar(){
             axios.get(`${url_base}/reporte/acopio`,{
-                params: {
-                    fecha_recepcion: this.fecha_recepcion,
-                    cliente_id: this.cliente_id
-                }
+                params: this.consulta
             })
             .then(response => {
                 this.table=response.data;
