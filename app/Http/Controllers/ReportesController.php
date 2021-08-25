@@ -70,14 +70,16 @@ class ReportesController extends Controller
                         op.nom_operador,
                         op.ape_operador,
                         COUNT(*) conteo,
-                        LA.descripcion labor
+                        LA.descripcion labor,
+                        EC.fecha_empaque
                 FROM caja CA 
-                INNER JOIN lote_ingreso LI on LI.id=CA.lote_ingreso_id
+                INNER JOIN etiqueta_caja EC ON EC.id=CA.etiqueta_caja_id
+                INNER JOIN lote_ingreso LI on LI.id=EC.lote_ingreso_id
                 INNER JOIN rendimiento_personal RP ON RP.caja_id=CA.id
-                INNER JOIN labor LA ON LA.codigo_labor=RP.codigo_labor
-                INNER JOIN db_asistencia_produccion.operador op ON op.dni=RP.codigo_operador
-                WHERE LI.fecha_proceso=?
-                GROUP BY RP.codigo_operador
+                INNER JOIN (SELECT * FROM labor group by codigo_labor) LA ON LA.codigo_labor=RP.codigo_labor
+                LEFT JOIN db_asistencia_produccion.operador op ON op.dni=RP.codigo_operador
+                WHERE fecha_empaque=?
+                GROUP BY RP.codigo_operador,EC.fecha_empaque, RP.codigo_labor
                 ORDER BY conteo DESC";
         $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);      
         return response()->json($data);  
@@ -99,7 +101,7 @@ class ReportesController extends Controller
                         CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
                         LI.fecha_proceso,
                         MA.nombre_materia,
-                        VA.nombre_variedad variedad,
+                        VA.nombre_variedad,
                         LI.codigo lote_materia,
                         SUM(PE.num_jabas) numero_jabas,
                         SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas) peso_promedio_jaba,

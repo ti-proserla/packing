@@ -265,7 +265,6 @@ this.labores=this.palet.etapas==1 ?
                             break;
                         }
                     }
-                    console.log("hola",repetido);
 
                     if (repetido==1) {
                         this.alerta("Código repetido.");
@@ -282,7 +281,20 @@ this.labores=this.palet.etapas==1 ?
                                 break;
                             }
                         }
-                    
+
+                        var encontrado=0;
+                        for (let i = 0; i < this.labores.length; i++) {
+                            const labor = this.labores[i];
+                            if (labor.codigo==this.codigo_barras.substring(2,4)) {
+                                encontrado=1;
+                                break;
+                            }
+                        }
+                        if (encontrado==0) {
+                            repetido=1;
+                            this.alerta("Labor no admitida.");
+                        }
+
                         if (repetido==0) {
                             if (this.fila_codigos.length<this.palet.etapas) {
                                 this.fila_codigos.push(this.codigo_barras);

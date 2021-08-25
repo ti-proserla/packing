@@ -48,65 +48,6 @@
                     hide-default-footer
                     >
                 </v-data-table>
-                <v-simple-table
-                    class="table-lineal">
-                    <template v-slot:default>
-                        <thead>
-                            <tr>
-                                <th>Productor</th>
-                                <th>Fundo</th>
-                                <th>Lugar Producción</th>
-                                <th>Viaje</th>
-                                <th>Guia</th>
-                                <th>Semana</th>
-                                <th>Fecha Recepcion</th>
-                                <th>Hora Ingreso</th>
-                                <!-- <th>Fecha Proceso</th> -->
-                                <th>Materia</th>
-                                <th>Variedad</th>
-                                <!-- <th>Tipo</th> -->
-                                <th>Lote Materia</th>
-                                <th>Número Jabas</th>
-                                <th>Peso Promedio Jaba</th>
-                                <th>Peso Guia</th>
-                                <th>Peso Neto</th>
-                                <th>Peso Neto Proceso</th>
-                                <th>Descarte Granos</th>
-                                <th>Descarte Racimos</th>
-                                <th>Total Descarte</th>
-                                <th>Descarte Porcentaje</th>
-                                <th>Cantidad Jabas Descarte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(row,i) in table" :key="i">
-                                <td>{{row.cliente}}</td>
-                                <td>{{row.fundo}}</td>
-                                <td>{{row.lugar}}</td>
-                                <td>{{row.viaje}}</td>
-                                <td>{{row.guia}}</td>
-                                <td>{{row.semana}}</td>
-                                <td>{{row.fecha_recepcion}}</td>
-                                <td>{{row.hora_ingreso}}</td>
-                                <!-- <td>{{row.fecha_proceso}}</td> -->
-                                <td>{{row.materia}}</td>
-                                <td>{{row.variedad}}</td>
-                                <!-- <td>{{row.tipo}}</td> -->
-                                <td>{{row.lote_materia}}</td>
-                                <td>{{row.numero_jabas}}</td>
-                                <td>{{row.peso_promedio_jaba}}</td>
-                                <td>{{row.peso_guia}}</td>
-                                <td>{{row.peso_neto}}</td>
-                                <td>{{row.peso_neto_proceso}}</td>
-                                <td>{{row.descarte_granos}}</td>
-                                <td>{{row.descarte_racimos}}</td>
-                                <td>{{row.total_descarte}}</td>
-                                <td>{{row.descarte_porcentaje}}</td>
-                                <td>{{row.cantidad_jabas_descarte}}</td>
-                            </tr>
-                        </tbody>
-                    </template>
-                </v-simple-table>
             </v-card-text>
         </v-card>
     </v-container>
@@ -137,7 +78,13 @@ export default {
                 { text: 'Hr. Ingreso Camión', value: 'hora_ingreso' },
                 { text: 'Fecha Proceso', value: 'fecha_proceso' },
                 { text: 'Materia', value: 'nombre_materia' },
-
+                { text: 'Variedad', value: 'nombre_variedad' },
+                { text: 'Lote Materia', value: 'lote_materia' },
+                { text: 'Número de Jabas', value: 'numero_jabas' },
+                { text: 'Peso Prom. Jaba (Kg)', value: 'peso_promedio_jaba' },
+                { text: 'Peso Guia Campo (Kg)', value: 'peso_guia' },
+                { text: 'Peso Ingreso Planta (Kg)', value: 'peso_neto_proceso' },
+                { text: 'Peso Ingreso Proceso (Kg)', value: 'peso_neto_proceso' },
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,

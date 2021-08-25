@@ -170,16 +170,22 @@
                             </v-list-item-icon>
                         <v-list-item-content>Reportes</v-list-item-content>
                     </template>
+                    <v-list-item link to="/reporte/acopio">
+                        <v-list-item-content>
+                            Reporte Acopio 
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item link to="/reporte/avance-lote">
                         <v-list-item-content>
                             Reporte Avance Lote 
                         </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-list-item link to="/reporte/personal">
+                    <v-list-item link to="/reporte/personal">
                         <v-list-item-content>
                             Rendimiento Personal
                         </v-list-item-content>
                     </v-list-item>
+                    <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>
                             Reporte por Lote
