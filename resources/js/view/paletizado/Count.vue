@@ -171,6 +171,13 @@ export default {
             axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
             .then(response => {
                 this.palet=response.data
+this.labores=this.palet.etapas==1 ? 
+[{codigo: '01',descripcion: 'EMPAQUE'}] : 
+[
+                {codigo: '01',descripcion: 'EMPAQUE'},
+                {codigo: '02',descripcion: 'PESADO'},
+                {codigo: '03',descripcion: 'SELECCION'},
+            ];
                 var cajas=this.palet.cajas;
                 for (let i = 0; i < cajas.length; i++) {
                     const caja = cajas[i];
