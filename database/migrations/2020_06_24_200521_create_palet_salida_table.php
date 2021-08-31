@@ -23,6 +23,7 @@ class CreatePaletSalidaTable extends Migration
             $table->integer('operacion_id');
             $table->integer('nave')->nullable()->default(1);
             $table->integer('camara')->nullable();
+            $table->string('tipo_palet_id',3)->nullable();
             $table->timestamps();
         });
     }

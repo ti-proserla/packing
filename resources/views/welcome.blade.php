@@ -11,6 +11,11 @@
         {{-- <link rel="stylesheet" href="{{ asset('app.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('fontawesome-5/css/all.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <style>
+            *{
+                /* font-size: 14px */
+            }
+        </style>
     </head>
     <body>
         <div id="app">

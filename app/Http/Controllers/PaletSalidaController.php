@@ -37,8 +37,10 @@ class PaletSalidaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $paletSalida=new PaletSalida();
         $paletSalida->cliente_id=$request->cliente_id;
+        $paletSalida->tipo_palet_id=$request->tipo_palet_id;
         $paletSalida->etapas=$request->etapas;
         $paletSalida->nave=1;
         $paletSalida->camara=null;

@@ -6,8 +6,6 @@
                 <v-row>
                     <v-col cols="12" sm=3>
                         <v-text-field
-                            outlined
-                            dense
                             label="Desde:"
                             v-model="consulta.desde"
                             type="date">
@@ -15,8 +13,6 @@
                     </v-col>
                     <v-col cols="12" sm=3>
                         <v-text-field
-                            outlined
-                            dense
                             label="Hasta:"
                             v-model="consulta.hasta"
                             type="date">
@@ -37,10 +33,10 @@
                     </v-col>
                     <v-col cols="12" sm=2>
                         <v-btn color="info" @click="buscar">
-                            Buscar
+                            <i class="fas fa-search"></i>
                         </v-btn>
-                        <v-btn :href="excel">
-                            Excel
+                        <v-btn color="success" :href="excel">
+                            <i class="fas fa-file-excel"></i>
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -70,7 +66,7 @@ export default {
             },
             table: [],
             header: [
-                { text: 'Productor', value: 'nombre_productor' },
+                { text: 'Productor', value: 'nombre_productor'},
                 { text: 'Fundo', value: 'nombre_fundo' },
                 { text: 'Lugar Producción', value: 'lugar_produccion' },
                 { text: 'N° Viaje', value: 'viaje' },

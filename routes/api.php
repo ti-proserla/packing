@@ -32,6 +32,7 @@ Route::resource('marca-caja', 'MarcaCajaController');
 Route::resource('marca-empaque', 'MarcaEmpaqueController');
 Route::resource('tipo-empaque', 'TipoEmpaqueController');
 Route::resource('tipo', 'TipoController');
+Route::resource('tipo-palet', 'TipoPaletController');
 Route::post('operacion/addPalet', 'OperacionController@addPalet');
 Route::resource('operacion', 'OperacionController');
 Route::resource('produccion', 'ProduccionController');

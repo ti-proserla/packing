@@ -15,7 +15,7 @@
                             item-value="id">
                             </v-select>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" lg="4">
                         <v-select
                             outlined
                             dense
@@ -24,6 +24,17 @@
                             :items="procesos"
                             :item-text="proceso => `${proceso.descripcion}`"
                             item-value="etapas">
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="4">
+                        <v-select
+                            outlined
+                            dense
+                            v-model="palet_salida.tipo_palet_id"
+                            label="Tipo de Palet:"
+                            :items="tipos_palet"
+                            :item-text="tipo => `${tipo.descripcion}`"
+                            item-value="id">
                         </v-select>
                     </v-col>
                     <v-col>
@@ -60,14 +71,22 @@ export default {
                 {'etapas' : 1 , "descripcion" : "Solo Empaque"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
             ],
-            operaciones: []
+            operaciones: [],
+            tipos_palet: []
         }
     },
     mounted() {
         this.listarClientes();
         this.listarOperaciones();
+        this.listarTiposPalet();
     },
     methods: {
+        listarTiposPalet(){
+            axios.get(url_base+`/tipo-palet`)
+            .then(response => {
+                this.tipos_palet=response.data
+            });
+        },
         listarLoteIngreso(){
             axios.get(url_base+`/lote_ingreso?estado=Pendiente`)
             .then(response => {
