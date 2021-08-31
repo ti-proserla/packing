@@ -39,6 +39,9 @@
                         <v-btn color="info" @click="buscar">
                             Buscar
                         </v-btn>
+                        <v-btn :href="excel">
+                            Excel
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <v-data-table
@@ -88,12 +91,24 @@ export default {
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,
-            clientes: []
+            clientes: [],
+            header_excel: [
+                {
+                    label: 'Productor',
+                    field: 'nombre_productor',
+                },
+                // 'Productor': 'nombre_productor'
+            ]
         }
     },
     mounted() {
         this.listarClientes();
         this.buscar();
+    },
+    computed:{
+        excel(){
+            return `${url_base}/reporte/acopio?excel&desde=${this.consulta.desde}&hasta=${this.consulta.hasta}&cliente_id=${this.consulta.cliente_id}`
+        }
     },
     methods:{
         listarClientes(){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GeneralExcel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -98,13 +99,13 @@ class ReportesController extends Controller
                         FU.cod_lugar_produccion cod_lugar_produccion,
                         WEEK(SL.fecha_recepcion) semana,
                         DATE(SL.fecha_recepcion) fecha_recepcion,
-                        CONCAT(HOUR(SL.fecha_recepcion),':',MINUTE(SL.fecha_recepcion)) hora_ingreso,
+                        DATE_FORMAT(SL.fecha_recepcion,'%H:%i') hora_ingreso,
                         LI.fecha_proceso,
                         MA.nombre_materia,
                         VA.nombre_variedad,
                         LI.codigo lote_materia,
                         SUM(PE.num_jabas) numero_jabas,
-                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas) peso_promedio_jaba,
+                        ROUND(SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas),2) peso_promedio_jaba,
                         SL.peso_guia,
                         SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto,
                         SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto_proceso,
@@ -127,8 +128,11 @@ class ReportesController extends Controller
                 AND DATE(SL.fecha_recepcion)<=?
                 GROUP BY LI.id, SL.id";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
-
-        return response()->json($data);  
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Acopio $desde - $hasta.xlsx");
+        }else{
+            return response()->json($data);  
+        }
     }
 
     public function avance_lote(Request $request){
