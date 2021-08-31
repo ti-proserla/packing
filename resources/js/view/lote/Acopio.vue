@@ -15,6 +15,7 @@
                                 <th>Materia</th>
                                 <th>Variedad</th>
                                 <th>Cosecha</th>
+                                <th>Fecha Proceso</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,12 +25,43 @@
                                 <td>{{ lote.nombre_materia}}</td>
                                 <td>{{ lote.nombre_variedad }}</td>
                                 <td>{{ lote.fecha_cosecha }}</td>
+                                <td>{{ lote.fecha_proceso }}
+                                    <v-btn 
+                                        text
+                                        @click="abrir_actualizar(lote.id)">
+                                        <i class="fas fa-pen"></i>
+                                    </v-btn>
+                                </td>
                             </tr>
                         </tbody>
                     </template>
                 </v-simple-table>
             </v-card-text>
         </v-card>
+        <!-- Editar -->
+        <v-dialog v-model="open_editar" persistent max-width="350">
+            <v-card>
+                <v-card-title class="headline">Fecha Producción</v-card-title>
+                <v-card-text>
+                    <v-text-field 
+                        label="Fecha" 
+                        v-model="lote_editar.fecha_proceso"
+                    ></v-text-field>
+                    <div class="text-right mt-3">
+                        <v-btn 
+                            outlined 
+                            color="secondary" 
+                            @click="open_editar=false"
+                            >Cancelar</v-btn>
+                        <v-btn 
+                            outlined 
+                            color="primary" 
+                            @click="actualizar()"
+                            >Guardar</v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>               
+        </v-dialog>
         <v-btn
             dark
             fab
@@ -52,7 +84,12 @@
 export default {
     data() {
         return {
-            lotes_ingreso: []
+            lotes_ingreso: [],
+            lote_editar: {
+                lote_ingreso_id: 0,
+                fecha_proceso: moment().format('YYYY-MM-DD')
+            },
+            open_editar: false
         }
     },
     mounted() {
@@ -67,6 +104,35 @@ export default {
         },
         nuevo(){
             this.$router.push('/acopio/lote/new');
+        },
+        abrir_actualizar(id){
+            this.lote_editar.lote_ingreso_id=id;
+            this.open_editar=true;
+        },
+        actualizar(){
+            axios.post(url_base+`/lote_ingreso/${this.lote_editar.lote_ingreso_id}?_method=PUT`,this.lote_editar)
+            .then(response => {
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case 'OK':
+                        swal("Lote Actualizado", { 
+                            icon: "success", 
+                            timer: 2000, 
+                            buttons: false
+                        });
+                        this.open_editar=false;
+                        this.listarLotes();
+                        break;
+                    case 'VALIDATION':
+                        this.error_editar=respuesta.data;
+                        break;
+                    case 'ERROR':
+                        break;
+                    default:
+
+                        break;
+                }
+            });
         }
     },
 }
