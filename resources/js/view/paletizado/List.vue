@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-card>
-            <v-card-title>LISTA DE PALETS POR LOTES</v-card-title>
+            <v-card-title>LISTA DE PALETS</v-card-title>
         </v-card>
         <v-btn
             fab
@@ -22,6 +22,9 @@
                         <div class="text-center">
                             <v-btn :to="`/paletizado/${lote.id}`"
                                 color="primary">Ver</v-btn>
+                            <v-btn @click="print(lote.id)">
+                                IMPRIMIR
+                            </v-btn>
                         </div>
                     </v-card-text>
                 </v-card>
@@ -41,7 +44,9 @@
 export default {
     data() {
         return {
-            lotes: []
+            lotes: [],
+            printer_select: null,
+            zpl: '',
         }
     },
     methods: {
@@ -51,8 +56,22 @@ export default {
     },
     mounted() {
         this.listar();
+        var t = this;
+        BrowserPrint.getDefaultDevice("printer", function(device){
+            t.printer_select=device;
+        });
     },
     methods:{
+        print(id){
+            axios.get(url_base+`/print/zpl/palet_salida?palet_id=`+id)
+            .then(response => {
+                var zplPrint=response.data;
+                console.log(zplPrint);
+                this.printer_select.send(zplPrint, undefined, function(errorMessage){
+                    alert("Error: " + errorMessage);	
+                });
+            });
+        },
         listar(){
             axios.get(url_base+`/palet_salida?estado=Pendiente,Cerrado`)
             .then(response => {

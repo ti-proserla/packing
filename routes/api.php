@@ -63,12 +63,14 @@ Route::patch('lanzado','LanzadoController@palet_entrada');
 Route::get('rendimiento-personal', 'ReportesController@rendimiento_personal');
 Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
+Route::get('reporte/producto-terminado', 'ReportesController@producto_terminado');
 Route::get('reporte/acopio', 'ReportesController@acopio');
 Route::get('reporte/avance_lote', 'ReportesController@avance_lote');
 Route::get('reporte/avance_personal', 'ReportesController@avance_personal');
 Route::get('print/muestra_etiqueta_caja', 'PrintZPLController@muestra_etiqueta_caja');
 Route::get('print/cajas', 'PrintZPLController@caja_palet');
 Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
+Route::get('print/zpl/palet_salida', 'PrintZPLController@palet_salida');
 Route::get('print/zpl/palet_entrada', 'PrintZPLController@palet_entrada');
 Route::get('print/zpl/palet_entrada/all', 'PrintZPLController@palet_entrada_all');
 

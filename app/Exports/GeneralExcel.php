@@ -21,7 +21,7 @@ class GeneralExcel implements FromArray, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         $header=[];
-        if (count($header)>0) {
+        if (count($this->datos)>0) {
             foreach ($this->datos[0] as $key => $value) {
                 array_push($header,ucwords(strtolower(str_replace("_"," ",$key))));
             }

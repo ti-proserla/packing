@@ -95,6 +95,14 @@
                         Cliente
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/campania">
+                    <v-list-item-icon>
+                        <i class="far fa-calendar-check"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Campaña
+                    </v-list-item-content>
+                </v-list-item>
             </v-list-group>
             
             <!-- <v-list-item link to="/tipo">
@@ -183,6 +191,11 @@
                     <v-list-item link to="/reporte/personal">
                         <v-list-item-content>
                             Rendimiento Personal
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/reporte/producto-terminado">
+                        <v-list-item-content>
+                            Producto Terminado
                         </v-list-item-content>
                     </v-list-item>
                     <!-- 

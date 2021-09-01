@@ -134,6 +134,40 @@ class ReportesController extends Controller
             return response()->json($data);  
         }
     }
+    public function producto_terminado(Request $request){
+        $cliente_id=$request->cliente_id;
+        $desde=$request->desde;
+        $hasta=$request->hasta;
+        $queryProductor="";
+        $query="SELECT 	EC.fecha_empaque,
+                        PS.tipo_palet_id,
+                        PS.numero,
+                        CAL.nombre_calibre,
+                        CAT.nombre_categoria,
+                        FUN.cod_cartilla codigo_fundo,
+                        VAR.cod_cartilla codigo_variedad,
+                        DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) juliano,
+                        LI.codigo codigo_lote,
+                        CL.descripcion nombre_productor,
+                        PS.id palet_id,
+                        COUNT(CA.id) numero_cajas
+                FROM palet_salida PS 
+                INNER JOIN cliente CL ON PS.cliente_id=CL.id
+                INNER JOIN caja CA ON CA.palet_salida_id=PS.id
+                INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
+                INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
+                INNER JOIN categoria CAT ON CAT.id = EC.categoria_id
+                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
+                INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
+                INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
+                GROUP BY PS.id ";
+        $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Producto Terminado $desde - $hasta.xlsx");
+        }else{
+            return response()->json($data);  
+        }
+    }
 
     public function avance_lote(Request $request){
         $fecha_produccion=$request->fecha_produccion;

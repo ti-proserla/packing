@@ -6,8 +6,6 @@
                 <v-row>
                     <v-col cols=12 lg=6>
                         <v-select
-                            outlined
-                            dense
                             v-model="palet_salida.cliente_id"
                             label="Cliente:"
                             :items="clientes"
@@ -17,8 +15,6 @@
                     </v-col>
                     <v-col cols="12" lg="6">
                         <v-select
-                            outlined
-                            dense
                             v-model="palet_salida.etapas"
                             label="Procesos:"
                             :items="procesos"
@@ -28,8 +24,6 @@
                     </v-col>
                     <v-col cols="12" lg="4">
                         <v-select
-                            outlined
-                            dense
                             v-model="palet_salida.tipo_palet_id"
                             label="Tipo de Palet:"
                             :items="tipos_palet"
@@ -39,8 +33,6 @@
                     </v-col>
                     <v-col>
                         <v-select
-                            outlined
-                            dense
                             v-model="palet_salida.campania_id"
                             label="Campañas:"
                             :items="campanias"

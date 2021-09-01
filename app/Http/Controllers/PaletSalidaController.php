@@ -37,7 +37,6 @@ class PaletSalidaController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;

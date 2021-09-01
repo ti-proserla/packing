@@ -310,87 +310,67 @@ class PrintZPLController extends Controller
     }
     public function palet_Salida(Request $request){
         $ip_print = $request->ip_print;
-        $palet_entrada_id=$request->palet_entrada_id;
+        $palet_id=$request->palet_id;
 
-        $w_etiqueta=410;
-        if ($this->ping($ip_print)){            
-            $string_zpl="^XA
-                            ^FT25,30
-                            ^AAN,21,10
-                            ^FB360,1,0,C
-                            ^FD[empresa]^FS
-                            
-                            ^FT140,70
-                            ^AAN,21,10
-                            ^FD[variedad]^FS
-                            
-                            ^FT140,100
-                            ^AAN,21,10
-                            ^FDN. Jabas: [num_jabas]^FS
+        $string_zpl="^XA
+                    ~TA000
+                    ~JSN
+                    ^LT0
+                    ^MNW
+                    ^MTT
+                    ^PON
+                    ^PMN
+                    ^LH0,0
+                    ^JMA
+                    ^PR8,8
+                    ~SD15
+                    ^JUS
+                    ^LRN
+                    ^CI27
+                    ^PA0,1,1,0
+                    ^XZ
+                    ^XA
+                    ^MMT
+                    ^PW831
+                    ^LL1624
+                    ^LS0
+                    ^FO143,4^GB0,1620,5^FS
+                    ^FT49,1604^A0B,23,23^FH\^CI28^FDEXPORTED^FS^CI27
+                    ^FT100,1414^A0B,51,51^FH\^CI28^FD[nombre_productor]^FS^CI27
+                    ^FT195,1604^A0B,23,23^FH\^CI28^FDPACKED AND PROCESSED^FS^CI27
+                    ^FT290,1062^A0B,51,51^FB500,1,13,C^FH\^CI28^FDJAYANCA FRUITS S.A.C^FS^CI27
+                    ^FO318,4^GB0,1620,5^FS
+                    ^FO516,4^GB0,1620,5^FS
+                    ^FT451,1504^A0B,51,51^FB623,1,13,C^FH\^CI28^FDN° DE PALET:  [codigo_palet]^FS^CI27
+                    ^FT359,187^BQN,2,6
+                    ^FH\^FDLA,[palet_id]^FS
+                    ^FO659,4^GB0,1620,5^FS
+                    ^FO516,789^GB311,0,5^FS
+                    ^FT609,745^A0B,37,38^FH\^CI28^FDN° BOXES^FS^CI27
+                    ^FO516,453^GB311,0,5^FS
+                    ^FT609,413^A0B,37,38^FH\^CI28^FD[numero_cajas]^FS^CI27
+                    ^PQ1,0,1,Y
+                    ^XZ";
 
-                            ^FT140,130
-                            ^AAN,21,10
-                            ^FDN. Viaje: [viaje]^FS
-                            
-                            ^FT25,160
-                            ^AAN,30,15
-                            ^FB360,1,0,R
-                            ^FD[num_palet]^FS
-                        
-                            ^FT20,170
-                            ^BQN,2,5
-                            ^FDMA,P-[palet_id]^FS
-                        ^XZ";
-            $string_zpl=str_replace('^XA','',$string_zpl);
-            $string_zpl=str_replace('^XZ','',$string_zpl);
-
-            $query="SELECT 	PE.num_palet,
-                            codigo, 
-                            CL.descripcion empresa,
-                            PE.peso peso, 
-                            VA.nombre_variedad variedad,
-                            PE.num_jabas,
-                            SL.viaje,
-                            PE.id palet_id
-                    FROM lote_ingreso LI 
-                    INNER JOIN cliente CL ON CL.id=LI.cliente_id
-                    INNER JOIN sub_lote SL ON SL.lote_id=LI.id
-                    INNER JOIN palet_entrada PE ON PE.sub_lote_id=SL.id
-                    INNER JOIN variedad VA on LI.variedad_id=VA.id
-                    WHERE PE.id=?
-                    ORDER BY palet_id DESC";
-            $data=DB::select(DB::raw("$query"),[$palet_entrada_id]);
-            $string_zpl_new="";
-
-            $columna=1;
-            
-            for ($i=0; $i < count($data)/$columna; $i++) {
-                $recorrido=($i+1)*$columna<count($data) ? $columna : (count($data)-($i)*$columna);
-                $string_zpl_new.="^XA";
-                for ($j=0; $j < $recorrido; $j++) {
-                    
-                    $string_zpl_bk=$this->columnaEtiqueta($string_zpl,$j);
-                    foreach($data[$i*$columna+$j] as $key=>$value){
-                        $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
-                    }
-                    $string_zpl_new.=$string_zpl_bk;
-                }
-                $string_zpl_new.="^XZ";
-            }            
-            
-            $this->print_red($ip_print,9100,$string_zpl_new);
-
-            return response()->json([
-                "status" => "OK",
-                "data"   => "Imprimiendo."
-            ]);
+            $query="SELECT 	CL.descripcion nombre_productor, 
+                                CONCAT(LPAD(PS.numero,6,'0'),'-',CL.cod_cartilla) codigo_palet,
+                                PS.id palet_id,
+                                CAL.nombre_calibre,
+                                COUNT(CA.id) numero_cajas
+                    FROM palet_salida PS 
+                    INNER JOIN cliente CL ON PS.cliente_id=CL.id
+                    INNER JOIN caja CA ON CA.palet_salida_id=PS.id
+                    INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
+                    INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
+                    WHERE PS.id=?";
+        $data=DB::select(DB::raw("$query"),[$palet_id])[0];
+        // dd($data);
+        $data=json_decode(json_encode($data), true);
+        
+        foreach($data as $key=>$value){
+            $string_zpl=str_replace('['.$key.']',$value,$string_zpl);
         }
-        else {
-            return response()->json([
-                "status"    => "ERROR",
-                "data"      => "Impresora Desconectada."
-            ]);
-        }
+        return response()->json($string_zpl);
     }
 
     public function columnaEtiqueta($zpl,$columna,$width=420)
