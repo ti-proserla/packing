@@ -12,9 +12,25 @@
                             type="date">
                         </v-text-field>
                     </v-col>
+                    <v-col>
+                        <v-select
+                            @change="buscar"
+                                outlined
+                                dense
+                                v-model="codigo_labor"
+                                label="Productor:"
+                                :items="labores"
+                                item-text="descripcion"
+                                item-value="codigo"
+                                >
+                                </v-select>
+                    </v-col>
                     <v-col cols="12" sm=4>
                         <v-btn color="info" @click="buscar">
                             Buscar
+                        </v-btn>
+                        <v-btn color="success" :href="excel">
+                            <i class="fas fa-file-excel"></i>
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -29,6 +45,9 @@
                                 <th>Apellidos</th>
                                 <th>Conteo</th>
                                 <th>Labor</th>
+                                <th>Primera Lectura</th>
+                                <th>Ultima Lectura</th>
+                                <th>Diferencia</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,6 +60,9 @@
                                 <td>{{ fila.ape_operador }}</td>
                                 <td>{{ fila.conteo }}</td>
                                 <td>{{ fila.labor }}</td>
+                                <td>{{ fila.primera_lectura }}</td>
+                                <td>{{ fila.ultima_lectura }}</td>
+                                <td>{{ fila.diferencia }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -59,17 +81,29 @@ export default {
     data() {
         return {
             datos: [],
+            labores: [
+                {codigo: '01',descripcion: 'EMPAQUE'},
+                {codigo: '02',descripcion: 'PESADO'},
+                {codigo: '03',descripcion: 'SELECCION'},
+            ],
+            codigo_labor: '01',
             fecha_produccion: moment().format('YYYY-MM-DD')
         }
     },
     mounted() {
         this.buscar();
     },
+    computed:{
+        excel(){
+            return `${url_base}/rendimiento-personal?excel&fecha_produccion=${this.fecha_produccion}&codigo_labor=${this.codigo_labor}`
+        }
+    },
     methods:{
         buscar(){
             axios.get(`${url_base}/rendimiento-personal`,{ 
                 params: {
-                    fecha_produccion: this.fecha_produccion
+                    fecha_produccion: this.fecha_produccion,
+                    codigo_labor: this.codigo_labor
                 }
             })
             .then(response => {

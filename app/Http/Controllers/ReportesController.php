@@ -66,13 +66,18 @@ class ReportesController extends Controller
         return response()->json($data);  
     }
     public function rendimiento_personal(Request $request){
+        $fecha_produccion=$request->fecha_produccion;
+        $query_labor=($request->has('codigo_labor')) ? "AND RP.codigo_labor=".$request->codigo_labor : "";
         $query="SELECT 
                         RP.codigo_operador,
                         op.nom_operador,
                         op.ape_operador,
                         COUNT(*) conteo,
                         LA.descripcion labor,
-                        EC.fecha_empaque
+                        EC.fecha_empaque,
+                        DATE_FORMAT(MIN(RP.created_at),'%H:%i') primera_lectura,
+                        DATE_FORMAT(MAX(RP.created_at),'%H:%i') ultima_lectura,				 
+                        TIMESTAMPDIFF(MINUTE, MIN(RP.created_at), MAX(RP.created_at))/60 diferencia
                 FROM caja CA 
                 INNER JOIN etiqueta_caja EC ON EC.id=CA.etiqueta_caja_id
                 INNER JOIN lote_ingreso LI on LI.id=EC.lote_ingreso_id
@@ -80,10 +85,15 @@ class ReportesController extends Controller
                 INNER JOIN (SELECT * FROM labor group by codigo_labor) LA ON LA.codigo_labor=RP.codigo_labor
                 LEFT JOIN db_asistencia_produccion.operador op ON op.dni=RP.codigo_operador
                 WHERE fecha_empaque=?
+                $query_labor
                 GROUP BY RP.codigo_operador,EC.fecha_empaque, RP.codigo_labor
                 ORDER BY conteo DESC";
-        $data=DB::select(DB::raw("$query"),[$request->fecha_produccion]);      
-        return response()->json($data);  
+        $data=DB::select(DB::raw("$query"),[$fecha_produccion]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Rendimiento Personal $fecha_produccion.xlsx");
+        }else{
+            return response()->json($data);  
+        }   
     }
     public function acopio(Request $request){
         $cliente_id=$request->cliente_id;

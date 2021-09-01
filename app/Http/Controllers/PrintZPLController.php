@@ -229,7 +229,6 @@ class PrintZPLController extends Controller
         $palet_entrada_id=$request->palet_entrada_id;
 
         $w_etiqueta=410;
-        if ($this->ping($ip_print)){            
             $string_zpl="^XA
                             ^FT25,30
                             ^AAN,21,10
@@ -293,7 +292,8 @@ class PrintZPLController extends Controller
                 }
                 $string_zpl_new.="^XZ";
             }            
-            
+
+        if ($this->ping($ip_print)){               
             $this->print_red($ip_print,9100,$string_zpl_new);
 
             return response()->json([

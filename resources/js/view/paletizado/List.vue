@@ -13,6 +13,15 @@
               <v-icon>+</v-icon>
         </v-btn>
         <v-row>
+            <v-col cols="12">
+                <v-data-table
+                    class="table-lineal"
+                    :headers="header"
+                    :items="lotes"
+                    hide-default-footer
+                    >
+                </v-data-table>
+            </v-col>
             <v-col sm=4 cols="12" v-for="(lote,i) in lotes" :key="i">
                 <v-card>
                     <v-card-text>
@@ -30,8 +39,6 @@
                 </v-card>
             </v-col>
         </v-row>
-
-        
     </v-container>
 </template>
 <style>
@@ -47,6 +54,7 @@ export default {
             lotes: [],
             printer_select: null,
             zpl: '',
+            header: []
         }
     },
     methods: {
