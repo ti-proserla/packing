@@ -308,6 +308,90 @@ class PrintZPLController extends Controller
             ]);
         }
     }
+    public function palet_Salida(Request $request){
+        $ip_print = $request->ip_print;
+        $palet_entrada_id=$request->palet_entrada_id;
+
+        $w_etiqueta=410;
+        if ($this->ping($ip_print)){            
+            $string_zpl="^XA
+                            ^FT25,30
+                            ^AAN,21,10
+                            ^FB360,1,0,C
+                            ^FD[empresa]^FS
+                            
+                            ^FT140,70
+                            ^AAN,21,10
+                            ^FD[variedad]^FS
+                            
+                            ^FT140,100
+                            ^AAN,21,10
+                            ^FDN. Jabas: [num_jabas]^FS
+
+                            ^FT140,130
+                            ^AAN,21,10
+                            ^FDN. Viaje: [viaje]^FS
+                            
+                            ^FT25,160
+                            ^AAN,30,15
+                            ^FB360,1,0,R
+                            ^FD[num_palet]^FS
+                        
+                            ^FT20,170
+                            ^BQN,2,5
+                            ^FDMA,P-[palet_id]^FS
+                        ^XZ";
+            $string_zpl=str_replace('^XA','',$string_zpl);
+            $string_zpl=str_replace('^XZ','',$string_zpl);
+
+            $query="SELECT 	PE.num_palet,
+                            codigo, 
+                            CL.descripcion empresa,
+                            PE.peso peso, 
+                            VA.nombre_variedad variedad,
+                            PE.num_jabas,
+                            SL.viaje,
+                            PE.id palet_id
+                    FROM lote_ingreso LI 
+                    INNER JOIN cliente CL ON CL.id=LI.cliente_id
+                    INNER JOIN sub_lote SL ON SL.lote_id=LI.id
+                    INNER JOIN palet_entrada PE ON PE.sub_lote_id=SL.id
+                    INNER JOIN variedad VA on LI.variedad_id=VA.id
+                    WHERE PE.id=?
+                    ORDER BY palet_id DESC";
+            $data=DB::select(DB::raw("$query"),[$palet_entrada_id]);
+            $string_zpl_new="";
+
+            $columna=1;
+            
+            for ($i=0; $i < count($data)/$columna; $i++) {
+                $recorrido=($i+1)*$columna<count($data) ? $columna : (count($data)-($i)*$columna);
+                $string_zpl_new.="^XA";
+                for ($j=0; $j < $recorrido; $j++) {
+                    
+                    $string_zpl_bk=$this->columnaEtiqueta($string_zpl,$j);
+                    foreach($data[$i*$columna+$j] as $key=>$value){
+                        $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
+                    }
+                    $string_zpl_new.=$string_zpl_bk;
+                }
+                $string_zpl_new.="^XZ";
+            }            
+            
+            $this->print_red($ip_print,9100,$string_zpl_new);
+
+            return response()->json([
+                "status" => "OK",
+                "data"   => "Imprimiendo."
+            ]);
+        }
+        else {
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Impresora Desconectada."
+            ]);
+        }
+    }
 
     public function columnaEtiqueta($zpl,$columna,$width=420)
     {
