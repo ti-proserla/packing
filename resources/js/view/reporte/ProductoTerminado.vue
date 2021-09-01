@@ -3,6 +3,13 @@
         <v-card>
             <v-card-title>Reporte Producto Terminado</v-card-title>              
             <v-card-text>
+                <v-row>
+                    <v-col cols="12">
+                        <v-btn color="success" :href="excel">
+                            <i class="fas fa-file-excel"></i>
+                        </v-btn>
+                    </v-col>
+                </v-row>
                 <!-- <v-row>
                     <v-col cols="12" sm=3>
                         <v-text-field
@@ -72,6 +79,7 @@ export default {
                 { text: 'N° Palet', value: 'numero'},
                 { text: 'Calibre', value: 'nombre_calibre'},
                 { text: 'Categoria', value: 'nombre_categoria'},
+                { text: 'Presentación', value: 'nombre_presentacion'},
                 { text: 'Cod. Fundo', value: 'codigo_fundo'},
                 { text: 'Cod. Variedad', value: 'codigo_variedad'},
                 { text: 'Juliano', value: 'juliano'},
@@ -96,7 +104,7 @@ export default {
     },
     computed:{
         excel(){
-            return `${url_base}/reporte/acopio?excel&desde=${this.consulta.desde}&hasta=${this.consulta.hasta}&cliente_id=${this.consulta.cliente_id}`
+            return `${url_base}/reporte/producto-terminado?excel`
         }
     },
     methods:{
