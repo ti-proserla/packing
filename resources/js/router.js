@@ -22,6 +22,10 @@ var routes =[
         component: require('./view/materia.vue').default,
     },
     {
+        path: '/campania',
+        component: require('./view/campania.vue').default
+    },
+    {
         path: '/variedad',
         component: require('./view/variedad.vue').default
     },

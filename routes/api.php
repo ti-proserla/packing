@@ -23,6 +23,7 @@ Route::get('materia/variedad', 'MateriaController@variedad');
 Route::get('materia/detallado', 'MateriaController@detallado');
 Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
+Route::resource('campania', 'CampaniaController');
 Route::resource('variedad', 'VariedadController');
 Route::resource('calibre', 'CalibreController');
 Route::resource('categoria', 'CategoriaController');

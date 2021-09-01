@@ -14,13 +14,13 @@ class CreateCampaniaTable extends Migration
     public function up()
     {
         Schema::create('campania', function (Blueprint $table) {
-            $table->id();
-            $table->integer('materia_id');
-            $table->integer('productor_id');
-            $table->integer('anio');
-            $table->integer('conteo_palet_terminado')->default(0);
-            $table->integer('conteo_palet_saldo')->default(0);
+            $table->string('id',5);
             $table->string('estado',30)->default('Abierto'); //Cerrado
+            $table->integer('materia_id');
+            $table->integer('anio');
+            // $table->integer('productor_id');
+            // $table->integer('conteo_palet_terminado')->default(0);
+            // $table->integer('conteo_palet_saldo')->default(0);
             $table->timestamps();
         });
     }

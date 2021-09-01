@@ -15,15 +15,16 @@ class CreatePaletSalidaTable extends Migration
     {
         Schema::create('palet_salida', function (Blueprint $table) {
             $table->id();
+            $table->string('campania_id',5)->nullable();
+            $table->string('tipo_palet_id',3)->nullable();
             $table->integer('cliente_id');
-            $table->integer('etapas');
             $table->integer('numero')->nullable();
+            $table->integer('etapas');
             $table->string('estado',30); //Abierto, Cerrado
             $table->date('fecha_cierre'); // Cierre de palet , fecha sistema.
             $table->integer('operacion_id');
             $table->integer('nave')->nullable()->default(1);
             $table->integer('camara')->nullable();
-            $table->string('tipo_palet_id',3)->nullable();
             $table->timestamps();
         });
     }

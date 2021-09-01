@@ -12,9 +12,18 @@ class CampaniaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->has('all')) {
+            $campanias=Campania::join('materia','materia.id','=','campania.materia_id')
+                                ->select('campania.*','materia.nombre_materia')
+                                ->get();
+        }else{
+            $campanias=Campania::join('materia','materia.id','=','campania.materia_id')
+                        ->select('campania.*','materia.nombre_materia')
+                        ->paginate(10); 
+        }
+        return response()->json($campanias);
     }
 
     /**
@@ -36,11 +45,15 @@ class CampaniaController extends Controller
     public function store(Request $request)
     {
         $campania=new Campania();
+        $campania->id=$request->id;
         $campania->materia_id=$request->materia_id;
-        $campania->productor_id=$request->productor_id;
         $campania->anio=$request->anio;
-        $campania->conteo_palet_saldo=$request->conteo_palet_saldo;
-        $campania->conteo_palet_terminado=$request->conteo_palet_terminado;
+        $campania->estado="Abierto";
+        $campania->save();
+        return response()->json([
+            "status" => "OK",
+            "message"=> "Campaña Registrada."
+        ]);
     }
 
     /**

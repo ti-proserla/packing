@@ -1,21 +1,21 @@
 <template>
     <v-container fluid>
         <v-card>
-            <v-card-title>Nuevo Palet Salida</v-card-title>              
+            <v-card-title>Nuevo Palet</v-card-title>              
             <v-card-text>
                 <v-row>
-                    <v-col cols=12 sm=6>
+                    <v-col cols=12 lg=6>
                         <v-select
                             outlined
                             dense
                             v-model="palet_salida.cliente_id"
-                            label="Cliente - Lote:"
+                            label="Cliente:"
                             :items="clientes"
                             :item-text="cliente => `${cliente.descripcion}`"
                             item-value="id">
                             </v-select>
                     </v-col>
-                    <v-col cols="12" lg="4">
+                    <v-col cols="12" lg="6">
                         <v-select
                             outlined
                             dense
@@ -41,10 +41,10 @@
                         <v-select
                             outlined
                             dense
-                            v-model="palet_salida.operacion_id"
-                            label="Procesos:"
-                            :items="operaciones"
-                            :item-text="operacion => `${operacion.descripcion}`"
+                            v-model="palet_salida.campania_id"
+                            label="Campañas:"
+                            :items="campanias"
+                            :item-text="campania => `${campania.id} - ${campania.nombre_materia}`"
                             item-value="id">
                         </v-select>
                     </v-col>
@@ -67,6 +67,7 @@ export default {
             },
             productos: [],
             clientes: [],
+            campanias: [],
             procesos: [
                 {'etapas' : 1 , "descripcion" : "Solo Empaque"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
@@ -79,12 +80,19 @@ export default {
         this.listarClientes();
         this.listarOperaciones();
         this.listarTiposPalet();
+        this.listarTiposCampanias();
     },
     methods: {
         listarTiposPalet(){
             axios.get(url_base+`/tipo-palet`)
             .then(response => {
                 this.tipos_palet=response.data
+            });
+        },
+        listarTiposCampanias(){
+            axios.get(url_base+`/campania?all&estado=Abierto`)
+            .then(response => {
+                this.campanias=response.data
             });
         },
         listarLoteIngreso(){

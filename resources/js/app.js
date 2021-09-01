@@ -65,9 +65,9 @@ window.store=new Vuex.Store({
   },
 });
 
-import VueExcelXlsx from "vue-excel-xlsx";
+// import VueExcelXlsx from "vue-excel-xlsx";
  
-Vue.use(VueExcelXlsx);
+// Vue.use(VueExcelXlsx);
 
 
 import { VTextField } from 'vuetify/lib';

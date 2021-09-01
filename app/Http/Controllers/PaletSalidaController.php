@@ -39,8 +39,9 @@ class PaletSalidaController extends Controller
     {
         // dd($request->all());
         $paletSalida=new PaletSalida();
-        $paletSalida->cliente_id=$request->cliente_id;
+        $paletSalida->campania_id=$request->campania_id;
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
+        $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;
         $paletSalida->nave=1;
         $paletSalida->camara=null;
@@ -98,10 +99,12 @@ class PaletSalidaController extends Controller
         switch ($request->estado) {
             case 'Cerrado':
                 $paletSalida=PaletSalida::where('id',$id)->first();
-                $cliente=Cliente::where('id',$paletSalida->cliente_id)->first();
-                $cliente->conteo_palets=$cliente->conteo_palets+1;
-                $cliente->save();
-                $paletSalida->numero=$cliente->conteo_palets;
+                $conteo=PaletSalida::where('estado','Cerrado')
+                    ->where('tipo_palet_id',$paletSalida->tipo_palet_id)
+                    ->where('campania_id',$paletSalida->campania_id)
+                    ->where('cliente_id',$paletSalida->cliente_id)
+                    ->count();
+                $paletSalida->numero=$conteo+1;
                 $paletSalida->estado=$request->estado;
                 $paletSalida->fecha_cierre=Carbon::now();
                 $paletSalida->save();
