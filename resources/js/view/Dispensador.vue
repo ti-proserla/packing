@@ -11,8 +11,6 @@
                             <v-row>
                                 <v-col cols="12">
                                     <v-select
-                                        outlined
-                                        dense
                                         v-model="printing_local"
                                         label="Printers:"
                                         :items="[

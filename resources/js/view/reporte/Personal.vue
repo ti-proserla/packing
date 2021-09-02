@@ -5,8 +5,6 @@
                 <v-row>
                     <v-col cols="12" sm=4>
                         <v-text-field
-                            outlined
-                            dense
                             label="Fecha Producción"
                             v-model="fecha_produccion"
                             type="date">
@@ -15,15 +13,13 @@
                     <v-col>
                         <v-select
                             @change="buscar"
-                                outlined
-                                dense
-                                v-model="codigo_labor"
-                                label="Productor:"
-                                :items="labores"
-                                item-text="descripcion"
-                                item-value="codigo"
-                                >
-                                </v-select>
+                            v-model="codigo_labor"
+                            label="Productor:"
+                            :items="labores"
+                            item-text="descripcion"
+                            item-value="codigo"
+                            >
+                            </v-select>
                     </v-col>
                     <v-col cols="12" sm=4>
                         <v-btn color="info" @click="buscar">

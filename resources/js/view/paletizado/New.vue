@@ -141,7 +141,4 @@ export default {
     },
 }
 
-function errorCB(tx, err) {
-  console.log(err);  
-}
 </script>
