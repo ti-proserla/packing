@@ -37,6 +37,7 @@ Route::resource('tipo-palet', 'TipoPaletController');
 Route::post('operacion/addPalet', 'OperacionController@addPalet');
 Route::resource('operacion', 'OperacionController');
 Route::resource('produccion', 'ProduccionController');
+Route::resource('descarte', 'DescarteController');
 Route::resource('etiqueta-caja', 'EtiquetaCajaController');
 
 Route::get('fundo/detallado', 'FundoController@detallado');

@@ -17,6 +17,18 @@ class LoteIngresoController extends Controller
      */
     public function index(Request $request)
     {
+
+        if ($request->has('descarte')) {
+            $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
+                ->join('materia','materia.id','=','lote_ingreso.materia_id')
+                ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
+                ->leftJoin('tipo','tipo.id','=','lote_ingreso.tipo_id')
+                ->leftJoin('descarte as DE','DE.lote_id','=','lote_ingreso.id')
+                ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad','tipo.nombre_tipo')
+                ->whereNull('DE.id')
+                ->get();
+            return response()->json($lotesIngreso);
+        }
         $lotesIngreso=LoteIngreso::join('cliente','cliente.id','=','lote_ingreso.cliente_id')
             ->join('materia','materia.id','=','lote_ingreso.materia_id')
             ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')

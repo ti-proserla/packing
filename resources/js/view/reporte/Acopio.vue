@@ -4,21 +4,21 @@
             <v-card-title>Reporte Acopio</v-card-title>              
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" sm=3>
+                    <v-col cols="12" sm=6 lg="3">
                         <v-text-field
                             label="Desde:"
                             v-model="consulta.desde"
                             type="date">
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" sm=3>
+                    <v-col cols="12" sm=6 lg="3">
                         <v-text-field
                             label="Hasta:"
                             v-model="consulta.hasta"
                             type="date">
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" sm=4>
+                    <v-col cols="12" sm=8 lg="4">
                         <v-select
                             @change="buscar"
                                 outlined
@@ -31,7 +31,7 @@
                                 >
                                 </v-select>
                     </v-col>
-                    <v-col cols="12" sm=2>
+                    <v-col cols="12" sm=4 lg="2">
                         <v-btn color="info" @click="buscar">
                             <i class="fas fa-search"></i>
                         </v-btn>
@@ -84,6 +84,8 @@ export default {
                 { text: 'Peso Guia Campo (Kg)', value: 'peso_guia' },
                 { text: 'Peso Ingreso Planta (Kg)', value: 'peso_neto_proceso' },
                 { text: 'Peso Ingreso Proceso (Kg)', value: 'peso_neto_proceso' },
+                { text: 'Peso Descarte Racimo (Kg)', value: 'descarte_racimos' },
+                { text: 'Peso Descarte grano (Kg)', value: 'descarte_granos' },
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,

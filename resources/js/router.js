@@ -100,6 +100,10 @@ var routes =[
     },
     //ACOPIO
     {
+        path: '/descarte',
+        component: require('./view/descarte.vue').default
+    },
+    {
         path: '/acopio/lote',
         component: require('./view/lote/Acopio.vue').default
     },
