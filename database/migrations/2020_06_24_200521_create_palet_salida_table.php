@@ -15,6 +15,7 @@ class CreatePaletSalidaTable extends Migration
     {
         Schema::create('palet_salida', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo',15)->nullable();
             $table->string('campania_id',5)->nullable();
             $table->string('tipo_palet_id',3)->nullable();
             $table->integer('cliente_id');

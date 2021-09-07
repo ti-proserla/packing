@@ -17,13 +17,14 @@ class CreateTipoPaletTable extends Migration
             $table->string('id',3); //TER , SAL, MUE
             $table->string('descripcion',50)->nullable();
             $table->string('exportable',20)->default('NO');
+            $table->string('estructura_codigo')->default('NO');
             $table->timestamps();
         });
 
         DB::table('tipo_palet')->insert([
-            ['id'=> 'TER','descripcion'=> 'Palet Terminado' ,'exportable'=> 'SI'],
-            ['id'=> 'SAL','descripcion'=> 'Palet Saldo'     ,'exportable'=> 'NO'],
-            ['id'=> 'MUE','descripcion'=> 'Palet Muestra'   ,'exportable'=> 'NO'],
+            ['id'=> 'TER','descripcion'=> 'Palet Terminado' ,'exportable'=> 'SI','estructura_codigo'=>'[codigo_productor]-[numero]-[anio]'],
+            ['id'=> 'SAL','descripcion'=> 'Palet Saldo'     ,'exportable'=> 'NO','estructura_codigo'=>'[id]-[codigo_productor]-[numero]-[anio]'],
+            ['id'=> 'MUE','descripcion'=> 'Palet Muestra'   ,'exportable'=> 'NO','estructura_codigo'=>'[id]-[codigo_productor]-[numero]-[anio]'],
         ]);
     }
 

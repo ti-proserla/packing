@@ -145,6 +145,14 @@
                         Lanzado
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/descarte">
+                    <v-list-item-icon>
+                        <i class="fas fa-archive"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Descarte
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/paletizado">
                     <v-list-item-icon>
                         <i class="fas fa-pallet"></i>
