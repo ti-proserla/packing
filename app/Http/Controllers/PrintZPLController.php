@@ -312,7 +312,8 @@ class PrintZPLController extends Controller
         $ip_print = $request->ip_print;
         $palet_id=$request->palet_id;
 
-        $string_zpl="^XA
+        $string_zpl="CT~~CD,~CC^~CT~
+                    ^XA
                     ~TA000
                     ~JSN
                     ^LT0
@@ -334,14 +335,14 @@ class PrintZPLController extends Controller
                     ^PW831
                     ^LL1624
                     ^LS0
-                    ^FO143,4^GB0,1620,5^FS
-                    ^FT49,1604^A0B,23,23^FH\^CI28^FDEXPORTED^FS^CI27
-                    ^FT100,1414^A0B,51,51^FH\^CI28^FD[nombre_productor]^FS^CI27
-                    ^FT195,1604^A0B,23,23^FH\^CI28^FDPACKED AND PROCESSED^FS^CI27
-                    ^FT290,1062^A0B,51,51^FB500,1,13,C^FH\^CI28^FDJAYANCA FRUITS S.A.C^FS^CI27
-                    ^FO318,4^GB0,1620,5^FS
+                    ^FO170,4^GB0,1620,5^FS
+                    ^FT63,1580^A0B,37,38^FH\^CI28^FDEXPORTED^FS^CI27
+                    ^FT140,1504^A0B,79,79^FH\^CI28^FD[nombre_productor]^FS^CI27
+                    ^FT236,1580^A0B,37,38^FH\^CI28^FDPACKED AND PROCESSED^FS^CI27
+                    ^FT318,1504^A0B,73,74^FB731,1,19,C^FH\^CI28^FDJAYANCA FRUITS S.A.C^FS^CI27
+                    ^FO343,4^GB0,1620,5^FS
                     ^FO516,4^GB0,1620,5^FS
-                    ^FT451,1504^A0B,51,51^FB623,1,13,C^FH\^CI28^FDN° DE PALET:  [codigo_palet]^FS^CI27
+                    ^FT462,1580^A0B,102,101^FB1252,1,26,C^FH\^CI28^FDN° DE PALET:  [codigo_palet]^FS^CI27
                     ^FT359,187^BQN,2,6
                     ^FH\^FDLA,[palet_id]^FS
                     ^FO659,4^GB0,1620,5^FS
