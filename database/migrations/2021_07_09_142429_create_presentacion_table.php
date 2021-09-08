@@ -16,6 +16,7 @@ class CreatePresentacionTable extends Migration
         Schema::create('presentacion', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_presentacion',50);
+            $table->decimal('peso_neto',8,2); //en Kilogramos
             $table->timestamps();
         });
     }

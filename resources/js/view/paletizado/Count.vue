@@ -22,6 +22,7 @@
                                         outlined 
                                         label="Lectura" 
                                         autofocus
+                                        ref="codigo_barras"
                                         @focus="OpenFocus()" 
                                         :readonly="readonlyFocusInit"
                                         v-model="codigo_barras">
@@ -68,24 +69,6 @@
                             hide-default-footer
                             >
                         </v-data-table>
-                        <!-- <v-simple-table>
-                            <template v-slot:default>
-                                <tbody>
-                                    <tr>
-                                        <td><b>Calibre</b></td>
-                                        <td><b>Categoria</b></td>
-                                        <td><b>Presentación</b></td>
-                                        <td><b>Cantidad</b></td>
-                                    </tr>
-                                    <tr :key="index" v-for="(caja,index) in palet.cajas">
-                                        <td>{{ caja.nombre_calibre }}</td>
-                                        <td>{{caja.nombre_categoria}}</td>
-                                        <td>{{caja.nombre_presentacion}}</td>
-                                        <td>{{caja.cantidad}}</td>
-                                    </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table> -->
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -97,6 +80,7 @@
 export default {
     data() {
         return {
+            statusFocus: true,
             readonlyFocusInit: false,
             palet: {
                 cajas: []
@@ -166,6 +150,7 @@ export default {
                     this.fila_codigos.push('00XX000000000000'.replace('XX',labor.codigo));
                 }
             }
+            this.$refs.codigo_barras.focus();
         },
         getPaletSalida(){
             axios.get(url_base+`/palet_salida/${this.$route.params.id}`)

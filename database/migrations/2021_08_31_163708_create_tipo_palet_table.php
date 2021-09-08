@@ -23,8 +23,8 @@ class CreateTipoPaletTable extends Migration
 
         DB::table('tipo_palet')->insert([
             ['id'=> 'TER','descripcion'=> 'Palet Terminado' ,'exportable'=> 'SI','estructura_codigo'=>'[codigo_productor]-[numero]-[anio]'],
-            ['id'=> 'SAL','descripcion'=> 'Palet Saldo'     ,'exportable'=> 'NO','estructura_codigo'=>'[id]-[codigo_productor]-[numero]-[anio]'],
-            ['id'=> 'MUE','descripcion'=> 'Palet Muestra'   ,'exportable'=> 'NO','estructura_codigo'=>'[id]-[codigo_productor]-[numero]-[anio]'],
+            ['id'=> 'SAL','descripcion'=> 'Palet Saldo'     ,'exportable'=> 'NO','estructura_codigo'=>'[tipo_palet_id]-[codigo_productor]-[numero]-[anio]'],
+            ['id'=> 'MUE','descripcion'=> 'Palet Muestra'   ,'exportable'=> 'NO','estructura_codigo'=>'[tipo_palet_id]-[codigo_productor]-[numero]-[anio]'],
         ]);
     }
 

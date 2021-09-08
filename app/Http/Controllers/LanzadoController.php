@@ -47,6 +47,7 @@ class LanzadoController extends Controller
             case 'Pendiente':
 
                 $palet_anterior=PaletEntrada::where('linea_lanzado',$request->linea)
+                                        ->where('fecha_lanzado','>',Carbon::now()->subHour(2))
                                         ->orderBy('fecha_lanzado','DESC')
                                         ->first();
                 if ($palet_anterior!=null) {
@@ -75,7 +76,7 @@ class LanzadoController extends Controller
     }
     public function cerrar(Request $request,$id){
         $palet_entrada=PaletEntrada::find($id);
-        $palet_entrada->fecha_fin_lanzado=Carbon::now();
+        $palet_entrada->fecha_fin_lanzado=Carbon::parse($palet_entrada->fecha_lanzado)->addMinutes($request->timer);
         $palet_entrada->save();
         return response()->json([
             "status" => "OK",

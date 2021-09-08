@@ -4,7 +4,34 @@
             <v-card-title>Reporte Producto Terminado</v-card-title>              
             <v-card-text>
                 <v-row>
-                    <v-col cols="12">
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-text-field
+                            label="Desde:"
+                            v-model="consulta.desde"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-text-field
+                            label="Hasta:"
+                            v-model="consulta.hasta"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=8 lg="4">
+                        <v-select
+                            @change="buscar"
+                                outlined
+                                dense
+                                v-model="consulta.cliente_id"
+                                label="Productor:"
+                                :items="clientes"
+                                item-text="descripcion"
+                                item-value="id"
+                                >
+                                </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="2">
                         <v-btn color="success" :href="excel">
                             <i class="fas fa-file-excel"></i>
                         </v-btn>
@@ -104,7 +131,11 @@ export default {
     },
     computed:{
         excel(){
-            return `${url_base}/reporte/producto-terminado?excel`
+            var query="";
+            Object.entries(this.consulta).forEach(([key, value]) => {
+                query+=`&${key}=${value}`;
+            });
+            return `${url_base}/reporte/producto-terminado?excel${query}`
         }
     },
     methods:{

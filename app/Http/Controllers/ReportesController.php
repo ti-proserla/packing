@@ -173,10 +173,13 @@ class ReportesController extends Controller
                 INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
+                WHERE CL.id=?
+                AND DATE(EC.fecha_empaque)>=?
+                AND DATE(EC.fecha_empaque)<=?
                 GROUP BY PS.id ";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
         if ($request->has('excel')) {
-            return (new GeneralExcel($data))->download("Reporte Producto Terminado.xlsx");
+            return (new GeneralExcel($data))->download("Reporte Producto Terminado $desde - $hasta.xlsx");
         }else{
             return response()->json($data);  
         }

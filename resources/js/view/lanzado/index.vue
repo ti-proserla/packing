@@ -1,24 +1,28 @@
 <template>
     <div>
-        <v-row>
-            <v-col cols="12">
-                <v-btn
-                    @click="open_nuevo=true"
-                    color="primary">
-                    Agregar
-                </v-btn>
-            </v-col>
-            <v-col cols="12" sm=6 lg="3">
-                <v-text-field
-                    @keyup="listar()"
-                    label="Fecha Proceso:"
-                    v-model="consulta.fecha_proceso"
-                    type="date">
-                </v-text-field>
-            </v-col>
-        </v-row>
         <v-card>
+            <v-card-title class="headline">
+                Lanzado de Materia
+            </v-card-title>
             <v-card-text>
+                <v-row>
+                    
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-text-field
+                            @keyup="listar()"
+                            label="Fecha Proceso:"
+                            v-model="consulta.fecha_proceso"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" lg="2">
+                        <v-btn
+                            @click="open_nuevo=true"
+                            color="primary">
+                            Lanzar un nuevo Palet
+                        </v-btn>
+                    </v-col>
+                </v-row>
                 <v-data-table
                     :headers="header"
                     :items="datos"
@@ -26,13 +30,42 @@
                     >
                     <template v-slot:item.fin="{ item }">
                         {{item.fin}}
-                        <v-btn v-if="item.fin==null" text color="warning" @click="cerrarPalet(item.id)">
+                        <v-btn v-if="item.fin==null" text color="warning" @click="openCerrar(item.id)">
                             <i class="far fa-stop-circle"></i>
                         </v-btn>
                     </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
+        <v-dialog v-model="open_cerrar" persistent max-width="350">
+            <v-card>
+                <v-card-title class="headline">Cerrar Palet Lanzado</v-card-title>
+                <v-card-text>
+                    <form
+                        autocomplete="off"
+                        id="app"
+                        v-on:submit.prevent="cerrarPalet(palet_id)">
+                        <v-text-field 
+                            label="Adicionar Minutos:"
+                            type="number"
+                            v-model="timer"
+                        ></v-text-field>
+                        <div class="text-right mt-3">
+                            <v-btn 
+                                outlined 
+                                color="secondary" 
+                                @click="open_cerrar=false"
+                                >Cerrar</v-btn>
+                            <v-btn 
+                                outlined 
+                                color="primary" 
+                                type="submit"
+                                >Lanzar</v-btn>
+                        </div>
+                    </form>
+                </v-card-text>
+            </v-card>               
+        </v-dialog>
         <v-dialog v-model="open_nuevo" persistent max-width="350">
             <v-card>
                 <v-card-title class="headline">Registrar Lanzado</v-card-title>
@@ -73,6 +106,9 @@
 export default {
     data() {
         return {
+            open_cerrar: false,
+            palet_id: 0,
+            timer: '',
             datos: [],
             lanzado: this.initLanzado(),
             open_nuevo: false,
@@ -96,7 +132,7 @@ export default {
                 { text: 'Variedad', value: 'nombre_variedad' },
                 { text: 'Inicio', value: 'inicio' },
                 { text: 'Fin', value: 'fin' },
-                { text: 'Diferencia', value: 'diferencia' }
+                { text: 'Diferencia (min)', value: 'diferencia' }
             ],
         }
     },
@@ -149,10 +185,15 @@ export default {
             this.open_nuevo=false;
             this.lanzado=this.initLanzado();
         },
+        openCerrar(id){
+            this.palet_id=id;
+            this.open_cerrar=true;
+        },
         cerrarPalet(id){
-            console.log(id);
             var t=this;
-            axios.post(url_base+`/lanzado/${id}/cerrar?_method=patch`)
+            axios.post(url_base+`/lanzado/${id}/cerrar?_method=patch`,{
+                timer: this.timer
+            })
             .then(response => {
                 var res=response.data;
                 switch (res.status) {
@@ -163,6 +204,7 @@ export default {
                             buttons: false,
                         });
                         t.listar();
+                        t.open_cerrar=false;
                         break;
                     case 'ERROR':
                         var x = document.getElementById("myAudio");
