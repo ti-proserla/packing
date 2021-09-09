@@ -301,6 +301,7 @@ import { mapState,mapMutations } from 'vuex'
 export default {
     data() {
         return {
+            alert: {},
             //modal
             open_nuevo:false,
             open_palets: false,
@@ -325,7 +326,8 @@ export default {
             palets_error:{},
             //selectores
             seleccionado_sub_lote: null,
-            seleccionado_estado_sub_lote: null
+            seleccionado_estado_sub_lote: null,
+            getZPL: true
         }
     },
     computed: {
@@ -335,7 +337,8 @@ export default {
                 const palet = this.sub_lote_seleccionado.palets[index];
                 
             }
-        }
+        },
+        ...mapState(['defaultPrinter']),
     },
     watch: {
         open_palets: function() {
@@ -343,6 +346,7 @@ export default {
         }
     },
     mounted() {
+        this.$store.commit('getDefaultPrinter');
         axios.get(url_base+`/cliente?proceso`)
         .then(response => {
             this.clientes=response.data
@@ -514,19 +518,23 @@ export default {
             });
         },    
         print(id){
-            axios.get(`${url_base}/print/zpl/palet_entrada/all`,{
+            console.log(this.getZPL);
+            axios.get(`${url_base}/print/zpl/palet_entrada/all?getZPL`,{
                 params: {
                     sub_lote_id: id,
-                    ip_print: localStorage.getItem('ip_print') || null,
+                    // ip_print: localStorage.getItem('ip_print') || null,
                 }
             })
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        this.alert.status= 'primary';
+                        this.alert.status = 'primary';
                         this.alert.visible= true;
-                        this.alert.message= respuesta.data;
+                        this.alert.message= 'IMPRIMIENDO';
+                        this.defaultPrinter.send(respuesta.data, undefined, function(errorMessage){
+                            alert("Error: " + errorMessage);	
+                        });
                         break;
                     case 'ERROR':
                         this.alert.status= 'warning';

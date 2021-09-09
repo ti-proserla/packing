@@ -21,7 +21,15 @@ Vue.use(Vuex)
 window.store=new Vuex.Store({
   state: {
     peso: 0,
+    defaultPrinter: {},
   },
+  mutations: { 
+    getDefaultPrinter(state){
+      BrowserPrint.getDefaultDevice("printer", function(device){
+        state.defaultPrinter=device;
+      });
+    },
+  }
 });
 
 // import VueExcelXlsx from "vue-excel-xlsx";
