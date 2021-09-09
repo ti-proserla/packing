@@ -216,11 +216,6 @@ class PrintZPLController extends Controller
         }
     }
 
-
-    public function generarZPL(){
-
-    }
-
     public function palet_entrada(Request $request){
         $ip_print = $request->ip_print;
         $palet_entrada_id=$request->palet_entrada_id;
