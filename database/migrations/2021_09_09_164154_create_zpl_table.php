@@ -15,6 +15,7 @@ class CreateZplTable extends Migration
     {
         Schema::create('zpl', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_zpl',50);
             $table->text('contenido');
             $table->string('tipo',3); //ACO , TRA, PAL
             $table->timestamps();

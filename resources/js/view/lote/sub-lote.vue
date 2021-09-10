@@ -532,6 +532,7 @@ export default {
                         this.alert.status = 'primary';
                         this.alert.visible= true;
                         this.alert.message= 'IMPRIMIENDO';
+                        
                         this.defaultPrinter.send(respuesta.data, undefined, function(errorMessage){
                             alert("Error: " + errorMessage);	
                         });

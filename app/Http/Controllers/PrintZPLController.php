@@ -132,32 +132,36 @@ class PrintZPLController extends Controller
         $w_etiqueta=420;
                     
         $string_zpl="^XA
-                    ^FT25,30
-                    ^AAN,21,10
-                    ^FB360,1,0,C
-                    ^FD[empresa]^FS
-                    
-                    ^FT140,70
-                    ^AAN,21,10
-                    ^FD[variedad]^FS
-                    
-                    ^FT140,100
-                    ^AAN,21,10
-                    ^FDN. Jabas: [num_jabas]^FS
-
-                    ^FT140,130
-                    ^AAN,21,10
-                    ^FDN. Viaje: [viaje]^FS
-                    
-                    ^FT25,160
-                    ^AAN,30,15
-                    ^FB360,1,0,R
-                    ^FD[num_palet]^FS
-                
-                    ^FT20,170
-                    ^BQN,2,5
-                    ^FDMA,P-[palet_id]^FS
-                ^XZ";
+        ^FT25,60
+        ^AAN,35,15
+        ^FB780,1,0,C
+        ^FD[empresa]^FS
+        
+        ^FT260,120
+        ^AAN,30,15
+        ^FD[variedad]^FS
+        
+        ^FT260,170
+        ^AAN,30,15
+        ^FDN. Jabas: [num_jabas]^FS
+        
+        ^FT260,220
+        ^AAN,30,15
+        ^FDN. Viaje: [viaje]^FS
+        
+        ^FT260,270
+        ^AAN,30,15
+        ^FDCosecha: [fecha_cosecha]^FS
+        
+        ^FT25,380
+        ^AAN,40,20
+        ^FB760,1,0,R
+        ^FD[num_palet]^FS
+        
+        ^FT25,320
+        ^BQN,2,10
+        ^FDMA,P-[palet_id]^FS
+        ^XZ";
             // dd($string_zpl);      
             // $string_zpl=
         $string_zpl=str_replace('^XA','',$string_zpl);
@@ -169,7 +173,8 @@ class PrintZPLController extends Controller
                         VA.nombre_variedad variedad,
                         PE.num_jabas,
                         SL.viaje,
-                        PE.id palet_id
+                        PE.id palet_id,
+                        DATE_FORMAT(LI.fecha_cosecha,'%d-%m-%Y') fecha_cosecha
                 FROM lote_ingreso LI 
                 INNER JOIN cliente CL ON CL.id=LI.cliente_id
                 INNER JOIN sub_lote SL ON SL.lote_id=LI.id
@@ -179,7 +184,7 @@ class PrintZPLController extends Controller
                 ORDER BY palet_id DESC";
         $data=DB::select(DB::raw("$query"),[$sub_lote_id]);
         
-        $columna=2;
+        $columna=1;
         $string_zpl_new="";
         $data_part=array_chunk($data,$columna);
         $zpl_envio="";
