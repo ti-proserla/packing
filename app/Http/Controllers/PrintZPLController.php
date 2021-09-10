@@ -130,7 +130,7 @@ class PrintZPLController extends Controller
         $sub_lote_id=$request->sub_lote_id;
 
         $w_etiqueta=420;
-                    
+                    //hola
         $string_zpl="^XA
         ^FT25,60
         ^AAN,35,15
