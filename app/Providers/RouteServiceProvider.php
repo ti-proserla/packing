@@ -31,7 +31,10 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
+        // App::before(function($request)
+        // {
+        //     DB::statement("SET lc_time_names = 'es_ES'");
+        // });
         parent::boot();
     }
 

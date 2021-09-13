@@ -347,7 +347,7 @@ class PrintZPLController extends Controller
             $query="SELECT 	CL.descripcion nombre_productor, 
                                 CONCAT(LPAD(PS.numero,6,'0'),'-',CL.cod_cartilla) codigo_palet,
                                 PS.id palet_id,
-                                CAL.nombre_calibre,
+                                CAL.nombre_calibre calibre,
                                 COUNT(CA.id) numero_cajas
                     FROM palet_salida PS 
                     INNER JOIN cliente CL ON PS.cliente_id=CL.id
@@ -450,15 +450,19 @@ class PrintZPLController extends Controller
 
     public function muestra_etiqueta_caja(Request $request){
         $etiqueta_id=$request->etiqueta_caja_id;
+        DB::statement("SET lc_time_names = 'es_ES'");
+
         $etiquetaCaja=EtiquetaCaja::select(
                         DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
                         'etiqueta_caja.*',
+                        DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 2))) fecha_empaque"),
                         'LI.codigo as codigo_lote',
-                        'CLI.descripcion as nombre_productor',
-                        'CL.nombre_calibre',
-                        'MA.nombre_materia',
-                        'VA.nombre_variedad',
-                        'CT.nombre_categoria')
+                        'CLI.descripcion as productor',
+                        'CL.nombre_calibre as calibre',
+                        'MA.nombre_materia as materia',
+                        'PE.peso_neto',
+                        'VA.nombre_variedad as variedad',
+                        'CT.nombre_categoria as categoria')
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                     ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
                     ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
@@ -469,62 +473,119 @@ class PrintZPLController extends Controller
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
+                    // dd($etiquetaCaja);
+        $zpl="
+        ^XA
+        ~TA000
+        ~JSN
+        ^LT0
+        ^MNW
+        ^MTT
+        ^PON
+        ^PMN
+        ^LH0,0
+        ^JMA
+        ^PR9,9
+        ~SD22
+        ^JUS
+        ^LRN
+        ^CI27
+        ^PA0,1,1,0
+        ^MMT
+        ^PW799
+        ^LL416
+        ^LS0
+        ^FT228,21^A0N,17,25^FH\^CI28^FDPRODUCED AND EXPORTED BY:^FS^CI27
+        ^FO1,318^GB628,0,3^FS
+        ^FO2,288^GB622,0,1^FS
+        ^FO4,190^GB619,0,1^FS
+        ^FO9,255^GB615,0,2^FS
+        ^FT330,182^A0N,18,35^FH\^CI28^FDSize :^FS^CI27
+        ^FO2,224^GB622,0,1^FS
+        ^FT330,247^A0N,21,30^FH\^CI28^FDGGN: 4050373273149^FS^CI27
+        ^FT8,187^A0N,23,30^FH\^CI28^FDVariety: [variedad]^FS^CI27
+        ^FT11,336^A0N,12,18^FH\^CI28^FDProduction Place (Province): Jayanca-Lambayeque-Perú^FS^CI27
+        ^FT11,351^A0N,12,18^FH\^CI28^FDOrchard registered number: 004-01756-04  ^FS^CI27
+        ^FT11,366^A0N,12,18^FH\^CI28^FDPackinghouse registered number : N° 004-00002-PE^FS^CI27
+        ^FT11,381^A0N,12,18^FH\^CI28^FDHealt authorization of packinghouse: 000034-MINAGRI-SENASA-LAMBAYEQUE             ^FS^CI27
+        ^FT11,396^A0N,12,18^FH\^CI28^FD                                           PRODUCT OF PERU^FS^CI27
+        ^FT467,186^A0N,21,33^FH\^CI28^FDClass: [categoria]^FS^CI27
+        ^FO323,162^GB0,91,1^FS
+        ^FT413,185^A0N,25,25^FH\^CI28^FD[calibre]^FS^CI27
+        ^FT188,311^A0N,24,20^FH\^CI28^FD\"To Taiwan, Republic of China\"^FS^CI27
+        ^FO4,85^GB793,0,2^FS
+        ^FT133,282^A0N,24,20^FH\^CI28^FDTreated with sulfur dioxide for fungicide use^FS^CI27
+        ^FO5,162^GB794,0,2^FS
+        ^FO8,134^GB790,0,1^FS
+        ^FT8,248^A0N,25,23^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
+        ^FT329,214^A0N,20,25^FH\^CI28^FDDATE: [fecha_empaque]^FS^CI27
+        ^FT9,215^A0N,23,28^FH\^CI28^FDNet weight: [peso_neto] Kg^FS^CI27
+        ^FT0,102^A0N,12,20^FB757,1,3,C^FH\^CI28^FDPACKED BY: JAYANCA FRUITS S.A.C^FS^CI27
+        ^FT0,117^A0N,12,20^FB757,1,3,C^FH\^CI28^FDCa. Antigua Panamericana Norte Km. 37- Jayanca- Lambayeque^FS^CI27
+        ^FT0,132^A0N,12,20^FB757,1,3,C^FH\^CI28^FDN° FDA: 12285652576^FS^CI27
+        ^FT197,80^A0N,14,20^FH\^CI28^FDLAMBAYEQUE-LAMBAYEQUE - JAYANCA^FS^CI27
+        ^FT220,157^A0N,21,53^FH\^CI28^FDTABLE GRAPES^FS^CI27
+        ^FT0,64^A0N,17,15^FB765,1,4,C^FH\^CI28^FDCAL. ANTOLIN FLORES NRO. 1580 C.P. VILLA SAN JUAN, CAR PANAMERICANA NORTE KM 37 ^FS^CI27
+        ^FT650,363^BQN,2,6
+        ^FH\^FDMA,[codigo_caja]^FS
+        ^FT1,42^A0N,17,25^FB798,1,4,C^FH\^CI28^FD[productor]^FS^CI27
+        
+        ^XZ";
         $zpl="^XA
-                ~TA000
-                ~JSN
-                ^LT0
-                ^MNW
-                ^MTT
-                ^PON
-                ^PMN
-                ^LH0,0
-                ^JMA
-                ^PR8,8
-                ~SD15
-                ^JUS
-                ^LRN
-                ^CI27
-                ^PA0,1,1,0
-                ^XZ
-                ^XA
-                ^MMT
-                ^PW831
-                ^LL609
-                ^LS0
-                ^FO162,1^GB0,608,3^FS
-                ^FPH,1^FT87,430^A0B,14,15^FH\^CI28^FDPACKED BY: JAYANCA FRUITS SAC^FS^CI27
-                ^FPH,1^FT149,406^A0B,25,30^FB204,1,6,C^FH\^CI28^FDTABLE GRAPES^FS^CI27
-                ^FPH,1^FT191,289^A0B,20,20^FH\^CI28^FDSize: [nombre_calibre]^FS^CI27
-                ^FPH,1^FT191,242^A0B,20,20^FB229,1,5,R^FH\^CI28^FDCat: [nombre_categoria]^FS^CI27
-                ^FO116,1^GB0,608,3^FS
-                ^FO67,1^GB0,608,3^FS
-                ^FO165,294^GB57,0,3^FS
-                ^FPH,1^FT191,595^A0B,20,20^FH\^CI28^FDVariety: [nombre_variedad]^FS^CI27
-                ^FO220,1^GB0,608,3^FS
-                ^FT233,131^BQN,2,5
-                ^FH\^FDLA,[codigo_caja]^FS
-                ^FPH,1^FT31,434^A0B,17,18^FH\^CI28^FDEXPORTED AND PRODUCED BY:^FS^CI27
-                ^FPH,1^FT52,436^A0B,17,23^FH\^CI28^FD[nombre_productor]^FS^CI27
-                ^FPH,1^FT105,551^A0B,14,15^FH\^CI28^FDCa. ANtigua Panamericana Norte Km. 37 - Jayanca - Lambayeque^FS^CI27
-                ^FPH,1^FT215,595^A0B,20,20^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
-                ^FO580,1^GB0,608,3^FS
-                ^FPH,1^FT505,430^A0B,14,15^FH\^CI28^FDPACKED BY: JAYANCA FRUITS SAC^FS^CI27
-                ^FPH,1^FT568,406^A0B,25,30^FB204,1,6,C^FH\^CI28^FDTABLE GRAPES^FS^CI27
-                ^FPH,1^FT609,289^A0B,20,20^FH\^CI28^FDSize: [nombre_calibre]^FS^CI27
-                ^FPH,1^FT609,242^A0B,20,20^FB229,1,5,R^FH\^CI28^FDCat: [nombre_categoria]^FS^CI27
-                ^FO535,1^GB0,608,3^FS
-                ^FO485,1^GB0,608,3^FS
-                ^FO583,294^GB57,0,3^FS
-                ^FPH,1^FT609,595^A0B,20,20^FH\^CI28^FDVariety: [nombre_variedad]^FS^CI27
-                ^FO638,1^GB0,608,3^FS
-                ^FT651,131^BQN,2,5
-                ^FH\^FDLA,[codigo_caja]^FS
-                ^FPH,1^FT449,434^A0B,17,18^FH\^CI28^FDEXPORTED AND PRODUCED BY:^FS^CI27
-                ^FPH,1^FT470,436^A0B,17,23^FH\^CI28^FD[nombre_productor]^FS^CI27
-                ^FPH,1^FT523,551^A0B,14,15^FH\^CI28^FDCa. ANtigua Panamericana Norte Km. 37 - Jayanca - Lambayeque^FS^CI27
-                ^FPH,1^FT633,595^A0B,20,20^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
-                ^PQ1,0,1,Y
-                ^XZ";
+~TA000
+~JSN
+^LT0
+^MNW
+^MTT
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR9,9
+~SD22
+^JUS
+^LRN
+^CI27
+^PA0,1,1,0
+^MMT
+^PW799
+^LL416
+^LS0
+^FT228,21^A0N,17,25^FH\^CI28^FDPRODUCED AND EXPORTED BY:^FS^CI27
+^FO1,292^GB628,0,3^FS
+^FO4,190^GB619,0,1^FS
+^FO9,255^GB615,0,2^FS
+^FT330,182^A0N,18,35^FH\^CI28^FDSize :^FS^CI27
+^FO2,224^GB622,0,1^FS
+^FT330,247^A0N,21,30^FH\^CI28^FDGGN: 4050373273149^FS^CI27
+^FT8,187^A0N,23,30^FH\^CI28^FDVariety: RED GLOBE^FS^CI27
+^FT8,313^A0N,14,18^FH\^CI28^FDProduction Place (Province): Jayanca-Lambayeque-Perú^FS^CI27
+^FT8,331^A0N,14,18^FH\^CI28^FDOrchard registered number: 004-01756-04  ^FS^CI27
+^FT8,349^A0N,14,18^FH\^CI28^FDPackinghouse registered number : N° 004-00002-PE^FS^CI27
+^FT8,367^A0N,14,18^FH\^CI28^FDHealt authorization of packinghouse: 000034-MINAGRI-SENASA-LAMBAYEQUE             ^FS^CI27
+^FT8,385^A0N,14,18^FH\^CI28^FD                                           PRODUCT OF PERU^FS^CI27
+^FO323,162^GB0,91,1^FS
+^FO4,85^GB793,0,2^FS
+^FT118,284^A0N,24,20^FH\^CI28^FDTreated with sulfur dioxide for fungicide use^FS^CI27
+^FO5,162^GB794,0,2^FS
+^FO8,134^GB790,0,1^FS
+^FT0,102^A0N,12,20^FB757,1,3,C^FH\^CI28^FDPACKED BY: JAYANCA FRUITS S.A.C^FS^CI27
+^FT0,117^A0N,12,20^FB757,1,3,C^FH\^CI28^FDCa. Antigua Panamericana Norte Km. 37- Jayanca- Lambayeque^FS^CI27
+^FT0,132^A0N,12,20^FB757,1,3,C^FH\^CI28^FDN° FDA: 12285652576^FS^CI27
+^FT197,80^A0N,14,20^FH\^CI28^FDLAMBAYEQUE-LAMBAYEQUE - JAYANCA^FS^CI27
+^FT220,157^A0N,21,53^FH\^CI28^FDTABLE GRAPES^FS^CI27
+^FT0,64^A0N,17,15^FB765,1,4,C^FH\^CI28^FDCAL. ANTOLIN FLORES NRO. 1580 C.P. VILLA SAN JUAN, CAR PANAMERICANA NORTE KM 37 ^FS^CI27
+^FT1,42^A0N,17,25^FB798,1,4,C^FH\^CI28^FD[productor]^FS^CI27
+^FT413,185^A0N,25,25^FH\^CI28^FD[calibre]^FS^CI27
+^FT467,186^A0N,21,33^FH\^CI28^FDClass: [categoria]^FS^CI27
+^FT650,363^BQN,2,6
+^FH\^FDMA,[codigo_caja]^FS
+^FT329,214^A0N,20,25^FH\^CI28^FDDATE: [fecha_empaque]^FS^CI27
+^FT9,215^A0N,23,28^FH\^CI28^FDNet weight: [peso_neto] Kg^FS^CI27
+^FT8,248^A0N,25,23^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
+
+^XZ";
+        
         foreach($etiquetaCaja->toArray() as $key=>$value){
             $zpl=str_replace('['.$key.']',$value,$zpl);
         }

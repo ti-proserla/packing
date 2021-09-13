@@ -204,6 +204,79 @@
                 </v-card-text>
             </v-card>               
         </v-dialog>
+        <v-dialog 
+            max-width="600"
+            persistent>
+            <v-card>
+                <v-card-title class="headline">Nuevo Sub Lote</v-card-title>
+                <v-card-text>
+                    <v-row>
+                        <v-col cols=12>
+                            <v-select
+                                v-model="sub_lote.lote_id"
+                                label="Lote:"
+                                :items="lotes"
+                                :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}`"
+                                item-value="id"
+                                :error-messages="sub_lote_error.lote_id"
+                                >
+                                </v-select>
+                        </v-col>
+                        <v-col cols=4>
+                            <v-text-field 
+                                label="Viaje:" 
+                                type="number"
+                                v-model="sub_lote.viaje"
+                                :outlined="true"
+                                dense
+                                clearable
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=8>
+                            <v-text-field 
+                                label="Guia:" 
+                                v-model="sub_lote.guia"
+                                :outlined="true"
+                                clearable
+                                :error-messages="sub_lote_error.guia"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=12>
+                            <v-text-field 
+                                label="Peso Guia (Kg):" 
+                                v-model="sub_lote.peso_guia"
+                                :outlined="true"
+                                dense
+                                type="number"
+                                clearable
+                                :error-messages="sub_lote_error.peso_guia"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=12 sm=12>
+                            <v-text-field 
+                                label="Fecha Recepcion:" 
+                                v-model="sub_lote.fecha_recepcion"
+                                outlined
+                                dense
+                                clearable
+                                type="datetime-local"
+                                :error-messages="sub_lote_error.fecha_recepcion"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <div class="text-right mt-3">
+                        <v-btn 
+                            outlined 
+                            color="secondary" 
+                            @click="open_nuevo=false"
+                            >Cancelar</v-btn>
+                        <v-btn color="primary" @click="guardarSubLote()">
+                            Guardar
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>               
+        </v-dialog>
         <v-row>
             <v-col cols="12">
                 <v-card>
