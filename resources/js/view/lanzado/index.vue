@@ -9,7 +9,7 @@
                     
                     <v-col cols="12" sm=6 lg="3">
                         <v-text-field
-                            @keyup="listar()"
+                            @change="listar()"
                             label="Fecha Proceso:"
                             v-model="consulta.fecha_proceso"
                             type="date">
