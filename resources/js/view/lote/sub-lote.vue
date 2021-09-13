@@ -66,6 +66,12 @@
                                     Agregar
                                 </v-btn>
                             </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-checkbox
+                                v-model="printAdd"
+                                label="Imprimir al Agregar"
+                                ></v-checkbox>
+                            </v-col>
                         </v-row>
                         <v-row v-else>
                             <v-col cols=12>
@@ -73,7 +79,7 @@
                                     color="primary"
                                     block 
                                     @click="print(sub_lote_seleccionado.id)">
-                                    IMPRIMIR
+                                    Imprimir Todo
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -87,6 +93,7 @@
                                             <th>Peso Total</th>
                                             <th>Peso Palet</th>
                                             <th>Peso Jaba</th>
+                                            <th>Imprimir</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -96,6 +103,14 @@
                                             <td>{{ palet.peso }}</td>
                                             <td>{{ palet.peso_palet }}</td>
                                             <td>{{ palet.peso_jaba }}</td>
+                                            <td>
+                                                <v-btn
+                                                    @click="printUnitario(palet.id)"
+                                                    color="warning"
+                                                    text>
+                                                    <i class="fas fa-print"></i>
+                                                </v-btn>
+                                            </td>
                                         </tr>
                                         <tr v-if="seleccionado_sub_lote==null">
                                             <td colspan="3"> Seleccione un Sub lote </td>
@@ -308,8 +323,8 @@ export default {
             //operaciones
             num_jabas: 0,
             peso: 0,
-            peso_palet: 20.00,
-            peso_jaba: 1.2,
+            peso_palet: 1.2,
+            peso_jaba: 0.2,
             lote: {},
             lotes: [],
             sub_lote: this.init(),
@@ -327,7 +342,8 @@ export default {
             //selectores
             seleccionado_sub_lote: null,
             seleccionado_estado_sub_lote: null,
-            getZPL: true
+            getZPL: true,
+            printAdd: true
         }
     },
     computed: {
@@ -369,9 +385,6 @@ export default {
             if(e.toString()!=null && e.toString().indexOf(".")>-1 && (e.toString().split('.')[1].length > 1)){
                 $event.preventDefault();
             }
-        },
-        abrirEditar(){
-
         },
         abrirPalet(id,estado){
             this.seleccionar(id);
@@ -440,7 +453,9 @@ export default {
                         this.peso=0;
                         this.num_jabas=0;
                         this.palets_error={};
-                        this.printUnitario(res.data.id);
+                        if (this.printAdd) {
+                            this.printUnitario(res.data.id);
+                        }
                         this.listarPaletEntrada();
                         break;
 
@@ -493,17 +508,16 @@ export default {
         printUnitario(id){
             axios.get(`${url_base}/print/zpl/palet_entrada`,{
                 params: {
-                    palet_entrada_id: id,
-                    ip_print: localStorage.getItem('ip_print') || null,
+                    palet_entrada_id: id
                 }
             })
             .then(response => {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        this.alert.status= 'primary';
-                        this.alert.visible= true;
-                        this.alert.message= respuesta.data;
+                        this.defaultPrinter.send(respuesta.data, undefined, function(errorMessage){
+                            alert("Error: " + errorMessage);	
+                        });
                         break;
                     case 'ERROR':
                         this.alert.status= 'warning';
@@ -522,7 +536,6 @@ export default {
             axios.get(`${url_base}/print/zpl/palet_entrada/all?getZPL`,{
                 params: {
                     sub_lote_id: id,
-                    // ip_print: localStorage.getItem('ip_print') || null,
                 }
             })
             .then(response => {

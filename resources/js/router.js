@@ -26,6 +26,10 @@ var routes =[
         component: require('./view/campania.vue').default
     },
     {
+        path: '/zpl',
+        component: require('./view/zpl.vue').default
+    },
+    {
         path: '/variedad',
         component: require('./view/variedad.vue').default
     },

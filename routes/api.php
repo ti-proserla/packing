@@ -21,6 +21,7 @@ Route::resource('producto', 'ProductoController');
 Route::resource('cliente', 'ClienteController');
 Route::get('materia/variedad', 'MateriaController@variedad');
 Route::get('materia/detallado', 'MateriaController@detallado');
+Route::resource('zpl', 'ZplController');
 Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('campania', 'CampaniaController');

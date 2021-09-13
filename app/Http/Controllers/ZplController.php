@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Model\zpl;
-use App\Http\Requests\zplValidate;
+use App\Model\Zpl;
+use App\Http\Requests\ZplValidate;
 use Illuminate\Http\Request;
 
 class ZplController extends Controller
@@ -15,32 +15,19 @@ class ZplController extends Controller
     public function index(Request $request)
     {
         if ($request->has('all')) {
-            $zpls=zpl::all();
+            $zpls=Zpl::all();
         }else{
-            $zpls=zpl::paginate(10);
+            $zpls=Zpl::paginate(10);
         }
         return response()->json($zpls);
     }
-
-    public function variedad(){
-        $zpls=zpl::with('variedad')->get();
-        return response()->json($zpls);
-    }
-    
-    public function detallado(){
-        $zpls=zpl::with('variedad')
-                            ->with('tipo')
-                            ->with('calibre')
-                            ->get();
-        return response()->json($zpls);
-    }
-
    
-    public function store(zplValidate $request)
+    public function store(ZplValidate $request)
     {
-        $zpls=new zpl();
-        $zpls->cod_cartilla=$request->cod_cartilla;
+        $zpls=new Zpl();
         $zpls->nombre_zpl=$request->nombre_zpl;
+        $zpls->contenido=$request->contenido;
+        $zpls->tipo=$request->tipo;
         $zpls->save();
         
         return response()->json([
@@ -53,17 +40,18 @@ class ZplController extends Controller
     
     public function show($id)
     {
-        $zpls=zpl::where('id',$id)->first();
+        $zpls=Zpl::where('id',$id)->first();
         return response()->json($zpls);
     }
     
     
     
-    public function update(zplValidate $request, $id)
+    public function update(ZplValidate $request, $id)
     {
-        $zpls=zpl::where('id',$id)->first();
-        $zpls->cod_cartilla=$request->cod_cartilla;
+        $zpls=Zpl::where('id',$id)->first();
         $zpls->nombre_zpl=$request->nombre_zpl;
+        $zpls->contenido=$request->contenido;
+        $zpls->tipo=$request->tipo;
         $zpls->save();
 
         return response()->json([
@@ -74,7 +62,7 @@ class ZplController extends Controller
 
     public function destroy($id)
     {
-        $zpls=zpl::where('id',$id)->first();
+        $zpls=Zpl::where('id',$id)->first();
         $zpls->delete();
         return response()->json([
             "status" => "OK"

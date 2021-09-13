@@ -20,27 +20,35 @@
             </v-card-text>
 
             <!-- Nuevo -->
-            <v-dialog v-model="open_nuevo" persistent max-width="350">
+            <v-dialog v-model="open_nuevo" persistent max-width="400">
                 <v-card>
                     <v-card-title class="headline">Nuevo zpl</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            label="cod_cartilla" 
-                            v-model="zpl.cod_cartilla"
-                            :error-messages="error.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="RUC" 
-                            v-model="zpl.ruc"
-                            :error-messages="error.ruc"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="Nombre" 
-                            v-model="zpl.descripcion"
-                            :error-messages="error.descripcion"
-                        ></v-text-field>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Nombre" 
+                                    v-model="zpl.nombre_zpl"
+                                    :error-messages="error.nombre_zpl"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-textarea
+                                outlined
+                                label="Contenido"
+                                v-model="zpl.contenido"
+                                ></v-textarea>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-select
+                                    v-model="zpl.tipo"
+                                    label="Tipo de Label:"
+                                    :items="tipos"
+                                    :item-text="tipo => `${tipo.descripcion}`"
+                                    item-value="tipo">
+                                </v-select>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -61,23 +69,31 @@
                 <v-card>
                     <v-card-title class="headline">Editar zpl</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            label="cod_cartilla" 
-                            v-model="zpl_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="RUC" 
-                            v-model="zpl_editar.ruc"
-                            :error-messages="error_editar.ruc"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="Nombre" 
-                            v-model="zpl_editar.descripcion"
-                            :error-messages="error_editar.descripcion"
-                        ></v-text-field>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Nombre" 
+                                    v-model="zpl_editar.nombre_zpl"
+                                    :error-messages="error.nombre_zpl"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-textarea
+                                outlined
+                                label="Contenido"
+                                v-model="zpl_editar.contenido"
+                                ></v-textarea>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-select
+                                    v-model="zpl_editar.tipo"
+                                    label="Tipo de Label:"
+                                    :items="tipos"
+                                    :item-text="tipo => `${tipo.descripcion}`"
+                                    item-value="tipo">
+                                </v-select>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -101,9 +117,8 @@ export default {
     data() {
         return {
             header:[
-                { text: 'Cod Cartilla', value: 'cod_cartilla' },
-                { text: 'RUC', value: 'ruc' },
-                { text: 'Descripción', value: 'descripcion' },
+                { text: 'Nombre', value: 'nombre_zpl' },
+                { text: 'Tipo', value: 'tipo' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -120,6 +135,11 @@ export default {
             open_editar: false,
             zpl_editar: this.initForm(),
             error_editar: {},
+            tipos: [
+                {'tipo' : 'ACO' , "descripcion" : "Acopio"},
+                {'tipo' : 'TRA' , "descripcion" : "Trazabilidad"},
+                {'tipo' : 'PAL' , "descripcion" : "Paletizado"},
+            ],
         }
     },
     mounted() {

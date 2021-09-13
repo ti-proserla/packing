@@ -97,3 +97,15 @@ new Vue({
   store,
   render: h => h(App),
 })
+Object.defineProperty(Array.prototype, 'chunk', {
+  value: function(chunkSize) {
+    var R = [];
+    for (var i = 0; i < this.length; i += chunkSize)
+      R.push(this.slice(i, i + chunkSize));
+    return R;
+  }
+});
+
+console.log(
+  [1, 2, 3, 4, 5, 6, 7].chunk(3)
+)
