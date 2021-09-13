@@ -60,7 +60,7 @@ class PrintZPLController extends Controller
             $string_zpl="^XA
                 ^FT20,30
                 ^A0N,14,15
-                ^FB240,1,0,C
+                ^FB420,1,0,C
                 ^FD{nombre_operador}^FS
                 ^FT140,100
                 ^AAN,40,15
