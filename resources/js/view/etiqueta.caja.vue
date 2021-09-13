@@ -46,11 +46,11 @@
                                 cols="12"
                                 lg="4">
                                 <v-text-field 
-                                    label="Fecha Recepcion:" 
+                                    label="Fecha Empaque:" 
                                     v-model="etiqueta_caja.fecha_empaque"
                                     clearable
                                     type="date"
-                                    :error-messages="error.fecha_recepcion"
+                                    :error-messages="error.fecha_empaque"
                                 ></v-text-field>
                             </v-col>
                             <v-col 
@@ -219,6 +219,11 @@ export default {
                 { text: 'Categoria', value: 'nombre_categoria' },
                 { text: 'Materia', value: 'nombre_materia' },
                 { text: 'Variedad', value: 'nombre_variedad' },
+                { text: 'presentacion', value: 'nombre_presentacion' },
+                { text: 'Marca Caja', value: 'nombre_marca_caja' },
+                { text: 'Tipo Empaque', value: 'nombre_tipo_empaque' },
+                { text: 'Marca Empaque', value: 'nombre_marca_empaque' },
+                { text: 'PLU', value: 'nombre_plu' },
                 { text: 'Estado', value: 'estado' },
                 { text: 'Ver', value: 'ver' },
             ],

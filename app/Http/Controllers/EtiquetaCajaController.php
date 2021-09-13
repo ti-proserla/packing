@@ -16,7 +16,12 @@ class EtiquetaCajaController extends Controller
                             'CLI.descripcion as nombre_cliente',
                             'CL.nombre_calibre',
                             'MA.nombre_materia',
+                            'PE.nombre_presentacion',
                             'VA.nombre_variedad',
+                            'MAC.nombre_marca_caja',
+                            'TIE.nombre_tipo_empaque',
+                            'MAE.nombre_marca_empaque',
+                            'plu.nombre_plu',
                             'CT.nombre_categoria')
                         ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                         ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
@@ -25,6 +30,10 @@ class EtiquetaCajaController extends Controller
                         ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
                         ->join('materia as MA','MA.id','=','LI.materia_id')
                         ->join('variedad as VA','VA.id','=','LI.variedad_id')
+                        ->join('marca_caja as MAC','MAC.id','=','etiqueta_caja.marca_caja_id')
+                        ->join('tipo_empaque as TIE','TIE.id','=','etiqueta_caja.tipo_empaque_id')
+                        ->join('marca_empaque as MAE','MAE.id','=','etiqueta_caja.marca_empaque_id')
+                        ->join('plu','plu.id','=','etiqueta_caja.plu_id')
                         ->orderBy('id','DESC')->paginate(10);
         return response()->json($etiquetaCaja);
     }
