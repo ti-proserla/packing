@@ -25,6 +25,8 @@
             <v-col sm=4 cols="12" v-for="(lote,i) in lotes" :key="i">
                 <v-card>
                     <v-card-text>
+                        <p class="mb-0"><b class="detalles">Tipo:</b> {{ lote.tipo_palet_id}}</p>
+                        <p class="mb-0"><b class="detalles">Número:</b> {{ lote.numero}}</p>
                         <p class="mb-0"><b class="detalles">Cliente:</b> {{ lote.cliente}}</p>
                         <p class="mb-0"><b class="detalles">Cajas:</b> {{ lote.cajas_contadas }}</p>
                         <p class="mb-0"><b class="detalles">Estado:</b> {{ lote.estado }}</p>
