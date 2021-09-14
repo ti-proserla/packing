@@ -65,14 +65,14 @@
             <v-btn
                 fab
                 dark
-                color="red">
+                color="red"
+                @click="$router.push('/paletizado/remonte')">
                 <i class="far fa-object-ungroup"></i>
             </v-btn>
             <v-btn
                 fab
                 dark
                 color="primary"
-                small
                 @click="$router.push('/paletizado/new')">
                 <i class="fas fa-plus"></i>
             </v-btn>
