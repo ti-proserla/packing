@@ -3,15 +3,16 @@
         <v-card>
             <v-card-title>LISTA DE PALETS</v-card-title>
         </v-card>
-        <v-btn
+        <!-- <v-btn
             fab
             bottom
             :fixed="true"
-            right
+            left
             color="primary"
             @click="$router.push('/paletizado/new')">
               <v-icon>+</v-icon>
-        </v-btn>
+        </v-btn> -->
+        
         <v-row>
             <v-col cols="12">
                 <v-data-table
@@ -41,6 +42,41 @@
                 </v-card>
             </v-col>
         </v-row>
+        <v-speed-dial
+                v-model="fab"
+                bottom
+                fixed
+                right
+                :direction="'top'"
+                open-on-hover
+                transition='slide-y-reverse-transition'
+            >
+            <template v-slot:activator>
+                <v-btn
+                v-model="fab"
+                color="blue darken-2"
+                dark
+                fab
+                >
+                    <i v-if="fab" class="fas fa-ellipsis-h"></i>
+                    <i v-else class="fas fa-ellipsis-v"></i>
+                </v-btn>
+            </template>
+            <v-btn
+                fab
+                dark
+                color="red">
+                <i class="far fa-object-ungroup"></i>
+            </v-btn>
+            <v-btn
+                fab
+                dark
+                color="primary"
+                small
+                @click="$router.push('/paletizado/new')">
+                <i class="fas fa-plus"></i>
+            </v-btn>
+        </v-speed-dial>
     </v-container>
 </template>
 <style>
@@ -56,7 +92,8 @@ export default {
             lotes: [],
             printer_select: null,
             zpl: '',
-            header: []
+            header: [],
+            fab: false
         }
     },
     methods: {

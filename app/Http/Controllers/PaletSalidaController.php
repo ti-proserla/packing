@@ -16,6 +16,34 @@ class PaletSalidaController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->has('tipo')) {
+            $paletSalidas=PaletSalida::select(
+                                        'palet_salida.*',
+                                        DB::raw('COUNT(caja.id) cajas_contadas'),
+                                    'CL.nombre_calibre as calibre',
+                                    'MA.nombre_materia as materia',
+                                    'PE.peso_neto',
+                                    'VA.nombre_variedad as variedad',
+                                    'CT.nombre_categoria as categoria',
+                                    'PRE.nombre_presentacion as presentacion'
+                                )
+                                ->join('cliente','cliente.id','=','palet_salida.cliente_id')
+                                ->join('caja','caja.palet_salida_id','=','palet_salida.id')
+                                ->join('etiqueta_caja','etiqueta_caja.id','=','caja.etiqueta_caja_id')
+                                ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
+                                ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
+                                ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
+                                ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
+                                ->join('materia as MA','MA.id','=','LI.materia_id')
+                                ->join('variedad as VA','VA.id','=','LI.variedad_id')
+                                ->join('presentacion as PRE','PRE.id','=','etiqueta_caja.presentacion_id')
+                                ->groupBy('palet_salida.id')
+                                ->where('palet_salida.estado','Cerrado')
+                                ->where('tipo_palet_id','SAL')
+                                ->where('palet_salida.cliente_id',$request->cliente_id)
+                                ->get();
+            return response()->json($paletSalidas);
+        }
         if ($request->has('estado')) {
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
                                 ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
@@ -30,6 +58,7 @@ class PaletSalidaController extends Controller
                                 ->groupBy('palet_salida.id')
                                 ->get();
         }
+
         return response()->json($paletSalidas);
     }  
     /**
@@ -103,6 +132,51 @@ class PaletSalidaController extends Controller
                                 ->first();
         return response()->json($paletSalida);
     }
+
+    public function remonte(Request $request){
+        
+
+        $paletSalida=new PaletSalida();
+        $paletSalida->campania_id=$request->campania_id;
+        $paletSalida->tipo_palet_id='TER';
+        $paletSalida->cliente_id=$request->cliente_id;
+        $paletSalida->etapas=1;
+        $paletSalida->nave=1;
+        $paletSalida->camara=null;
+        $paletSalida->estado="Cerrado";
+        $conteo=PaletSalida::where('estado','Cerrado')
+                    ->where('tipo_palet_id','TER')
+                    ->where('campania_id',$paletSalida->campania_id)
+                    ->where('cliente_id',$paletSalida->cliente_id)
+                    ->count();
+        $paletSalida->numero=$conteo+1;
+        $paletSalida->fecha_cierre=Carbon::now();
+        $paletSalida->save();
+
+
+        $palets=$request->palets_id;
+        
+        for ($i=0; $i < count($palets); $i++) { 
+            $id=$palets[$i];
+            $cajas=Caja::where('palet_salida_id',$id)->get();
+            foreach ($cajas as $key => $caja) {
+                $cajaNew=new Caja();
+                $cajaNew->palet_salida_id=$paletSalida->id;
+                $cajaNew->etiqueta_caja_id=$caja->etiqueta_caja_id;
+                $cajaNew->save();
+            }
+            $paletSalidaOld=PaletSalida::where('id',$id)->first();
+            $paletSalidaOld->estado="Remonte";
+            $paletSalidaOld->detalle='Remonte en '.$paletSalida->tipo_palet_id.'-'.$paletSalida->numero;
+            $paletSalidaOld->save();
+        }
+
+        return response()->json([
+            "status" => "OK",
+            "data"  => $paletSalida
+        ]);
+    }
+
     public function update(Request $request,$id){
         switch ($request->estado) {
             case 'Cerrado':

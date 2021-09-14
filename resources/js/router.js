@@ -87,6 +87,10 @@ var routes =[
         component: require('./view/paletizado/New.vue').default
     },
     {
+        path: '/paletizado/remonte',
+        component: require('./view/paletizado/Remonte.vue').default
+    },
+    {
         path: '/paletizado/:id',
         component: require('./view/paletizado/Count.vue').default
     },
