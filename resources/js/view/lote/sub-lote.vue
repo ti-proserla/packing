@@ -287,7 +287,7 @@
                             </v-col>
                             <v-col cols="6" class="text-right">
                                 <v-btn 
-                                    @click="open_nuevo=true" 
+                                    @click="openNuevo" 
                                     small
                                     color="info">
                                     Nuevo Sub Lote
@@ -446,6 +446,11 @@ export default {
         });
     },
     methods: {
+        openNuevo(){
+            this.open_nuevo=true;
+            this.sub_lote=this.init();
+            console.log("hola");
+        },
         handleInput (e) {
             let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
 

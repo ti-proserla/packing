@@ -229,17 +229,13 @@ this.labores=this.palet.etapas==1 ?
                 if (this.fila_codigos.length==this.palet.etapas) {
                     this.alerta("Escanear codigo de palet.");
                 }else{
-
                     var repetido=0;
 
-                    for (let i = 0; i < this.matriz_codigos.length; i++) {
-                        var fila_codigos = this.matriz_codigos[i];
-                        for (let k = 0; k < fila_codigos.length; k++) {
-                            const element = fila_codigos[k];
-                            if (this.codigo_barras==element) {
-                                repetido=1;
-                                break;
-                            }
+                    for (let i = 0; i < this.palet.cajas.length; i++) {
+                        var codigos = this.palet.cajas[i].codigos;
+                        if (codigos.includes(this.codigo_barras)) {
+                            repetido=1;
+                            break;
                         }
                     }
                     

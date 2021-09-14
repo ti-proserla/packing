@@ -92,8 +92,17 @@ class PaletSalidaController extends Controller
                                 ->select('palet_salida.*')
                                 ->first();
         return response()->json($paletSalida);
+        
     }
-
+    public function codigos(Request $request,$id){
+        $paletSalida=PaletSalida::join('caja as CA','CA.palet_salida_id','=','palet_salida.id')
+                                ->select(DB::raw('GROUP_CONCAT(RP.codigo_barras) codigos'))
+                                ->join('rendimiento_personal as RP','RP.caja_id','=','CA.id')
+                                ->where('palet_salida.id',$id)
+                                ->groupBy('palet_salida.id')
+                                ->first();
+        return response()->json($paletSalida);
+    }
     public function update(Request $request,$id){
         switch ($request->estado) {
             case 'Cerrado':

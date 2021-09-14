@@ -16,12 +16,14 @@ class PaletSalida extends Model
                     ->join('calibre as CL','CL.id','=','EC.calibre_id')
                     ->join('categoria as CT','CT.id','=','EC.categoria_id')    
                     ->join('presentacion as PE','PE.id','=','EC.presentacion_id')
+                    ->join('rendimiento_personal as RP','RP.caja_id','=','caja.id')
                     ->select(
                         'caja.palet_salida_id',
                         DB::raw('count(caja.id) cantidad'),
                         'CL.nombre_calibre',
                         'CT.nombre_categoria',
-                        'PE.nombre_presentacion'
+                        'PE.nombre_presentacion',
+                        DB::raw('GROUP_CONCAT(RP.codigo_barras) codigos')
                     )
                     ->groupBy('caja.etiqueta_caja_id');
     }
