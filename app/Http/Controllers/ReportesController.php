@@ -158,6 +158,10 @@ class ReportesController extends Controller
                         FUN.cod_cartilla codigo_fundo,
                         VAR.cod_cartilla codigo_variedad,
                         PRE.nombre_presentacion,
+                        MAC.nombre_marca_caja,
+                        TIE.nombre_tipo_empaque,
+                        MAE.nombre_marca_empaque,
+                        plu.nombre_plu,
                         DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) juliano,
                         LI.codigo codigo_lote,
                         CL.descripcion nombre_productor,
@@ -169,7 +173,11 @@ class ReportesController extends Controller
                 INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
                 INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
                 INNER JOIN categoria CAT ON CAT.id = EC.categoria_id
-								INNER JOIN presentacion PRE ON PRE.id = EC.presentacion_id
+                INNER JOIN presentacion PRE ON PRE.id = EC.presentacion_id
+                INNER JOIN marca_caja MAC ON MAC.id = EC.marca_caja_id
+                INNER JOIN tipo_empaque TIE ON TIE.id = EC.tipo_empaque_id
+                INNER JOIN marca_empaque MAE ON MAE.id = EC.marca_empaque_id
+                INNER JOIN plu ON plu.id = EC.plu_id
                 INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
