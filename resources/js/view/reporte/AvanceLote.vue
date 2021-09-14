@@ -85,9 +85,9 @@ export default {
             var t=this;
             t.buscar();
             t.buscar2();
-            setTimeout(() => {
-                t.cargar();
-            }, 5000);
+            // setTimeout(() => {
+            //     t.cargar();
+            // }, 5000);
         },
         buscar(){
             axios.get(`${url_base}/reporte/avance_lote`,{
