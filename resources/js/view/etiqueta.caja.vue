@@ -169,6 +169,22 @@
                                     v-model="print_count"
                                 ></v-text-field>
                             </v-col>
+                            <v-col
+                                cols="12"
+                                sm=6>
+                                <v-select
+                                    label="Diseño Etiqueta:"
+                                    v-model="zpl_id"
+                                    :items="zpls"
+                                    item-text="nombre_zpl"
+                                    item-value="id">
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" sm=2>
+                                 <v-btn @click="getZpl" color="primary">
+                                     Ver
+                                    </v-btn>  
+                            </v-col>
                             <v-col cols="12">
                                 <v-img
                                 :src="url_label"
@@ -202,6 +218,7 @@ export default {
             zpl: '',
             printer_select: {},
             lotes: [],
+            zpls: [],
             calibres: [],
             categorias: [],
             presentaciones: [],
@@ -234,6 +251,8 @@ export default {
             },
             url_label: '',
             search: '',
+            zpl_id: '',
+            etiqueta_caja_id: '',
             //Modal Nuevo
             open_nuevo: false,
             etiqueta_caja: this.initForm(),
@@ -262,10 +281,12 @@ export default {
         this.listarPresentaciones();
         this.listarTipoEmpaque();
         this.listarMarcaEmpaque();
+        this.listarZpls();
         var t = this;
         BrowserPrint.getDefaultDevice("printer", function(device){
             t.printer_select=device;
         });
+        
     },
     computed:{
         getMateriaId(){
@@ -310,6 +331,12 @@ export default {
             axios.get(url_base+`/lote_ingreso`)
             .then(response => {
                 this.lotes=response.data
+            });
+        },
+        listarZpls(){
+            axios.get(url_base+`/zpl?all`)
+            .then(response => {
+                this.zpls=response.data
             });
         },
         listarCalibres(){
@@ -361,7 +388,7 @@ export default {
             })
         },
         getZpl(id){
-            axios.get(url_base+'/print/muestra_etiqueta_caja?etiqueta_caja_id='+id)
+            axios.get(url_base+'/print/muestra_etiqueta_caja?zpl_id='+this.zpl_id+'&etiqueta_caja_id='+this.etiqueta_caja_id)
             .then(response => {
 
                 this.url_label="http://api.labelary.com/v1/printers/8dpmm/labels/4x3/0/"+response.data;
@@ -395,8 +422,8 @@ export default {
             });
         },
         buscar(id){
-            this.getZpl(id);
-                this.open_ver=true;
+            this.etiqueta_caja_id=id;
+            this.open_ver=true;
             // axios.get(url_base+'/etiqueta_caja/'+id)
             // .then(response => {
             //     this.etiqueta_caja_editar = response.data;

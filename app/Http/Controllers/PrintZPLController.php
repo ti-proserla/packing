@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Model\Labor;
 use App\Model\EtiquetaCaja;
-
+use App\Model\Zpl;
 
 class PrintZPLController extends Controller
 {
@@ -473,64 +473,66 @@ class PrintZPLController extends Controller
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
-                    // dd($etiquetaCaja);
-        $zpl="
-        ^XA
-        ~TA000
-        ~JSN
-        ^LT0
-        ^MNW
-        ^MTT
-        ^PON
-        ^PMN
-        ^LH0,0
-        ^JMA
-        ^PR9,9
-        ~SD22
-        ^JUS
-        ^LRN
-        ^CI27
-        ^PA0,1,1,0
-        ^MMT
-        ^PW799
-        ^LL416
-        ^LS0
-        ^FT228,21^A0N,17,25^FH\^CI28^FDPRODUCED AND EXPORTED BY:^FS^CI27
-        ^FO1,318^GB628,0,3^FS
-        ^FO2,288^GB622,0,1^FS
-        ^FO4,190^GB619,0,1^FS
-        ^FO9,255^GB615,0,2^FS
-        ^FT330,182^A0N,18,35^FH\^CI28^FDSize :^FS^CI27
-        ^FO2,224^GB622,0,1^FS
-        ^FT330,247^A0N,21,30^FH\^CI28^FDGGN: 4050373273149^FS^CI27
-        ^FT8,187^A0N,23,30^FH\^CI28^FDVariety: [variedad]^FS^CI27
-        ^FT11,336^A0N,12,18^FH\^CI28^FDProduction Place (Province): Jayanca-Lambayeque-Perú^FS^CI27
-        ^FT11,351^A0N,12,18^FH\^CI28^FDOrchard registered number: 004-01756-04  ^FS^CI27
-        ^FT11,366^A0N,12,18^FH\^CI28^FDPackinghouse registered number : N° 004-00002-PE^FS^CI27
-        ^FT11,381^A0N,12,18^FH\^CI28^FDHealt authorization of packinghouse: 000034-MINAGRI-SENASA-LAMBAYEQUE             ^FS^CI27
-        ^FT11,396^A0N,12,18^FH\^CI28^FD                                           PRODUCT OF PERU^FS^CI27
-        ^FT467,186^A0N,21,33^FH\^CI28^FDClass: [categoria]^FS^CI27
-        ^FO323,162^GB0,91,1^FS
-        ^FT413,185^A0N,25,25^FH\^CI28^FD[calibre]^FS^CI27
-        ^FT188,311^A0N,24,20^FH\^CI28^FD\"To Taiwan, Republic of China\"^FS^CI27
-        ^FO4,85^GB793,0,2^FS
-        ^FT133,282^A0N,24,20^FH\^CI28^FDTreated with sulfur dioxide for fungicide use^FS^CI27
-        ^FO5,162^GB794,0,2^FS
-        ^FO8,134^GB790,0,1^FS
-        ^FT8,248^A0N,25,23^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
-        ^FT329,214^A0N,20,25^FH\^CI28^FDDATE: [fecha_empaque]^FS^CI27
-        ^FT9,215^A0N,23,28^FH\^CI28^FDNet weight: [peso_neto] Kg^FS^CI27
-        ^FT0,102^A0N,12,20^FB757,1,3,C^FH\^CI28^FDPACKED BY: JAYANCA FRUITS S.A.C^FS^CI27
-        ^FT0,117^A0N,12,20^FB757,1,3,C^FH\^CI28^FDCa. Antigua Panamericana Norte Km. 37- Jayanca- Lambayeque^FS^CI27
-        ^FT0,132^A0N,12,20^FB757,1,3,C^FH\^CI28^FDN° FDA: 12285652576^FS^CI27
-        ^FT197,80^A0N,14,20^FH\^CI28^FDLAMBAYEQUE-LAMBAYEQUE - JAYANCA^FS^CI27
-        ^FT220,157^A0N,21,53^FH\^CI28^FDTABLE GRAPES^FS^CI27
-        ^FT0,64^A0N,17,15^FB765,1,4,C^FH\^CI28^FDCAL. ANTOLIN FLORES NRO. 1580 C.P. VILLA SAN JUAN, CAR PANAMERICANA NORTE KM 37 ^FS^CI27
-        ^FT650,363^BQN,2,6
-        ^FH\^FDMA,[codigo_caja]^FS
-        ^FT1,42^A0N,17,25^FB798,1,4,C^FH\^CI28^FD[productor]^FS^CI27
         
-        ^XZ";
+$zpl=ZPL::where('id',$request->zpl_id)->first()->contenido;
+                    // dd($etiquetaCaja);
+        // $zpl="
+        // ^XA
+        // ~TA000
+        // ~JSN
+        // ^LT0
+        // ^MNW
+        // ^MTT
+        // ^PON
+        // ^PMN
+        // ^LH0,0
+        // ^JMA
+        // ^PR9,9
+        // ~SD22
+        // ^JUS
+        // ^LRN
+        // ^CI27
+        // ^PA0,1,1,0
+        // ^MMT
+        // ^PW799
+        // ^LL416
+        // ^LS0
+        // ^FT228,21^A0N,17,25^FH\^CI28^FDPRODUCED AND EXPORTED BY:^FS^CI27
+        // ^FO1,318^GB628,0,3^FS
+        // ^FO2,288^GB622,0,1^FS
+        // ^FO4,190^GB619,0,1^FS
+        // ^FO9,255^GB615,0,2^FS
+        // ^FT330,182^A0N,18,35^FH\^CI28^FDSize :^FS^CI27
+        // ^FO2,224^GB622,0,1^FS
+        // ^FT330,247^A0N,21,30^FH\^CI28^FDGGN: 4050373273149^FS^CI27
+        // ^FT8,187^A0N,23,30^FH\^CI28^FDVariety: [variedad]^FS^CI27
+        // ^FT11,336^A0N,12,18^FH\^CI28^FDProduction Place (Province): Jayanca-Lambayeque-Perú^FS^CI27
+        // ^FT11,351^A0N,12,18^FH\^CI28^FDOrchard registered number: 004-01756-04  ^FS^CI27
+        // ^FT11,366^A0N,12,18^FH\^CI28^FDPackinghouse registered number : N° 004-00002-PE^FS^CI27
+        // ^FT11,381^A0N,12,18^FH\^CI28^FDHealt authorization of packinghouse: 000034-MINAGRI-SENASA-LAMBAYEQUE             ^FS^CI27
+        // ^FT11,396^A0N,12,18^FH\^CI28^FD                                           PRODUCT OF PERU^FS^CI27
+        // ^FT467,186^A0N,21,33^FH\^CI28^FDClass: [categoria]^FS^CI27
+        // ^FO323,162^GB0,91,1^FS
+        // ^FT413,185^A0N,25,25^FH\^CI28^FD[calibre]^FS^CI27
+        // ^FT188,311^A0N,24,20^FH\^CI28^FD\"To Taiwan, Republic of China\"^FS^CI27
+        // ^FO4,85^GB793,0,2^FS
+        // ^FT133,282^A0N,24,20^FH\^CI28^FDTreated with sulfur dioxide for fungicide use^FS^CI27
+        // ^FO5,162^GB794,0,2^FS
+        // ^FO8,134^GB790,0,1^FS
+        // ^FT8,248^A0N,25,23^FH\^CI28^FDProduct Code: [codigo_lote]^FS^CI27
+        // ^FT329,214^A0N,20,25^FH\^CI28^FDDATE: [fecha_empaque]^FS^CI27
+        // ^FT9,215^A0N,23,28^FH\^CI28^FDNet weight: [peso_neto] Kg^FS^CI27
+        // ^FT0,102^A0N,12,20^FB757,1,3,C^FH\^CI28^FDPACKED BY: JAYANCA FRUITS S.A.C^FS^CI27
+        // ^FT0,117^A0N,12,20^FB757,1,3,C^FH\^CI28^FDCa. Antigua Panamericana Norte Km. 37- Jayanca- Lambayeque^FS^CI27
+        // ^FT0,132^A0N,12,20^FB757,1,3,C^FH\^CI28^FDN° FDA: 12285652576^FS^CI27
+        // ^FT197,80^A0N,14,20^FH\^CI28^FDLAMBAYEQUE-LAMBAYEQUE - JAYANCA^FS^CI27
+        // ^FT220,157^A0N,21,53^FH\^CI28^FDTABLE GRAPES^FS^CI27
+        // ^FT0,64^A0N,17,15^FB765,1,4,C^FH\^CI28^FDCAL. ANTOLIN FLORES NRO. 1580 C.P. VILLA SAN JUAN, CAR PANAMERICANA NORTE KM 37 ^FS^CI27
+        // ^FT650,363^BQN,2,6
+        // ^FH\^FDMA,[codigo_caja]^FS
+        // ^FT1,42^A0N,17,25^FB798,1,4,C^FH\^CI28^FD[productor]^FS^CI27
+        
+        // ^XZ";
 //         $zpl="^XA
 // ~TA000
 // ~JSN
