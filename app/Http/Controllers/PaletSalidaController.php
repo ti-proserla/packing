@@ -181,7 +181,7 @@ class PaletSalidaController extends Controller
         switch ($request->estado) {
             case 'Cerrado':
                 $paletSalida=PaletSalida::where('id',$id)->first();
-                $conteo=PaletSalida::where('estado','Cerrado')
+                $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio'])
                     ->where('tipo_palet_id',$paletSalida->tipo_palet_id)
                     ->where('campania_id',$paletSalida->campania_id)
                     ->where('cliente_id',$paletSalida->cliente_id)
