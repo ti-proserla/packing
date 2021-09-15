@@ -187,7 +187,7 @@ this.labores=this.palet.etapas==1 ?
             },300 );
         },
         isCodigoTrabajador(sCodigo){
-            return (sCodigo.length==16) ? true : false;
+            return (sCodigo.length==16||sCodigo.length==17) ? true : false;
         },
         isCodigoPalet(sCodigo){
             return (sCodigo.indexOf('C-')>-1) ? true : false;

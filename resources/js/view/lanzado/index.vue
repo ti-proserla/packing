@@ -24,9 +24,9 @@
                     </v-col>
                 </v-row>
                 <v-data-table
+                    dense
                     :headers="header"
                     :items="datos"
-                    hide-default-footer
                     >
                     <template v-slot:item.fin="{ item }">
                         {{item.fin}}
