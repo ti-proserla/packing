@@ -449,20 +449,6 @@ export default {
         openNuevo(){
             this.open_nuevo=true;
             this.sub_lote=this.init();
-            console.log("hola");
-        },
-        handleInput (e) {
-            let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
-
-            // only allow number and one dot
-            if ((keyCode < 48 || keyCode > 57) && (keyCode !== 46 || e.toString().indexOf('.') != -1)) { // 46 is dot
-                $event.preventDefault();
-            }
-
-            // restrict to 2 decimal places
-            if(e.toString()!=null && e.toString().indexOf(".")>-1 && (e.toString().split('.')[1].length > 1)){
-                $event.preventDefault();
-            }
         },
         abrirPalet(id,estado){
             this.seleccionar(id);
@@ -503,8 +489,6 @@ export default {
                         t.lote_error={};
                         break;
                 }
-                
-                // this.sub_lote=this.init()
             });
         },
         seleccionar(id){

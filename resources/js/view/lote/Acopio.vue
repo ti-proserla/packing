@@ -5,7 +5,6 @@
                 Lotes Productor
             </v-card-title>
             <v-card-text>
-                
                 <v-simple-table dense>
                     <template v-slot:default>
                         <thead>
@@ -30,6 +29,11 @@
                                         text
                                         @click="abrir_actualizar(lote.id)">
                                         <i class="fas fa-pen"></i>
+                                    </v-btn>
+                                </td>
+                                <td>
+                                    <v-btn>
+                                        
                                     </v-btn>
                                 </td>
                             </tr>
@@ -97,7 +101,7 @@ export default {
     },
     methods: {
         listarLotes(){
-            axios.get(url_base+'/lote_ingreso?estado=Pendiente')
+            axios.get(url_base+'/lote_ingreso')
             .then(response => {
                 this.lotes_ingreso=response.data
             })
@@ -127,9 +131,6 @@ export default {
                         this.error_editar=respuesta.data;
                         break;
                     case 'ERROR':
-                        break;
-                    default:
-
                         break;
                 }
             });
