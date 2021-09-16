@@ -191,6 +191,11 @@
                             Reporte Acopio 
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/lanzado">
+                        <v-list-item-content>
+                            Reporte Lanzado 
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item link to="/reporte/avance-lote">
                         <v-list-item-content>
                             Reporte Avance Lote 

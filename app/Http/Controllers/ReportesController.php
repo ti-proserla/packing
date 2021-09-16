@@ -145,6 +145,41 @@ class ReportesController extends Controller
         }
     }
 
+    public function lanzado(Request $request){
+        $fecha_proceso=$request->fecha_proceso;
+        $query="SELECT 	PE.id,
+                        LI.codigo,
+                        LI.fecha_proceso,
+                        LI.fecha_cosecha,
+                        CL.descripcion nombre_productor,
+                        FU.nombre_fundo,
+                        MA.nombre_materia,
+                        VA.nombre_variedad,
+                        PE.linea_lanzado,
+                        DATE(PE.fecha_lanzado) fecha,
+                        CONCAT(HOUR(PE.fecha_lanzado),':00') hora_inicio,
+                        CONCAT(HOUR(DATE_ADD(PE.fecha_lanzado, INTERVAL 1 HOUR)),':00') hora_fin,
+                        COUNT(PE.num_palet) num_pallets,
+                        SUM(PE.num_jabas) num_jabas
+                FROM palet_entrada PE 
+                INNER JOIN sub_lote SL ON SL.id=PE.sub_lote_id
+                INNER JOIN lote_ingreso LI ON LI.id=SL.lote_id
+                INNER JOIN cliente CL ON CL.id=LI.cliente_id
+                INNER JOIN materia MA ON MA.id=LI.materia_id
+                INNER JOIN variedad VA ON VA.id=LI.variedad_id
+                INNER JOIN fundo FU ON FU.id=LI.fundo_id
+                WHERE PE.estado='Lanzado'
+                AND LI.fecha_proceso=?
+                GROUP BY DATE(PE.fecha_lanzado),HOUR(PE.fecha_lanzado)
+                ORDER BY fecha ASC, hora_inicio ASC";
+        $data=DB::select(DB::raw("$query"),[$fecha_proceso]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Lanzado $fecha_proceso.xlsx");
+        }else{
+            return response()->json($data);  
+        }
+    }
+
     public function producto_terminado(Request $request){
         $cliente_id=$request->cliente_id;
         $desde=$request->desde;
