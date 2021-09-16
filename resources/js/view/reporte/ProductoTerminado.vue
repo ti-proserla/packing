@@ -78,7 +78,6 @@
                     class="table-lineal"
                     :headers="header"
                     :items="table"
-                    hide-default-footer
                     >
                 </v-data-table>
             </v-card-text>
