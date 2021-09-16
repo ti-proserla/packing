@@ -414,7 +414,7 @@ class PrintZPLController extends Controller
                 for ($i=0; $i < $conteo-1; $i++) { 
                     $value=$separate_autonumerico[$i];
                     $temp_index_db+=1;
-                    $index=str_pad($temp_index_db, 4, "0", STR_PAD_LEFT);
+                    $index=substr(str_pad($temp_index_db, 5, "0", STR_PAD_LEFT),-5);
                     $print=$print.$value.$index;
                 }
                 /**

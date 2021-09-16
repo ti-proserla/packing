@@ -82,3 +82,8 @@ Route::get('print/zpl/palet_entrada/all', 'PrintZPLController@palet_entrada_all'
 
 //Replicar Base de datos
 Route::get('replicar/puerto_embarque','NisiraPuertoEmbarque@puerto_embarque');
+
+Route::get('prueba',function(){
+    $temp_index_db=100000;
+    dd(substr(str_pad($temp_index_db, 4, "0", STR_PAD_LEFT),-5));
+});

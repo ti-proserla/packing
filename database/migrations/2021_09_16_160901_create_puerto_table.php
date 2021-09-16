@@ -16,7 +16,7 @@ class CreatePuertoTable extends Migration
         Schema::create('puerto', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_puerto',20);
-            $table->integer('cliente_destino_id');
+            $table->integer('pais_id');
             $table->timestamps();
         });
     }
