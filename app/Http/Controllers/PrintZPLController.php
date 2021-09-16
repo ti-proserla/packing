@@ -462,6 +462,7 @@ class PrintZPLController extends Controller
                         'MA.nombre_materia as materia',
                         'PE.peso_neto',
                         'VA.nombre_variedad as variedad',
+                        'FU.cod_lugar_produccion',
                         'CT.nombre_categoria as categoria')
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                     ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
@@ -469,6 +470,7 @@ class PrintZPLController extends Controller
                     ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
                     ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
                     ->join('materia as MA','MA.id','=','LI.materia_id')
+                    ->join('fundo as FU','FU.id','=','LI.fundo_id')
                     ->join('variedad as VA','VA.id','=','LI.variedad_id')
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
