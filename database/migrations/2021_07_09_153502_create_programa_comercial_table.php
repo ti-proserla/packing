@@ -15,11 +15,11 @@ class CreateProgramaComercialTable extends Migration
     {
         Schema::create('programa_comercial', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo',10);
+            $table->string('codigo',12);
+            $table->string('estado',30)->default('Pendiente');
+            $table->integer('productor_id')->nullable();
             $table->string('codigo_operacion',20)->nullable();
             $table->date('fecha_despacho');
-            $table->integer('productor_id')->nullable();
-            $table->string('estado',30)->default('Pendiente');
             $table->timestamps();
         });
     }
