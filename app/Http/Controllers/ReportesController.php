@@ -219,6 +219,7 @@ class ReportesController extends Controller
                 WHERE CL.id=?
                 AND DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
+                AND PS.estado <> 'Remonte'
                 GROUP BY PS.id 
                 ORDER BY PS.numero ASC";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
