@@ -221,7 +221,7 @@ class ReportesController extends Controller
                 AND DATE(EC.fecha_empaque)<=?
                 AND PS.estado <> 'Remonte'
                 GROUP BY PS.id,LI.id 
-                ORDER BY PS.numero ASC";
+                ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Producto Terminado $desde - $hasta.xlsx");
