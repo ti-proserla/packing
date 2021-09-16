@@ -144,7 +144,7 @@ class PaletSalidaController extends Controller
         $paletSalida->nave=1;
         $paletSalida->camara=null;
         $paletSalida->estado="Cerrado";
-        $conteo=PaletSalida::where('estado','Cerrado')
+        $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio'])
                     ->where('tipo_palet_id','TER')
                     ->where('campania_id',$paletSalida->campania_id)
                     ->where('cliente_id',$paletSalida->cliente_id)
