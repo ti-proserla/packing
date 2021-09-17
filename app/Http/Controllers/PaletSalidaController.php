@@ -50,6 +50,7 @@ class PaletSalidaController extends Controller
                                 ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('estado',explode(',',$request->estado))
+                                ->orderBy('numero','DESC')
                                 ->get();
         }else{
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
