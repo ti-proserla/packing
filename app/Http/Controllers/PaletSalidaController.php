@@ -18,8 +18,8 @@ class PaletSalidaController extends Controller
     {
         if ($request->has('tipo')) {
             $paletSalidas=PaletSalida::select(
-                                        'palet_salida.*',
-                                        DB::raw('COUNT(caja.id) cajas_contadas'),
+                                    'palet_salida.*',
+                                    DB::raw('COUNT(caja.id) cajas_contadas'),
                                     'CL.nombre_calibre as calibre',
                                     'MA.nombre_materia as materia',
                                     'PE.peso_neto',
@@ -50,7 +50,7 @@ class PaletSalidaController extends Controller
                                 ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('estado',explode(',',$request->estado))
-                                ->orderBy('palet_salida.fecha_cierre','DESC')
+                                ->orderBy('palet_salida.updated_at','DESC')
                                 ->get();
         }else{
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
