@@ -19,7 +19,7 @@ class CreateProgramaComercialTable extends Migration
             $table->string('estado',30)->default('Pendiente');
             $table->integer('productor_id')->nullable();
             $table->string('codigo_operacion',20)->nullable();
-            $table->date('fecha_despacho');
+            $table->date('fecha_despacho')->nullable();
             $table->timestamps();
         });
     }

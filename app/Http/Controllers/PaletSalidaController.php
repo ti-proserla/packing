@@ -101,6 +101,8 @@ class PaletSalidaController extends Controller
                 $rendimientoPersonal->linea=substr($codigo,0,2);
                 $rendimientoPersonal->codigo_labor=substr($codigo,2,2);
                 $rendimientoPersonal->save();
+                $caja->linea=$rendimientoPersonal->linea;
+                $caja->save();
             }
         }
 
