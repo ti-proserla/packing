@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class EtiquetaCajaController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $etiquetaCaja=EtiquetaCaja::select(
                             DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
                             'etiqueta_caja.*',
@@ -34,6 +34,7 @@ class EtiquetaCajaController extends Controller
                         ->join('tipo_empaque as TIE','TIE.id','=','etiqueta_caja.tipo_empaque_id')
                         ->join('marca_empaque as MAE','MAE.id','=','etiqueta_caja.marca_empaque_id')
                         ->join('plu','plu.id','=','etiqueta_caja.plu_id')
+                        ->where('etiqueta_caja.fecha_empaque',$request->fecha_empaque)
                         ->orderBy('id','DESC')->paginate(10);
         return response()->json($etiquetaCaja);
     }

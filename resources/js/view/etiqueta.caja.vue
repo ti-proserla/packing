@@ -3,7 +3,27 @@
         <v-card outlined>
             <v-card-title>Lista de Etiqueta Caja</v-card-title>
             <v-card-text>
-                <v-btn @click="open_nuevo=true" outlined color="info">Nueva Etiqueta Caja</v-btn>
+                <v-row>
+                    
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-text-field
+                            @keydown="listar()"
+                            label="Fecha Empaque:"
+                            v-model="consulta.fecha_empaque"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-btn 
+                            color="primary"
+                            @click="listar()">
+                            Listar
+                        </v-btn>
+                    </v-col>
+                    <v-col class="text-right" cols="12" sm=6 lg="6">
+                        <v-btn  @click="open_nuevo=true" outlined color="info">Nueva Etiqueta Caja</v-btn>
+                    </v-col>
+                </v-row>
                 <v-data-table
                     :sort-desc="false"
                     :disable-sort="false"
@@ -214,6 +234,9 @@
 export default {
     data() {
         return {
+            consulta:{
+                fecha_empaque: moment().format('YYYY-MM-DD')
+            },
             print_count: 1,
             zpl: '',
             printer_select: {},
@@ -382,7 +405,9 @@ export default {
             });
         },
         listar(n=this.table.current_page){
-            axios.get(url_base+'/etiqueta-caja?page='+n+'&search='+this.search)
+            axios.get(url_base+'/etiqueta-caja?page='+n+'&search='+this.search,{
+                params: this.consulta
+            })
             .then(response => {
                 this.table = response.data;
             })
