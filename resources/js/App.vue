@@ -87,6 +87,46 @@
                         Calibre
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/presentacion">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Presentación
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/marca.caja">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Marca Caja
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/tipo.empaque">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Tipo Empaque
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/marca.empaque">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Marca Empaque
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/plu">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        PLU
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/cliente">
                     <v-list-item-icon>
                         <i class="fas fa-user-alt"></i>

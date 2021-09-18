@@ -34,6 +34,26 @@ var routes =[
         component: require('./view/variedad.vue').default
     },
     {
+        path: '/presentacion',
+        component: require('./view/presentacion.vue').default
+    },
+    {
+        path: '/marca.caja',
+        component: require('./view/marca.caja.vue').default
+    },
+    {
+        path: '/tipo.empaque',
+        component: require('./view/tipo.empaque.vue').default
+    },
+    {
+        path: '/marca.empaque',
+        component: require('./view/marca.empaque.vue').default
+    },
+    {
+        path: '/plu',
+        component: require('./view/plu.vue').default
+    },
+    {
         path: '/calibre',
         component: require('./view/calibre.vue').default
     },
