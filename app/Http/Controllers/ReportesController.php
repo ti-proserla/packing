@@ -230,6 +230,28 @@ class ReportesController extends Controller
         }
     }
 
+    public function rendimiento_linea(Request $request){
+        $fecha_proceso=$request->fecha_proceso;
+        $query="SELECT 	CONCAT(HOUR(CA.created_at),':00') hora_inicio,
+                        CONCAT(HOUR(DATE_ADD(CA.created_at, INTERVAL 1 HOUR)),':00') hora_fin,
+                        EC.fecha_empaque,
+                        CA.linea,
+                        PR.nombre_presentacion,
+                        SUM(peso_neto) kl_salida 
+                FROM etiqueta_caja EC 
+                INNER JOIN presentacion PR ON PR.id= EC.presentacion_id
+                INNER JOIN caja CA ON CA.etiqueta_caja_id=EC.id
+                WHERE fecha_empaque=?
+                GROUP BY HOUR(CA.created_at),EC.fecha_empaque,CA.linea,EC.presentacion_id 
+                ORDER BY fecha_empaque ASC,CA.created_at ASC";
+        $data=DB::select(DB::raw("$query"),[$fecha_proceso]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Rendimiento Linea $fecha_proceso.xlsx");
+        }else{
+            return response()->json($data);  
+        }
+    }
+
     public function avance_lote(Request $request){
         $fecha_produccion=$request->fecha_produccion;
         $query="SELECT 	LI.codigo,

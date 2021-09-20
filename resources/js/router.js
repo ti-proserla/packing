@@ -133,6 +133,10 @@ var routes =[
         component: require('./view/reporte/Lanzado.vue').default
     },
     {
+        path: '/reporte/rendimiento-linea',
+        component: require('./view/reporte/RendimientoLinea.vue').default
+    },
+    {
         path: '/reporte/producto-terminado',
         component: require('./view/reporte/ProductoTerminado.vue').default
     },
