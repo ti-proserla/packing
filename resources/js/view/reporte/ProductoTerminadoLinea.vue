@@ -139,7 +139,7 @@ export default {
             Object.entries(this.consulta).forEach(([key, value]) => {
                 query+=`&${key}=${value}`;
             });
-            return `${url_base}/reporte/producto-terminado?excel${query}`
+            return `${url_base}/reporte/producto-terminado-linea?excel${query}`
         }
     },
     methods:{
@@ -154,7 +154,7 @@ export default {
             })
         },
         buscar(){
-            axios.get(`${url_base}/reporte/producto-terminado`,{
+            axios.get(`${url_base}/reporte/producto-terminado-linea`,{
                 params: this.consulta
             })
             .then(response => {
