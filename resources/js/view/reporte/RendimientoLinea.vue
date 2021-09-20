@@ -6,9 +6,15 @@
                 <v-row>
                     <v-col cols="12" sm=6 lg="3">
                         <v-text-field
-                            @change="buscar"
-                            label="Fecha Proceso:"
-                            v-model="consulta.fecha_proceso"
+                            label="Desde:"
+                            v-model="consulta.desde"
+                            type="date">
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-text-field
+                            label="Hasta:"
+                            v-model="consulta.hasta"
                             type="date">
                         </v-text-field>
                     </v-col>
@@ -41,7 +47,8 @@ export default {
     data() {
         return {
             consulta:{
-                fecha_proceso: moment().format('YYYY-MM-DD'),
+                desde: moment().startOf('month').format('YYYY-MM-DD'),
+                hasta: moment().endOf('month').format('YYYY-MM-DD')
             },
             table: [],
             header: [
@@ -70,7 +77,11 @@ export default {
     },
     computed:{
         excel(){
-            return `${url_base}/reporte/rendimiento_linea?excel&fecha_proceso=${this.consulta.fecha_proceso}`
+            var query="";
+            Object.entries(this.consulta).forEach(([key, value]) => {
+                query+=`&${key}=${value}`;
+            });
+            return `${url_base}/reporte/rendimiento_linea?excel${query}`
         }
     },
     methods:{
