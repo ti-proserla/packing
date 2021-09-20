@@ -14,7 +14,7 @@
             app
             v-model="open"
         >
-            <v-list>
+            <!-- <v-list>
                 <v-list-item>
                 <v-list-item-avatar>
                     <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
@@ -24,14 +24,14 @@
                 <v-list-item link>
                     <v-list-item-content>
                         <v-list-item-title class="title">Diego Mendoza</v-list-item-title>
-                        <!-- <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle> -->
+                        <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
                     </v-list-item-content>
 
                     <v-list-item-action>
                         <v-icon>mdi-menu-down</v-icon>
                     </v-list-item-action>
                 </v-list-item>
-            </v-list>
+            </v-list> -->
             <v-list
             dense
             nav
@@ -85,6 +85,46 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                         Calibre
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/presentacion">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Presentación
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/marca.caja">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Marca Caja
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/tipo.empaque">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Tipo Empaque
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/marca.empaque">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Marca Empaque
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/plu">
+                    <v-list-item-icon>
+                        <i class="fas fa-ruler-vertical"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        PLU
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link to="/cliente">

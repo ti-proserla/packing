@@ -22,7 +22,7 @@ class PresentacionController extends Controller
     {
         $Presentaciones=new Presentacion();
         $Presentaciones->nombre_presentacion=$request->nombre_presentacion;
-        $Presentaciones->materia_id=$request->materia_id;
+        $Presentaciones->peso_neto=$request->peso_neto;
         $Presentaciones->save();
 
         return response()->json([
@@ -43,9 +43,8 @@ class PresentacionController extends Controller
     {
         $Presentaciones=Presentacion::where('id',$id)->first();
         $Presentaciones->nombre_presentacion=$request->nombre_presentacion;
-        $Presentaciones->materia_id=$request->materia_id;
+        $Presentaciones->peso_neto=$request->peso_neto;
         $Presentaciones->save();
-
         return response()->json([
             "status" => "OK"
         ]);

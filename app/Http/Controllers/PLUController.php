@@ -22,7 +22,6 @@ class PLUController extends Controller
     {
         $plus=new PLU();
         $plus->nombre_plu=$request->nombre_plu;
-        $plus->materia_id=$request->materia_id;
         $plus->save();
 
         return response()->json([
