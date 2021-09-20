@@ -298,7 +298,6 @@ class ReportesController extends Controller
                 AND EC.fecha_empaque<=?
                 GROUP BY HOUR(CA.created_at),EC.fecha_empaque,CA.linea,EC.presentacion_id 
                 ORDER BY fecha_empaque ASC,CA.created_at ASC";
-        dd($query);
         $data=DB::select(DB::raw("$query"),[$desde,$hasta]);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Rendimiento Linea $desde - $hasta.xlsx");
