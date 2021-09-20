@@ -219,7 +219,6 @@ class ReportesController extends Controller
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
-                $queryProductor
                 AND PS.estado <> 'Remonte'
                 GROUP BY PS.id,LI.id 
                 ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
