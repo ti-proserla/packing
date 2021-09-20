@@ -45,14 +45,12 @@ export default {
             },
             table: [],
             header: [
-                { text: 'Productor', value: 'nombre_productor'},
-                { text: 'Fundo', value: 'nombre_fundo' },
-                { text: 'Materia', value: 'nombre_materia' },
-                { text: 'Variedad', value: 'nombre_variedad' },
                 { text: 'Hora Inicio', value: 'hora_inicio' },
                 { text: 'Hora Final', value: 'hora_fin' },
-                { text: 'Hora Final', value: 'num_pallets' },
-                { text: 'Hora Final', value: 'num_jabas' },
+                { text: 'Fecha Proceso', value: 'fecha_empaque'},
+                { text: 'Linea', value: 'linea' },
+                { text: 'Presentacion', value: 'nombre_presentacion' },
+                { text: 'Salida (Kg)', value: 'salida' }
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,

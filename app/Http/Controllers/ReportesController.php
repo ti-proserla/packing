@@ -237,7 +237,7 @@ class ReportesController extends Controller
                         EC.fecha_empaque,
                         CA.linea,
                         PR.nombre_presentacion,
-                        SUM(peso_neto) kl_salida 
+                        SUM(peso_neto) salida 
                 FROM etiqueta_caja EC 
                 INNER JOIN presentacion PR ON PR.id= EC.presentacion_id
                 INNER JOIN caja CA ON CA.etiqueta_caja_id=EC.id
