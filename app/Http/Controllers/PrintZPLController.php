@@ -58,14 +58,14 @@ class PrintZPLController extends Controller
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
         $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
             $string_zpl="^XA
-                ^FT20,30
+                ^FT0,26
                 ^A0N,14,15
-                ^FB420,1,0,C
+                ^FB280,1,0,C
                 ^FD{nombre_operador}^FS
-                ^FT140,100
+                ^FT160,100
                 ^AAN,40,15
                 ^FD{labor_letra}^FS
-                ^FT20,170
+                ^FT40,160
                 ^BQN,2,5
                 ^FDMA,{linea}{labor}{operador}{autonumerico}^FS
                 ^XZ";
@@ -80,14 +80,14 @@ class PrintZPLController extends Controller
             // foreach($data[$i*$columna+$j] as $key=>$value){
             //     $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
             // }
-            $columna=2;
+            $columna=3;
             $string_zpl=str_replace('^XA','',$string_zpl);
             $string_zpl=str_replace('^XZ','',$string_zpl);
             
             $string_zpl_new="";
             $string_zpl_new.="^XA";
             for ($j=0; $j < $columna; $j++) {
-                $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,420);
+                $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,270);
             }
             $string_zpl_new.="^XZ";
         if ($request->has('return')) {
@@ -400,7 +400,7 @@ class PrintZPLController extends Controller
 
         $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
         $index_db=(int)$parametro->valor;
-        $cantidad=50;
+        $cantidad=60;
         
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);
