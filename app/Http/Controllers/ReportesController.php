@@ -294,8 +294,8 @@ class ReportesController extends Controller
                 FROM etiqueta_caja EC 
                 INNER JOIN presentacion PR ON PR.id= EC.presentacion_id
                 INNER JOIN caja CA ON CA.etiqueta_caja_id=EC.id
-                WHERE DATE(EC.fecha_empaque)>=?
-                AND DATE(EC.fecha_empaque)<=?
+                WHERE EC.fecha_empaque>=?
+                AND EC.fecha_empaque<=?
                 GROUP BY HOUR(CA.created_at),EC.fecha_empaque,CA.linea,EC.presentacion_id 
                 ORDER BY fecha_empaque ASC,CA.created_at ASC";
         $data=DB::select(DB::raw("$query"),[$desde,$hasta]);   
