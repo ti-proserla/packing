@@ -256,6 +256,11 @@
                             Producto Terminado
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/producto-terminado-linea">
+                        <v-list-item-content>
+                            Producto Terminado Linea
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>

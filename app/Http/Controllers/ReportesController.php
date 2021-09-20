@@ -184,7 +184,7 @@ class ReportesController extends Controller
         $cliente_id=$request->cliente_id;
         $desde=$request->desde;
         $hasta=$request->hasta;
-        $queryProductor="";
+        $queryProductor=($cliente_id==null) ? '' : ' AND CL.id=?';
         $query="SELECT 	EC.fecha_empaque,
                         PS.tipo_palet_id,
                         PS.numero,
@@ -216,15 +216,66 @@ class ReportesController extends Controller
                 INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
-                WHERE CL.id=?
-                AND DATE(EC.fecha_empaque)>=?
+                WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
+                $queryProductor
                 AND PS.estado <> 'Remonte'
                 GROUP BY PS.id,LI.id 
                 ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
-        $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
+        $data=DB::select(DB::raw("$query"),[$desde,$hasta,$cliente_id]);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Producto Terminado $desde - $hasta.xlsx");
+        }else{
+            return response()->json($data);  
+        }
+    }
+
+    public function producto_terminado_linea(Request $request){
+        $cliente_id=$request->cliente_id;
+        $desde=$request->desde;
+        $hasta=$request->hasta;
+        $queryProductor=($cliente_id==null) ? '' : ' AND CL.id=?';
+        $query="SELECT 	EC.fecha_empaque,
+                        PS.tipo_palet_id,
+                        PS.numero,
+                        CAL.nombre_calibre,
+                        CAT.nombre_categoria,
+                        FUN.cod_cartilla codigo_fundo,
+                        VAR.cod_cartilla codigo_variedad,
+                        PRE.nombre_presentacion,
+                        MAC.nombre_marca_caja,
+                        TIE.nombre_tipo_empaque,
+                        MAE.nombre_marca_empaque,
+                        plu.nombre_plu,
+                        DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) juliano,
+                        LI.codigo codigo_lote,
+                        CL.descripcion nombre_productor,
+                        PS.id palet_id,
+                        CA.linea,
+                        COUNT(CA.id) numero_cajas
+                FROM palet_salida PS 
+                INNER JOIN cliente CL ON PS.cliente_id=CL.id
+                INNER JOIN caja CA ON CA.palet_salida_id=PS.id
+                INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
+                INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
+                INNER JOIN categoria CAT ON CAT.id = EC.categoria_id
+                INNER JOIN presentacion PRE ON PRE.id = EC.presentacion_id
+                INNER JOIN marca_caja MAC ON MAC.id = EC.marca_caja_id
+                INNER JOIN tipo_empaque TIE ON TIE.id = EC.tipo_empaque_id
+                INNER JOIN marca_empaque MAE ON MAE.id = EC.marca_empaque_id
+                INNER JOIN plu ON plu.id = EC.plu_id
+                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
+                INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
+                INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
+                WHERE DATE(EC.fecha_empaque)>=?
+                AND DATE(EC.fecha_empaque)<=?
+                $queryProductor
+                AND PS.estado <> 'Remonte'
+                GROUP BY PS.id,LI.id, CA.linea
+                ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
+        $data=DB::select(DB::raw("$query"),[$desde,$hasta,$cliente_id]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Producto Terminado x Linea $desde - $hasta.xlsx");
         }else{
             return response()->json($data);  
         }

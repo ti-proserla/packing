@@ -69,6 +69,7 @@ Route::get('rendimiento-personal', 'ReportesController@rendimiento_personal');
 Route::get('cantidad-por-linea', 'ReportesController@cantidad_por_linea');
 Route::get('reporte/lote', 'ReportesController@lote');
 Route::get('reporte/producto-terminado', 'ReportesController@producto_terminado');
+Route::get('reporte/producto-terminado-linea', 'ReportesController@producto_terminado_linea');
 Route::get('reporte/acopio', 'ReportesController@acopio');
 Route::get('reporte/lanzado', 'ReportesController@lanzado');
 Route::get('reporte/rendimiento_linea', 'ReportesController@rendimiento_linea');

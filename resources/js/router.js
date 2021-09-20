@@ -161,6 +161,10 @@ var routes =[
         component: require('./view/reporte/ProductoTerminado.vue').default
     },
     {
+        path: '/reporte/producto-terminado-linea',
+        component: require('./view/reporte/ProductoTerminadoLinea.vue').default
+    },
+    {
         path: '/reporte/linea',
         component: require('./view/reporte/Linea.vue').default
     },

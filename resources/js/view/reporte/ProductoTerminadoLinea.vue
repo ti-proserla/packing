@@ -100,6 +100,7 @@ export default {
             },
             table: [],
             header: [
+                { text: 'Linea', value: 'linea'},
                 { text: 'Productor', value: 'nombre_productor'},
                 { text: 'Fecha Empaque', value: 'fecha_empaque'},
                 { text: 'Tipo Palet', value: 'tipo_palet_id'},
