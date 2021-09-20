@@ -185,6 +185,7 @@ class ReportesController extends Controller
         $desde=$request->desde;
         $hasta=$request->hasta;
         $queryProductor=($cliente_id==null) ? '' : ' AND CL.id=?';
+        dd($queryProductor);
         $query="SELECT 	EC.fecha_empaque,
                         PS.tipo_palet_id,
                         PS.numero,
