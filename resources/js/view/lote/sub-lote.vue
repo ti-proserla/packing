@@ -552,21 +552,6 @@ export default {
                 }
             });
         },
-        finalizar(){
-            axios.post(url_base+`/lote_ingreso/${ this.$route.params.id }?_method=patch`,{
-                estado: 'Lanzado'
-            }).then(response => {
-                var res=response.data;
-                switch (res.status) {
-                    case 'OK':
-                        this.$router.push('/acopio/lote');
-                        break;
-                
-                    default:
-                        break;
-                }
-            });
-        },
         printUnitario(id){
             axios.get(`${url_base}/print/zpl/palet_entrada`,{
                 params: {

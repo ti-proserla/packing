@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\LoteIngreso;
+use App\Model\SubLote;
 use App\Model\PaletSalida;
 use App\Http\Requests\LoteIngresoValidate;
 use Illuminate\Http\Request;
@@ -110,13 +111,33 @@ class LoteIngresoController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->has('estado')) {
-            $loteIngreso=LoteIngreso::where('id',$id)->first();
-            $loteIngreso->estado=$request->estado;
-            $loteIngreso->save();
-            return response()->json([
-                "status" => "OK",
-                "data"   => "Lote Ingreso Actulizado."
-            ]);
+            $estado=$request->estado;
+            switch ($estado) {
+                case 'Cerrado':
+                    $loteIngreso=LoteIngreso::where('id',$id)->first();
+                    $loteIngreso->estado=$estado;
+                    $loteIngreso->save();
+                    $sublotes=SubLote::where('lote_id',$loteIngreso->id)->get();
+                    foreach ($sublotes as $key => $sublote) {
+                        $sublote->estado=$estado;
+                        $sublote->save();
+                    }
+                    return response()->json([
+                        "status" => "OK",
+                        "data"   => "Lote $estado."
+                    ]);
+                    break;
+                
+                default:
+                    $loteIngreso=LoteIngreso::where('id',$id)->first();
+                    $loteIngreso->estado=$estado;
+                    $loteIngreso->save();
+                    return response()->json([
+                        "status" => "OK",
+                        "data"   => "Lote Ingreso Actulizado."
+                    ]);
+                    break;
+            }
         }else {
             $loteIngreso=LoteIngreso::where('id',$id)->first();
             $loteIngreso->fecha_proceso=$request->fecha_proceso;

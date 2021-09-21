@@ -255,8 +255,11 @@ class ReportesController extends Controller
                         COUNT(CA.id) numero_cajas
                 FROM palet_salida PS 
                 INNER JOIN cliente CL ON PS.cliente_id=CL.id
+                INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
+                INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 INNER JOIN caja CA ON CA.palet_salida_id=PS.id
                 INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
+                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
                 INNER JOIN categoria CAT ON CAT.id = EC.categoria_id
                 INNER JOIN presentacion PRE ON PRE.id = EC.presentacion_id
@@ -264,9 +267,6 @@ class ReportesController extends Controller
                 INNER JOIN tipo_empaque TIE ON TIE.id = EC.tipo_empaque_id
                 INNER JOIN marca_empaque MAE ON MAE.id = EC.marca_empaque_id
                 INNER JOIN plu ON plu.id = EC.plu_id
-                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
-                INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
-                INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
                 $queryProductor
@@ -293,8 +293,10 @@ class ReportesController extends Controller
                 FROM etiqueta_caja EC 
                 INNER JOIN presentacion PR ON PR.id= EC.presentacion_id
                 INNER JOIN caja CA ON CA.etiqueta_caja_id=EC.id
+                INNER JOIN palet_salida PS ON PS.id=CA.palet_salida_id
                 WHERE EC.fecha_empaque>=?
                 AND EC.fecha_empaque<=?
+                AND PS.estado <> 'Remonte'
                 GROUP BY HOUR(CA.created_at),EC.fecha_empaque,CA.linea,EC.presentacion_id 
                 ORDER BY fecha_empaque ASC,CA.created_at ASC";
         $data=DB::select(DB::raw("$query"),[$desde,$hasta]);   

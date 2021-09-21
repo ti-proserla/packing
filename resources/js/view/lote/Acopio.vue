@@ -15,6 +15,7 @@
                                 <th>Variedad</th>
                                 <th>Cosecha</th>
                                 <th>Fecha Proceso</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,15 +27,26 @@
                                 <td>{{ lote.fecha_cosecha }}</td>
                                 <td>{{ lote.fecha_proceso }}
                                     <v-btn 
+                                        small
                                         text
                                         @click="abrir_actualizar(lote.id)">
                                         <i class="fas fa-pen"></i>
                                     </v-btn>
                                 </td>
                                 <td>
-                                    <v-btn>
-                                        
-                                    </v-btn>
+                                    <v-chip
+                                    small
+                                    class="ma-2"
+                                    :color="colorGet(lote.estado)"
+                                    text-color="white"
+                                    >
+                                        {{lote.estado}}
+                                    </v-chip>
+                                    <!-- <v-btn 
+                                        v-if="lote.estado!='Cerrado'"
+                                        text>
+                                        Cerrar
+                                    </v-btn> -->
                                 </td>
                             </tr>
                         </tbody>
@@ -93,13 +105,28 @@ export default {
                 lote_ingreso_id: 0,
                 fecha_proceso: moment().format('YYYY-MM-DD')
             },
-            open_editar: false
+            open_editar: false,
+            estados: [
+                {color: 'success', estado: 'Pendiente'},
+                {color: 'warning', estado: 'Lanzado'},
+                {color: 'primary', estado: 'Cerrado'},
+                {color: 'danger', estado: 'Pendiente'}
+            ]
         }
     },
     mounted() {
         this.listarLotes()
     },
     methods: {
+        colorGet(estado){
+            for (let i = 0; i < this.estados.length; i++) {
+                const element = this.estados[i];
+                if (element.estado==estado) {
+                    return element.color;
+                }
+            }
+            return '';
+        },
         listarLotes(){
             axios.get(url_base+'/lote_ingreso')
             .then(response => {
@@ -112,6 +139,21 @@ export default {
         abrir_actualizar(id){
             this.lote_editar.lote_ingreso_id=id;
             this.open_editar=true;
+        },
+        finalizar(id){
+            axios.post(url_base+`/lote_ingreso/${ id }?_method=patch`,{
+                estado: 'Cerrado'
+            }).then(response => {
+                var res=response.data;
+                switch (res.status) {
+                    case 'OK':
+                        this.listarLotes();
+                        break;
+                
+                    default:
+                        break;
+                }
+            });
         },
         actualizar(){
             axios.post(url_base+`/lote_ingreso/${this.lote_editar.lote_ingreso_id}?_method=PUT`,this.lote_editar)
