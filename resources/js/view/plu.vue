@@ -3,7 +3,7 @@
         <v-card outlined>
             <v-card-title>Lista de plu</v-card-title>
             <v-card-text>
-                <v-btn @click="open_nuevo=true" outlined color="info">Nueva plu</v-btn>
+                <v-btn @click="open_nuevo=true" outlined color="info">Nuevo plu</v-btn>
                 <v-data-table
                     :headers="header"
                     :items="table.data"
@@ -22,7 +22,7 @@
             <!-- Nuevo -->
             <v-dialog v-model="open_nuevo" persistent max-width="350">
                 <v-card>
-                    <v-card-title class="headline">Nueva plu</v-card-title>
+                    <v-card-title class="headline">Nuevo plu</v-card-title>
                     <v-card-text>
                         <v-row>
                             <v-col cols="12" lg="12">
