@@ -466,6 +466,7 @@ class PrintZPLController extends Controller
                         'MA.nombre_materia as materia',
                         'PE.peso_neto',
                         'VA.nombre_variedad as variedad',
+                        'VA.variedad_licenciada',
                         'FU.cod_lugar_produccion',
                         'CT.nombre_categoria as categoria')
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')

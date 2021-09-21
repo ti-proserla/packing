@@ -22,6 +22,7 @@ window.store=new Vuex.Store({
   state: {
     peso: 0,
     defaultPrinter: {},
+    
   },
   mutations: { 
     getDefaultPrinter(state){
