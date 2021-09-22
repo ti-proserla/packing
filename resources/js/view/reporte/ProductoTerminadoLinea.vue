@@ -96,7 +96,7 @@ export default {
             consulta:{
                 desde: moment().startOf('month').format('YYYY-MM-DD'),
                 hasta: moment().endOf('month').format('YYYY-MM-DD'),
-                cliente_id: null
+                cliente_id: ''
             },
             table: [],
             header: [
@@ -149,7 +149,7 @@ export default {
                 this.clientes = response.data;
                 this.clientes.push({
                     descripcion: 'Todos los Clientes',
-                    id: null
+                    id: ''
                 })
             })
         },

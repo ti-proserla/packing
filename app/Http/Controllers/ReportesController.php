@@ -248,6 +248,7 @@ class ReportesController extends Controller
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
+                $queryProductor
                 AND PS.estado <> 'Remonte'
                 GROUP BY PS.id,LI.id 
                 ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
@@ -302,9 +303,10 @@ class ReportesController extends Controller
                 AND PS.estado <> 'Remonte'
                 GROUP BY PS.id,LI.id, CA.linea
                 ORDER BY PS.numero ASC, EC.fecha_empaque ASC";
+        // dd($query);
         $data=DB::select(DB::raw("$query"),[$desde,$hasta,$cliente_id]);   
         if ($request->has('excel')) {
-            return (new GeneralExcel($data))->download("Reporte Producto Terminado x Linea $desde - $hasta.xlsx");
+            return (new GeneralExcel($data))->download("Reporte Producto Terminado $desde - $hasta.xlsx");
         }else{
             return response()->json($data);  
         }
