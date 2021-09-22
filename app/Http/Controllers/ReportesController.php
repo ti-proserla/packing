@@ -254,12 +254,12 @@ class ReportesController extends Controller
                         CA.linea,
                         COUNT(CA.id) numero_cajas
                 FROM palet_salida PS 
+                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN cliente CL ON PS.cliente_id=CL.id
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 INNER JOIN caja CA ON CA.palet_salida_id=PS.id
                 INNER JOIN etiqueta_caja EC ON CA.etiqueta_caja_id=EC.id
-                INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
                 INNER JOIN categoria CAT ON CAT.id = EC.categoria_id
                 INNER JOIN presentacion PRE ON PRE.id = EC.presentacion_id
