@@ -134,21 +134,25 @@ export default {
     },
     methods: {
         completar(){
-            for (let i = 0; i < this.labores.length; i++) {
-                const labor = this.labores[i];
-                var encontrado=0;
-                for (let j = 0; j < this.fila_codigos.length; j++) {
-                    
-                    const codigo = this.fila_codigos[j];
-                    
-                    if (labor.codigo==codigo.substring(2,4)) {
-                        encontrado=1;
-                        break;
+            if (this.fila_codigos.length!=0) {
+                for (let i = 0; i < this.labores.length; i++) {
+                    const labor = this.labores[i];
+                    var encontrado=0;
+                    for (let j = 0; j < this.fila_codigos.length; j++) {
+                        
+                        const codigo = this.fila_codigos[j];
+                        
+                        if (labor.codigo==codigo.substring(2,4)) {
+                            encontrado=1;
+                            break;
+                        }
+                    }
+                    if (encontrado==0) {
+                        this.fila_codigos.push('00XX000000000000'.replace('XX',labor.codigo));
                     }
                 }
-                if (encontrado==0) {
-                    this.fila_codigos.push('00XX000000000000'.replace('XX',labor.codigo));
-                }
+            }else{
+                this.alerta("Leer al menos una etiqueta de trabajador.");
             }
             this.$refs.codigo_barras.focus();
         },
