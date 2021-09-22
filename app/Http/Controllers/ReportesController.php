@@ -111,7 +111,7 @@ class ReportesController extends Controller
                             SELECT * FROM db_asistencia_produccion.tareo 
                             GROUP BY codigo_operador,labor_id,fecha
                     ) ta ON ta.codigo_operador=ma.codigo_operador AND ma.fecha_ref = ta.fecha
-                    WHERE ma.fecha_ref>='2021-09-16' AND ma.fecha_ref<='2021-09-22' 
+                    WHERE ma.fecha_ref>='2021-09-15' AND ma.fecha_ref<='2021-09-22' 
                     GROUP BY op.dni, ma.fecha_ref,ta.labor_id
                 ) ASIS ON EC.fecha_empaque= ASIS.fecha_ref AND LA.codigo_auxiliar=ASIS.labor_id AND ASIS.dni=RP.codigo_operador
                 
