@@ -96,7 +96,7 @@ class ReportesController extends Controller
         }   
     }
 
-    public function rendimiento_personal_presentacion(){
+    public function rendimiento_personal_presentacion(Request $request){
         $query="SELECT EC.fecha_empaque,RP.codigo_operador,ASIS.nom_operador,ASIS.ape_operador,PRE.nombre_presentacion,LA.descripcion nombre_labor, COUNT(CA.id) num_cajas
                 FROM caja CA
                 INNER JOIN rendimiento_personal RP ON RP.caja_id=CA.id
