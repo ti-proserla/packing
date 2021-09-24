@@ -38,7 +38,9 @@ class LoteIngresoController extends Controller
         if ($request->has('estado')) {
             $lotesIngreso=$lotesIngreso->whereIn('estado',explode(',',$request->estado));
         }
-        $lotesIngreso=$lotesIngreso->get();
+        $lotesIngreso=$lotesIngreso
+                        ->orderBy('lote_ingreso.id','DESC')
+                        ->get();
         return response()->json($lotesIngreso); 
     }
 
