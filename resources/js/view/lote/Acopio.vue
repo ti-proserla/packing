@@ -26,7 +26,7 @@
                                 <td>{{ lote.nombre_variedad }}</td>
                                 <td>{{ lote.fecha_cosecha }}</td>
                                 <td>{{ lote.fecha_proceso }}
-                                    <v-btn 
+                                    <v-btn v-if="lote.estado!='Cerrado'"
                                         small
                                         text
                                         @click="abrir_actualizar(lote.id)">
@@ -35,6 +35,7 @@
                                 </td>
                                 <td>
                                     <v-chip
+                                    @click="finalizar(lote.id,lote.estado)"
                                     small
                                     class="ma-2"
                                     :color="colorGet(lote.estado)"
@@ -140,20 +141,28 @@ export default {
             this.lote_editar.lote_ingreso_id=id;
             this.open_editar=true;
         },
-        finalizar(id){
-            axios.post(url_base+`/lote_ingreso/${ id }?_method=patch`,{
-                estado: 'Cerrado'
-            }).then(response => {
-                var res=response.data;
-                switch (res.status) {
-                    case 'OK':
-                        this.listarLotes();
-                        break;
-                
-                    default:
-                        break;
-                }
-            });
+        finalizar(id,estado){
+            if (estado=='Pendiente') {
+                var t=this;
+                swal({ title: "¿Desea Cerrar Lote?", buttons: ['Cancelar',"Si"]})
+                .then((res) => {
+                    if (res) {
+                        axios.post(url_base+`/lote_ingreso/${ id }?_method=patch`,{
+                            estado: 'Cerrado'
+                        }).then(response => {
+                            var res=response.data;
+                            switch (res.status) {
+                                case 'OK':
+                                    t.listarLotes();
+                                    break;
+                            
+                                default:
+                                    break;
+                            }
+                        });
+                    }
+                });
+            }
         },
         actualizar(){
             axios.post(url_base+`/lote_ingreso/${this.lote_editar.lote_ingreso_id}?_method=PUT`,this.lote_editar)
