@@ -78,7 +78,10 @@ class SubLoteController extends Controller
     }
     public function palets($id){
         $subLote=SubLote::with('palets')
-                    ->where('id',$id)
+                    ->join('lote_ingreso as LI','LI.id','=','sub_lote.lote_id')
+                    ->join('cliente as CL','CL.id','=','LI.cliente_id')
+                    ->where('sub_lote.id',$id)
+                    ->select('sub_lote.*','CL.descripcion as cliente')
                     ->first();
         return response()->json($subLote);
         

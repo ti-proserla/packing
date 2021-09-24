@@ -31,4 +31,17 @@ class PaletEntradaController extends Controller
             "data"      =>  $paletEntradas
         ]);
     }
+    public function update(Request $request,$id){
+        $paletEntradas=PaletEntrada::where('id',$id)->first();
+        $paletEntradas->peso=$request->peso;
+        $paletEntradas->peso_palet=$request->peso_palet;
+        $paletEntradas->peso_jaba=$request->peso_jaba;
+        $paletEntradas->num_jabas = $request->num_jabas;
+        $paletEntradas->save();
+        return response()->json([
+            "status"    => "OK",
+            "message"   => "Palet Actualizado.",
+            "data"      =>  $paletEntradas
+        ]);
+    }
 }

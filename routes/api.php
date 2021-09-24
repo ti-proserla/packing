@@ -59,6 +59,7 @@ Route::get('sub_lote', 'SubLoteController@index');
 Route::post('sub_lote', 'SubLoteController@store');
 // Route::get('palet_entrada', 'PaletEntradaController');
 Route::resource('sub_lote/{sub_lote_id}/palet_entrada', 'PaletEntradaController');
+Route::patch('palet_entrada/{id}', 'PaletEntradaController@update');
 Route::get('lanzado','LanzadoController@index');
 Route::patch('lanzado','LanzadoController@palet_entrada');
 Route::patch('lanzado/{id}/cerrar','LanzadoController@cerrar');

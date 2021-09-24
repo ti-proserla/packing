@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-dialog 
-            max-width="500"
+            max-width="800"
             v-model="open_palets" 
             persistent>
             <v-card>
@@ -15,41 +15,42 @@
                         Registro de Palets
                 </v-card-title>
                 <v-card-text>
+                    <v-row>
+                        <v-col cols="12">
+                            <b>Viaje: </b>{{ sub_lote_seleccionado.viaje }} <br>
+                            <b>Cliente: </b>{{ sub_lote_seleccionado.cliente }} <br>
+                            <b>Fecha Recepción: </b>{{ sub_lote_seleccionado.fecha_recepcion }}
+                        </v-col>
+                    </v-row>
                         <v-row v-if="sub_lote_seleccionado.estado=='Pendiente'">
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="3">
                                 <v-text-field 
                                     label="N° de Jabas:" 
                                     v-model="num_jabas"
-                                    outlined
-                                    dense
                                     clearable
                                     type="number"
                                     :error-messages="palets_error.num_jabas"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="3">
                                 <v-text-field 
                                     label="Peso Total:" 
                                     v-model="peso"
-                                    outlined
-                                    dense
                                     clearable
                                     type="number"
                                     :error-messages="palets_error.peso"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="3">
                                 <v-text-field 
                                     label="Peso Palet (Kg):" 
                                     v-model="peso_palet"
-                                    outlined
-                                    dense
                                     clearable
                                     type="number"
                                     :error-messages="palets_error.peso_palet"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6">
+                            <v-col cols="12" sm="3">
                                 <v-text-field 
                                     label="Peso Jaba (Kg):" 
                                     v-model="peso_jaba"
@@ -94,22 +95,74 @@
                                             <th>Peso Palet</th>
                                             <th>Peso Jaba</th>
                                             <th>Imprimir</th>
+                                            <th v-if="sub_lote_seleccionado.estado=='Pendiente'">Editar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(palet,index) in sub_lote_seleccionado.palets.slice().reverse()">
                                             <td>{{ sub_lote_seleccionado.palets.length - index}}</td>
-                                            <td>{{ palet.num_jabas }}</td>
-                                            <td>{{ palet.peso }}</td>
-                                            <td>{{ palet.peso_palet }}</td>
-                                            <td>{{ palet.peso_jaba }}</td>
+                                            <td v-if="palet.id!=index_edit"> 
+                                                {{ palet.num_jabas }}
+                                            </td>
+                                            <td v-else>
+                                                <v-text-field 
+                                                    v-model="palet.num_jabas"
+                                                ></v-text-field>
+                                            </td>
+                                            <td v-if="palet.id!=index_edit"> 
+                                                {{ palet.peso }}
+                                            </td>
+                                            <td v-else>
+                                                <v-text-field 
+                                                    v-model="palet.peso"
+                                                ></v-text-field>
+                                            </td>
+                                            <td v-if="palet.id!=index_edit"> 
+                                                {{ palet.peso_palet }}
+                                            </td>
+                                            <td v-else>
+                                                <v-text-field 
+                                                    v-model="palet.peso_palet"
+                                                ></v-text-field>
+                                            </td>
+                                            <td v-if="palet.id!=index_edit"> 
+                                                {{ palet.peso_jaba }}
+                                            </td>
+                                            <td v-else>
+                                                <v-text-field 
+                                                    v-model="palet.peso_jaba"
+                                                ></v-text-field>
+                                            </td>
                                             <td>
                                                 <v-btn
                                                     @click="printUnitario(palet.id)"
-                                                    color="warning"
+                                                    color="orange"
                                                     text>
                                                     <i class="fas fa-print"></i>
                                                 </v-btn>
+                                            </td>
+                                            <td v-if="sub_lote_seleccionado.estado=='Pendiente'">
+                                                <v-btn v-if="palet.id!=index_edit" @click="edit(palet.id)"
+                                                        color="orange"
+                                                        text>
+                                                    <i class="fas fa-pen"></i>
+                                                </v-btn>
+                                                <v-btn-toggle v-else
+                                                    group
+                                                >
+                                                    <v-btn  @click="saveEdit(palet)"
+                                                            color="info"
+                                                            text>
+                                                        <i class="far fa-save"></i>
+                                                    </v-btn>
+                                                    <v-btn  
+                                                        @click="index_edit=0;listarPaletEntrada()"
+                                                        color="info"
+                                                        text>
+                                                        <i class="fas fa-share"></i>
+                                                    </v-btn>
+                                                </v-btn-toggle>
+                                                
                                             </td>
                                         </tr>
                                         <tr v-if="seleccionado_sub_lote==null">
@@ -416,7 +469,8 @@ export default {
             seleccionado_sub_lote: null,
             seleccionado_estado_sub_lote: null,
             getZPL: true,
-            printAdd: true
+            printAdd: true,
+            index_edit: -1
         }
     },
     computed: {
@@ -496,6 +550,7 @@ export default {
             this.listarPaletEntrada();
         },
         listarPaletEntrada(){
+            this.index_edit=0;
             axios.get(url_base+`/sub_lote/${this.seleccionado_sub_lote}/palets`)
             .then(response => {
                 this.sub_lote_seleccionado=response.data;
@@ -523,6 +578,24 @@ export default {
 
                     case 'VALIDATION':
                         this.palets_error=res.data;
+                        break;
+                
+                    default:
+                        break;
+                }
+            });
+        },
+        edit(index){ this.index_edit=index },
+        saveEdit(palet){
+            console.log(palet);
+            
+            axios.post(url_base+`/palet_entrada/${this.index_edit}?_method=PATCH`,palet)
+            .then(response => {
+                var res=response.data;
+                switch (res.status) {
+                    case 'OK':
+                        this.index_edit=0;
+                        this.listarPaletEntrada();
                         break;
                 
                     default:
