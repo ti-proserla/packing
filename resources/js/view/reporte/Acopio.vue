@@ -59,9 +59,13 @@
 export default {
     data() {
         return {
+            // consulta:{
+            //     desde: moment().startOf('month').format('YYYY-MM-DD'),
+            //     hasta: moment().endOf('month').format('YYYY-MM-DD')
+            // },
             consulta:{
-                desde: moment().startOf('month').format('YYYY-MM-DD'),
-                hasta: moment().endOf('month').format('YYYY-MM-DD')
+                desde: moment().format('YYYY-MM-DD'),
+                hasta: moment().format('YYYY-MM-DD')
             },
             table: [],
             header: [
