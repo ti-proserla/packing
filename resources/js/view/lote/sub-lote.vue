@@ -494,7 +494,7 @@ export default {
         .then(response => {
             this.clientes=response.data
         });
-        axios.get(url_base+`/lote_ingreso`)
+        axios.get(url_base+`/lote_ingreso?estado=Pendiente`)
         .then(response => {
             this.lotes=response.data
         });
