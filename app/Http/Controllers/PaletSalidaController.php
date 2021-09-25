@@ -163,10 +163,8 @@ class PaletSalidaController extends Controller
             $id=$palets[$i];
             $cajas=Caja::where('palet_salida_id',$id)->get();
             foreach ($cajas as $key => $caja) {
-                $cajaNew=new Caja();
-                $cajaNew->palet_salida_id=$paletSalida->id;
-                $cajaNew->etiqueta_caja_id=$caja->etiqueta_caja_id;
-                $cajaNew->save();
+                $caja->palet_salida_id=$paletSalida->id;
+                $caja->save();
             }
             $paletSalidaOld=PaletSalida::where('id',$id)->first();
             $paletSalidaOld->estado="Remonte";
