@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PaletEntradaValidate extends FormRequest
+class PaletSalidaValidate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,9 +28,11 @@ class PaletEntradaValidate extends FormRequest
     {
         return [
             // 'sub_lote_id' => 'required|numeric',
-            'peso' => 'required|numeric|min:1',
-            'num_jabas' => 'required|numeric|min:1',
-
+            'campania_id' => 'required',
+            'tipo_palet_id' => 'required',
+            'cliente_id' => 'required|numeric',
+            'etapas' => 'required|numeric',
+            'tope_cajas' => 'required|numeric'
         ];
     }
     

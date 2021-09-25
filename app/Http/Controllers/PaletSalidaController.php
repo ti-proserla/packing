@@ -11,6 +11,7 @@ use App\Model\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Http\Requests\PaletSalidaValidate;
 
 class PaletSalidaController extends Controller
 {
@@ -65,14 +66,15 @@ class PaletSalidaController extends Controller
     /**
      * La cantidad se Agrega por defecto 0 y va creciendo conforme se escanean Jabas.
      */
-    public function store(Request $request)
+    public function store(PaletSalidaValidate $request)
     {
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;
-        $paletSalida->presentacion_id=$request->presentacion_id;
+        // $paletSalida->presentacion_id=$request->presentacion_id;
+        $paletSalida->tope_cajas=$request->tope_cajas;
         $paletSalida->nave=1;
         $paletSalida->camara=null;
         $paletSalida->estado="Pendiente";
@@ -121,9 +123,8 @@ class PaletSalidaController extends Controller
 
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
-                                ->leftJoin('presentacion','presentacion.id','=','palet_salida.presentacion_id')
                                 ->where('palet_salida.id',$id)
-                                ->select('palet_salida.*','presentacion.tope_cajas')
+                                ->select('palet_salida.*')
                                 ->first();
         return response()->json($paletSalida);
         

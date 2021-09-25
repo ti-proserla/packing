@@ -10,7 +10,9 @@
                             label="Cliente:"
                             :items="clientes"
                             :item-text="cliente => `${cliente.descripcion}`"
-                            item-value="id">
+                            item-value="id"
+                            :error-messages="error.cliente_id"
+                            >
                             </v-select>
                     </v-col>
                     <v-col cols="12" lg="6">
@@ -19,6 +21,7 @@
                             label="Procesos:"
                             :items="procesos"
                             :item-text="proceso => `${proceso.descripcion}`"
+                            :error-messages="error.etapas"
                             item-value="etapas">
                         </v-select>
                     </v-col>
@@ -28,6 +31,7 @@
                             label="Tipo de Palet:"
                             :items="tipos_palet"
                             :item-text="tipo => `${tipo.descripcion}`"
+                            :error-messages="error.tipo_palet_id"
                             item-value="id">
                         </v-select>
                     </v-col>
@@ -37,15 +41,17 @@
                             label="Campañas:"
                             :items="campanias"
                             :item-text="campania => `${campania.id} - ${campania.nombre_materia}`"
+                            :error-messages="error.campania_id"
                             item-value="id">
                         </v-select>
                     </v-col>
                     <v-col cols="12" lg="4">
                         <v-select
-                            v-model="palet_salida.presentacion_id"
-                            label="Presentaciones:"
-                            :items="presentaciones"
-                            :item-text="presentacion => `(${presentacion.tope_cajas} cajas palet)${presentacion.nombre_presentacion}`"
+                            v-model="palet_salida.tope_cajas"
+                            label="Cajas Maximas por palet:"
+                            :items="topes"
+                            item-text="cantidad"
+                            :error-messages="error.tope_cajas"
                             item-value="id">
                         </v-select>
                     </v-col>
@@ -61,6 +67,10 @@
 export default {
     data() {
         return {
+            error:{
+
+            },
+
             lote_ingreso:[],
             palet_salida: {
                 cliente_id: null,
@@ -76,6 +86,17 @@ export default {
             operaciones: [],
             tipos_palet: [],
             presentaciones: [],
+            topes: [
+                {cantidad: 85},
+                {cantidad: 90},
+                {cantidad: 92},
+                {cantidad: 102},
+                {cantidad: 108},
+                {cantidad: 114},
+                {cantidad: 115},
+                {cantidad: 144},
+                {cantidad: 180}
+            ]
         }
     },
     mounted() {
@@ -142,6 +163,7 @@ export default {
                         console.log(respuesta);
                         switch (respuesta.status) {
                             case "VALIDATION":
+                                t.error=respuesta.data;
                                 break;
                             case "OK":
                                 swal("Palet Creado", { icon: "success", timer: 2000, buttons: false });
