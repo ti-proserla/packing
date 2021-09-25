@@ -182,7 +182,7 @@ this.labores=this.palet.etapas==1 ?
                         this.matriz_codigos.push(codigos);
                     }
                 }
-                if (this.tope) {
+                if (this.tope&&this.palet.estado=='Pendiente') {
                     this.alertaTerminado("Cajas Completas.");
                 }
             });
