@@ -1,16 +1,10 @@
 <template>
     <v-container fluid>
-        <v-row class="">
-            <v-col cols=12 sm=4>
-                PALETIZADO
-            </v-col>
-            <v-col cols=12 sm=8 class="text-right">
+        <v-row>
+            <v-col cols="12" sm="6" class="text-right">
                 <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
                 <v-btn @click="terminar()" color="success" v-if="palet.estado=='Pendiente'">Cerrar</v-btn>
-                
             </v-col>
-        </v-row>
-        <v-row>
             <v-col cols=12 sm=6>
                 <v-card>
                     <v-card-text>
@@ -23,11 +17,15 @@
                                         label="Lectura" 
                                         autofocus
                                         ref="codigo_barras"
+                                        :disabled="tope"
                                         @focus="OpenFocus()" 
                                         :readonly="readonlyFocusInit"
                                         v-model="codigo_barras">
                                         </v-text-field>
                                     <button type="submit" hidden>Submin</button>
+                                    <br>
+                                    <h2 v-if="tope">Palet completado ...</h2>
+                                    
                                     <v-alert v-model="alert.visible" 
                                         :color="alert.status" 
                                         dark 
@@ -110,6 +108,15 @@ export default {
         this.getPaletSalida();
     },
     computed:{
+        tope(){
+            var cantidad=0;
+            if (this.palet.cajas.length!=0) {
+                for (let i = 0; i < this.palet.cajas.length; i++) {
+                    cantidad+= this.palet.cajas[i].cantidad;
+                }
+            }
+            return (cantidad>=this.palet.tope_cajas);
+        },
         escaneadosLabores(){
             var avance= [];
             for (let i = 0; i < this.labores.length; i++) {
@@ -175,6 +182,9 @@ this.labores=this.palet.etapas==1 ?
                         this.matriz_codigos.push(codigos);
                     }
                 }
+                if (this.tope) {
+                    this.alertaTerminado("Cajas Completas.");
+                }
             });
         },
         initAlert(){
@@ -201,6 +211,17 @@ this.labores=this.palet.etapas==1 ?
             x.play();
             window.navigator.vibrate([500,100,500]);
             this.alert.status= 'danger';
+            this.alert.visible= true;
+            this.alert.message= sMensaje;
+            this.timer=setTimeout(() => {
+                this.alert=this.initAlert();
+            }, 2000);
+        },
+        alertaTerminado(sMensaje){
+            var x = document.getElementById("myAudio2");
+            x.play();
+            window.navigator.vibrate([500,500,500]);
+            this.alert.status= 'info';
             this.alert.visible= true;
             this.alert.message= sMensaje;
             this.timer=setTimeout(() => {

@@ -14,7 +14,7 @@ class AddTopeCajasToPresentacion extends Migration
     public function up()
     {
         Schema::table('presentacion', function (Blueprint $table) {
-            $table->integer('tope_cajas')->nullable();
+            $table->integer('tope_cajas')->default(0);
         });
     }
 

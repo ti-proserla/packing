@@ -40,6 +40,15 @@
                             item-value="id">
                         </v-select>
                     </v-col>
+                    <v-col cols="12" lg="4">
+                        <v-select
+                            v-model="palet_salida.presentacion_id"
+                            label="Presentaciones:"
+                            :items="presentaciones"
+                            :item-text="presentacion => `(${presentacion.tope_cajas} cajas palet)${presentacion.nombre_presentacion}`"
+                            item-value="id">
+                        </v-select>
+                    </v-col>
                 </v-row>
                 <v-btn color=primary @click="crear()">
                     Crear
@@ -65,11 +74,13 @@ export default {
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
             ],
             operaciones: [],
-            tipos_palet: []
+            tipos_palet: [],
+            presentaciones: [],
         }
     },
     mounted() {
         this.listarClientes();
+        this.listarPresentaciones();
         this.listarOperaciones();
         this.listarTiposPalet();
         this.listarTiposCampanias();
@@ -97,6 +108,12 @@ export default {
             axios.get(url_base+'/cliente?all')
             .then(response => {
                 this.clientes=response.data
+            })
+        },
+        listarPresentaciones(){
+            axios.get(url_base+'/presentacion?all')
+            .then(response => {
+                this.presentaciones=response.data
             })
         },
         listarProducto(){

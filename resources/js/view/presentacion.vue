@@ -39,6 +39,13 @@
                                     :error-messages="error.peso_neto"
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Tope Cajas por Palet:" 
+                                    v-model="presentacion.tope_cajas"
+                                    :error-messages="error.tope_cajas"
+                                ></v-text-field>
+                            </v-col>
                         </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -75,6 +82,13 @@
                                     :error-messages="error_editar.peso_neto"
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Tope Cajas por Palet:" 
+                                    v-model="presentacion_editar.tope_cajas"
+                                    :error-messages="error_editar.tope_cajas"
+                                ></v-text-field>
+                            </v-col>
                         </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -101,6 +115,8 @@ export default {
             materias: [],
             header:[
                 { text: 'Descripción', value: 'nombre_presentacion' },
+                { text: 'Peso Neto', value: 'peso_neto' },
+                { text: 'Tope Cajas', value: 'tope_cajas' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {

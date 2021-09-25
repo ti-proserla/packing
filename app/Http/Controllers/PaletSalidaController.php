@@ -72,6 +72,7 @@ class PaletSalidaController extends Controller
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;
+        $paletSalida->presentacion_id=$request->presentacion_id;
         $paletSalida->nave=1;
         $paletSalida->camara=null;
         $paletSalida->estado="Pendiente";
@@ -120,8 +121,9 @@ class PaletSalidaController extends Controller
 
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
+                                ->leftJoin('presentacion','presentacion.id','=','palet_salida.presentacion_id')
                                 ->where('palet_salida.id',$id)
-                                ->select('palet_salida.*')
+                                ->select('palet_salida.*','presentacion.tope_cajas')
                                 ->first();
         return response()->json($paletSalida);
         

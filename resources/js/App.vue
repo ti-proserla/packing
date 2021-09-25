@@ -294,6 +294,11 @@
             <source src="/mp3/error.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+        <audio id="myAudio2">
+            <!-- <source src="horse.ogg" type="audio/ogg"> -->
+            <source src="/mp3/correcto.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
   </v-app>
 </template>
 <style>

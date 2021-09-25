@@ -29,6 +29,7 @@ class PresentacionValidate extends FormRequest
         return [
             'nombre_presentacion' => 'required|max:50',
             'peso_neto' => 'required|numeric',
+            'tope_cajas' => 'required|numeric',
         ];
     }
     
