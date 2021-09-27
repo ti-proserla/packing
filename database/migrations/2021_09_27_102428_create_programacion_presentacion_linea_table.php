@@ -15,7 +15,8 @@ class CreateProgramacionPresentacionLineaTable extends Migration
     {
         Schema::create('programacion_presentacion_linea', function (Blueprint $table) {
             $table->id();
-            $table->string('linea_id');
+            $table->integer('linea_id');
+            $table->integer('presentacion_id')->unsigned();
             $table->datetime('inicio');
             $table->datetime('fin');
             $table->date('fecha_ref');
