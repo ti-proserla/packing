@@ -97,10 +97,10 @@ var routes =[
         path: '/produccion/new',
         component: require('./view/produccion.new.vue').default
     },
-    // {
-    //     path: '/produccion/:id',
-    //     component: require('./view/produccion.count.vue').default
-    // },
+    {
+        path: '/presentacion.linea',
+        component: require('./view/presentacion.linea.vue').default
+    },
     //Paletizado
     {
         path: '/paletizado/new',

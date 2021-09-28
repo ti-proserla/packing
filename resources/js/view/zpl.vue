@@ -212,7 +212,6 @@ export default {
                     case 'ERROR':
                         break;
                     default:
-
                         break;
                 }
             });

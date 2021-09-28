@@ -286,16 +286,13 @@
         </v-navigation-drawer>
         
         <v-main>
-            <!-- <notifications group="foo" position="top center"/> -->
             <router-view class="pa-6"></router-view>
         </v-main>
         <audio id="myAudio">
-            <!-- <source src="horse.ogg" type="audio/ogg"> -->
             <source src="/mp3/error.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         <audio id="myAudio2">
-            <!-- <source src="horse.ogg" type="audio/ogg"> -->
             <source src="/mp3/correcto.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>

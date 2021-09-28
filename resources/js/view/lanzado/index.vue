@@ -72,6 +72,7 @@
                 <v-card-text>
                     <form
                         id="app"
+                        autocomplete="off"
                         v-on:submit.prevent="guardar">
                         <v-select
                             label="Linea:"
