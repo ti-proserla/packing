@@ -56,7 +56,7 @@ class PrintZPLController extends Controller
         $labor_letra=($labor->descripcion)[0];
         $labor_id=$labor->codigo_labor;
         // $linea_id=str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
-        $linea_id=($tareo->linea_id==1) ? '00': str_pad($tareo->linea_id - 1, 2, "0", STR_PAD_LEFT);
+        $linea_id=($tareo->linea_id==null) ? '00': str_pad($tareo->linea_id, 2, "0", STR_PAD_LEFT);
             $string_zpl="^XA
                 ^FT0,26
                 ^A0N,14,15
