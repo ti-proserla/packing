@@ -193,6 +193,14 @@
                         Descarte
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/presentacion.linea">
+                    <v-list-item-icon>
+                        <i class="fas fa-pallet"></i>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        Programa Presentación Linea
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/paletizado">
                     <v-list-item-icon>
                         <i class="fas fa-pallet"></i>
