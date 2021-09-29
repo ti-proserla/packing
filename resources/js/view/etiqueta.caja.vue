@@ -351,7 +351,7 @@ export default {
             });
         },
         listarLotes(){
-            axios.get(url_base+`/lote_ingreso`)
+            axios.get(url_base+`/lote_ingreso?estado=Pendiente,Lanzado`)
             .then(response => {
                 this.lotes=response.data
             });
