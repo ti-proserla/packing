@@ -168,8 +168,8 @@ export default {
             .then(response => {
                 this.palet=response.data
 this.labores=this.palet.etapas==1 ? 
-[{codigo: '01',descripcion: 'EMPAQUE'}] : 
-[
+            [{codigo: '04',descripcion: 'CLANSHELL'}] : 
+            [
                 {codigo: '01',descripcion: 'EMPAQUE'},
                 {codigo: '02',descripcion: 'PESADO'},
                 {codigo: '03',descripcion: 'SELECCION'},

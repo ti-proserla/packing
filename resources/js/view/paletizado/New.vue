@@ -80,7 +80,7 @@ export default {
             clientes: [],
             campanias: [],
             procesos: [
-                {'etapas' : 1 , "descripcion" : "Solo Empaque"},
+                {'etapas' : 1 , "descripcion" : "Solo Clanshell"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
             ],
             operaciones: [],
