@@ -97,8 +97,8 @@ class ReportesController extends Controller
     }
 
     public function rendimiento_personal_presentacion(Request $request){
-        $query="CALL rendimiento_por_presentacion('2021-09-27','2021-09-29');";
-        $data=DB::select(DB::raw("$query"),[]);   
+        $query="CALL rendimiento_por_presentacion(?,?);";
+        $data=DB::select(DB::raw("$query"),['2021-09-27','2021-09-29']);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Rendimiento Personal Presentación.xlsx");
         }else{
