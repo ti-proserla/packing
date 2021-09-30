@@ -15,6 +15,10 @@ class CreateBonoRendimientoTable extends Migration
     {
         Schema::create('bono_rendimiento', function (Blueprint $table) {
             $table->id();
+            $table->integer('presentacion_id')->unsigned();
+            $table->string('codigo_labor',2);
+            $table->integer('cajas')->unsigned();
+            $table->decimal('bono',10,4);
             $table->timestamps();
         });
     }
