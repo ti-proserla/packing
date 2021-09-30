@@ -7,7 +7,12 @@ BEGIN
 				HP.labor,
 				RENDIMIENTO.nombre_presentacion,
 				ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2) hora_laborada,
-				RENDIMIENTO.cantidad
+				RENDIMIENTO.cantidad,
+				RENDIMIENTO.presentacion_id,
+				ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas meta,
+				RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas sobre, 
+				BR.bono,
+				BR.cajas
 		FROM
 		(
 				SELECT 	OP.dni,
@@ -28,7 +33,8 @@ BEGIN
 		INNER JOIN 
 		(
 			SELECT 	COUNT(RP.caja_id) cantidad, 
-							PRE.nombre_presentacion,  
+							PRE.nombre_presentacion,
+							PRE.id presentacion_id,
 							EC.fecha_empaque fecha_empaque,
 							RP.codigo_operador,
 							RP.codigo_labor,
@@ -57,9 +63,8 @@ BEGIN
 				RENDIMIENTO.codigo_operador = HP.dni 
 				AND RENDIMIENTO.codigo_labor = HP.codigo_labor
 				AND RENDIMIENTO.fecha_empaque = HP.fecha
-			)
-		ORDER BY dni ASC,fecha ASC;
+		)
 		
-END;
-
-CALL rendimiento_por_presentacion('2021-09-27','2021-09-29');
+		LEFT JOIN bono_rendimiento BR ON BR.presentacion_id=RENDIMIENTO.presentacion_id AND BR.codigo_labor=HP.codigo_labor
+		ORDER BY dni ASC,fecha ASC;
+END
