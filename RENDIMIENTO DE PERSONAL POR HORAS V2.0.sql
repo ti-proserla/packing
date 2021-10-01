@@ -10,8 +10,8 @@ BEGIN
 				RENDIMIENTO.cantidad,
 				RENDIMIENTO.presentacion_id,
 				ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas meta,
-				RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas sobre, 
-				BR.bono,
+				FLOOR( RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas ) sobre, 
+				FLOOR( RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas ) * BR.bono,
 				BR.cajas
 		FROM
 		(
@@ -67,4 +67,6 @@ BEGIN
 		
 		LEFT JOIN bono_rendimiento BR ON BR.presentacion_id=RENDIMIENTO.presentacion_id AND BR.codigo_labor=HP.codigo_labor
 		ORDER BY dni ASC,fecha ASC;
-END
+END;
+
+CALL rendimiento_por_presentacion('2021-09-27','2021-09-29');
