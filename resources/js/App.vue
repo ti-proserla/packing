@@ -269,6 +269,11 @@
                             Producto Terminado Linea
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/bono-personal">
+                        <v-list-item-content>
+                            Bono Personal
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>

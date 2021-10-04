@@ -106,6 +106,16 @@ class ReportesController extends Controller
         }   
     }
 
+    public function bono_personal(Request $request){
+        $query="CALL rendimiento_por_presentacion(?,?);";
+        $data=DB::select(DB::raw("$query"),[$request->desde,$request->hasta]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Bono Personal ".$request->desde." - ".$request->hasta.".xlsx");
+        }else{
+            return response()->json($data);  
+        }  
+    }
+
     public function acopio(Request $request){
         $cliente_id=$request->cliente_id;
         $desde=$request->desde;

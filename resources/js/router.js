@@ -177,6 +177,10 @@ var routes =[
         component: require('./view/reporte/Personal.vue').default
     },
     {
+        path: '/reporte/bono-personal',
+        component: require('./view/reporte/BonoPersonal.vue').default
+    },
+    {
         path: '/dispensador',
         component: require('./view/Dispensador.vue').default
     },
