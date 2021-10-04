@@ -48,9 +48,19 @@ class PaletSalidaController extends Controller
         if ($request->has('estado')) {
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
                                 ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
-                                ->select('palet_salida.*','cliente.descripcion as cliente',DB::raw('COUNT(caja.id) cajas_contadas'))
+                                ->leftJoin('etiqueta_caja as EC','caja.etiqueta_caja_id','=','EC.id')
+                                ->leftJoin('presentacion as PRE','PRE.id','=','EC.presentacion_id')
+                                ->leftJoin('calibre as CAL','CAL.id','=','EC.calibre_id')
+                                ->leftJoin('marca_caja as MC','MC.id','=','EC.marca_caja_id')
+                                ->leftJoin('lote_ingreso as LO','EC.lote_ingreso_id','=','LO.id')
+                                ->select(
+                                    'palet_salida.*',
+                                    'cliente.descripcion as cliente',
+                                    DB::raw('COUNT(caja.id) cajas_contadas'),
+                                    DB::raw("GROUP_CONCAT(DISTINCT CONCAT(LO.codigo,' | ',nombre_presentacion,' | ',nombre_calibre,' | ',nombre_marca_caja)) as detalles"),
+                                )
                                 ->groupBy('palet_salida.id')
-                                ->whereIn('estado',explode(',',$request->estado))
+                                ->whereIn('palet_salida.estado',explode(',',$request->estado))
                                 ->orderBy('palet_salida.updated_at','DESC')
                                 ->limit(100)
                                 ->get();
