@@ -52,6 +52,7 @@ class PaletSalidaController extends Controller
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('estado',explode(',',$request->estado))
                                 ->orderBy('palet_salida.updated_at','DESC')
+                                ->limit(100)
                                 ->get();
         }else{
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
