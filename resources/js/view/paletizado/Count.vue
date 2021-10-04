@@ -73,6 +73,11 @@
         </v-row>
     </v-container>
 </template>
+<style>
+      .v-data-table-header-mobile{
+        display: none !important;
+      }
+</style>
 <script>
     // extension: linea(2)autonumerico(8)
 export default {
@@ -97,10 +102,15 @@ export default {
                 {codigo: '03',descripcion: 'SELECCION'},
             ],
             header:[
+                { text: 'Fecha Empaque', value: 'fecha_empaque' },
+                { text: 'Cantidad', value: 'cantidad' },
+                { text: 'Presentación', value: 'nombre_presentacion' },
                 { text: 'Calibre', value: 'nombre_calibre' },
                 { text: 'Categoria', value: 'nombre_categoria' },
-                { text: 'Presentación', value: 'nombre_presentacion' },
-                { text: 'Cantidad', value: 'cantidad' },
+                { text: 'Tipo Empaque', value: 'nombre_tipo_empaque' },
+                { text: 'Marca Empaque', value: 'nombre_marca_empaque' },
+                { text: 'Marca Caja', value: 'nombre_marca_caja' },
+                { text: 'PLU', value: 'nombre_plu' },
             ],
         }
     },
