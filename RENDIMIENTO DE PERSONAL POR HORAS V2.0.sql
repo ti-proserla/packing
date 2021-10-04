@@ -9,10 +9,17 @@ BEGIN
 				ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2) hora_laborada,
 				RENDIMIENTO.cantidad,
 				RENDIMIENTO.presentacion_id,
-				ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas meta,
-				FLOOR( RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas ) sobre, 
-				FLOOR( RENDIMIENTO.cantidad-ROUND(HP.hora_laborada * RENDIMIENTO.proporcional,2)*BR.cajas ) * BR.bono,
-				BR.cajas
+				BR.cajas cajas_hora,
+				BR.bono bono_caja,
+				CEIL(HP.hora_laborada * RENDIMIENTO.proporcional*BR.cajas) meta,
+				RENDIMIENTO.cantidad-CEIL(HP.hora_laborada * RENDIMIENTO.proporcional*BR.cajas) as sobre,
+				-- sobre sobre2,
+				IF(
+					(RENDIMIENTO.cantidad-CEIL(HP.hora_laborada * RENDIMIENTO.proporcional*BR.cajas)) * BR.bono>0,
+					(RENDIMIENTO.cantidad-CEIL(HP.hora_laborada * RENDIMIENTO.proporcional*BR.cajas)) * BR.bono,
+					0
+				)	bono_optenido
+				
 		FROM
 		(
 				SELECT 	OP.dni,
@@ -69,4 +76,4 @@ BEGIN
 		ORDER BY dni ASC,fecha ASC;
 END;
 
-CALL rendimiento_por_presentacion('2021-09-27','2021-09-29');
+CALL rendimiento_por_presentacion('2021-09-27','2021-10-02');
