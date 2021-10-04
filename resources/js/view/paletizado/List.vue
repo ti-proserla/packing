@@ -31,7 +31,9 @@
                         <p class="mb-0"><b class="detalles">Cliente:</b> {{ lote.cliente}}</p>
                         <p class="mb-0"><b class="detalles">Cajas:</b> {{ lote.cajas_contadas }}</p>
                         <p class="mb-0"><b class="detalles">Estado:</b> {{ lote.estado }}</p>
-                        <p class="mb-0" v-for="detalle in lote.detalles.split(',')"><b>{{detalle }}</b></p>
+                        <div v-if="lote.detalles!=null">
+                            <p class="mb-0" v-for="detalle in lote.detalles.split(',')"><b>{{detalle }}</b></p>
+                        </div>
                         <div class="text-center">
                             <v-btn :to="`/paletizado/${lote.id}`"
                                 color="primary">Ver</v-btn>
