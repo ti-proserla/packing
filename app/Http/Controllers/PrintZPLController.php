@@ -503,9 +503,9 @@ class PrintZPLController extends Controller
         $result = curl_exec($curl);
         
         if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 200) {
-            $file = fopen("label.png", "w");
-            fwrite($file, $result);
-            fclose($file);
+            // $file = fopen("label.png", "w");
+            // fwrite($file, $result);
+            // fclose($file);
         } else {
             print_r("Error: $result");
         }
