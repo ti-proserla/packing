@@ -86,6 +86,7 @@ Route::get('print/zpl/cajas', 'PrintZPLController@cajas');
 Route::get('print/zpl/palet_salida', 'PrintZPLController@palet_salida');
 Route::get('print/zpl/palet_entrada', 'PrintZPLController@palet_entrada');
 Route::get('print/zpl/palet_entrada/all', 'PrintZPLController@palet_entrada_all');
+Route::post('zpl/preview', 'PrintZPLController@preview');
 
 //Replicar Base de datos
 Route::get('replicar/puerto_embarque','NisiraPuertoEmbarque@puerto_embarque');

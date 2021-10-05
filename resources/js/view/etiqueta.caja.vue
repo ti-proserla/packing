@@ -209,6 +209,7 @@
                                 <v-img
                                 :src="url_label"
                                 ></v-img>
+                                <img :src="preview" alt="">
                                 <!-- <img class="img-responsive" src="" alt=""> -->
                             </v-col>
                         </v-row>
@@ -284,6 +285,7 @@ export default {
             open_ver: false,
             etiqueta_caja_editar: this.initForm(),
             error_editar: {},
+            preview: ""
         }
     },
     mounted() {
@@ -413,11 +415,22 @@ export default {
             })
         },
         getZpl(id){
+            
             axios.get(url_base+'/print/muestra_etiqueta_caja?zpl_id='+this.zpl_id+'&etiqueta_caja_id='+this.etiqueta_caja_id)
             .then(response => {
 
                 this.url_label="http://api.labelary.com/v1/printers/8dpmm/labels/4x3/0/"+response.data;
                 this.zpl=response.data;
+
+                axios.post(url_base+'/zpl/preview',{
+                    zpl: this.zpl
+                },
+                { responseType: 'arraybuffer' }
+                )
+                .then(response => {
+                    this.preview=`data:${response.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(response.data)))}`;
+                });
+                    
             })
         },
         guardar(){
