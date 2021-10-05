@@ -175,10 +175,11 @@
                 </v-card>               
             </v-dialog>
             <!-- Editar -->
-            <v-dialog v-model="open_ver" persistent max-width="450">
+            <v-dialog v-model="open_ver" persistent max-width="550" scrollable>
                 <v-card>
-                    <v-card-title class="headline">IMPRIMIR ETIQUETA</v-card-title>
-                    <v-card-text>
+                    <v-card-title class="headline">
+                        IMPRIMIR ETIQUETA
+
                         <v-row>
                             <v-col 
                                 cols="12"
@@ -206,13 +207,14 @@
                                     </v-btn>  
                             </v-col>
                             <v-col cols="12">
-                                <v-img
-                                :src="url_label"
-                                ></v-img>
-                                <img :src="preview" alt="">
-                                <!-- <img class="img-responsive" src="" alt=""> -->
                             </v-col>
                         </v-row>
+                    </v-card-title>
+                    <v-card-text style="height: 400px;">
+                                <v-img :src="preview"></v-img>
+                        
+                    </v-card-text>
+                    <v-card-actions>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -225,7 +227,7 @@
                                 @click="print()"
                                 >IMPRIMIR</v-btn>
                         </div>
-                    </v-card-text>
+                    </v-card-actions>
                 </v-card>               
             </v-dialog>
         </v-card>
