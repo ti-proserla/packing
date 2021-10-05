@@ -57,4 +57,13 @@ class EtiquetaCajaController extends Controller
             "status" => "OK"
         ]);
     }
+    public function update(Request $request,$id){
+        $etiquetaCaja=EtiquetaCaja::where('id',$id)->first();
+        $etiquetaCaja->estado=$request->estado;
+        $etiquetaCaja->save();
+        return response()->json([
+            "status" => "OK"
+        ]);
+
+    }
 }

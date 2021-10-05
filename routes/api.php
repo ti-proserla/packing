@@ -44,6 +44,7 @@ Route::resource('etiqueta-caja', 'EtiquetaCajaController');
 Route::put('presentacion_linea/{id}', 'PresentacionLineaController@cerrar');
 Route::resource('presentacion_linea', 'PresentacionLineaController');
 
+
 Route::get('fundo/detallado', 'FundoController@detallado');
 Route::resource('fundo', 'FundoController');
 

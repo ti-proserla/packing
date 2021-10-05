@@ -14,13 +14,26 @@
                         </v-text-field>
                     </v-col>
                     <v-col cols="12" sm=6 lg="3">
+                        <v-select
+                            label="Estado:"
+                            v-model="consulta.estado"
+                            :items="[
+                                {estado: 'Pendiente'},
+                                {estado: 'Archivado'},
+                            ]"
+                            :item-text="item => `${item.estado}`"
+                            item-value="estado">
+                        </v-select>
+                    </v-col>
+
+                    <v-col cols="12" sm=6 lg="3">
                         <v-btn 
                             color="primary"
                             @click="listar()">
                             Listar
                         </v-btn>
                     </v-col>
-                    <v-col class="text-right" cols="12" sm=6 lg="6">
+                    <v-col class="text-right" cols="12" sm=6 lg="3">
                         <v-btn  @click="open_nuevo=true" outlined color="info">Nueva Etiqueta Caja</v-btn>
                     </v-col>
                 </v-row>
@@ -38,6 +51,20 @@
                             color="info" 
                             @click="buscar(item.id)">
                             <i class="fas fa-search"></i>
+                        </v-btn>
+                    </template>
+                    <template v-slot:item.archivar="{ item }">
+                        <v-btn v-if="item.estado=='Archivado'"
+                            text 
+                            color="info" 
+                            @click="cambiarEstado(item.id,'Pendiente')">
+                            Des-Archivar
+                        </v-btn>
+                        <v-btn v-else
+                            text 
+                            color="info" 
+                            @click="cambiarEstado(item.id,'Archivado')">
+                            Archivar
                         </v-btn>
                     </template>
                 </v-data-table>
@@ -238,7 +265,8 @@ export default {
     data() {
         return {
             consulta:{
-                fecha_empaque: moment().format('YYYY-MM-DD')
+                fecha_empaque: moment().format('YYYY-MM-DD'),
+                estado: 'Pendiente'
             },
             print_count: 1,
             zpl: '',
@@ -269,6 +297,7 @@ export default {
                 { text: 'PLU', value: 'nombre_plu' },
                 { text: 'Estado', value: 'estado' },
                 { text: 'Ver', value: 'ver' },
+                { text: 'Archivar', value: 'archivar' },
             ],
             table: {
                 current_page: 1,
@@ -491,6 +520,19 @@ export default {
                         break;
                     default:
 
+                        break;
+                }
+            });
+        },
+        cambiarEstado(id,estado){
+            axios.post(url_base+`/etiqueta-caja/${id}?_method=PATCH`,{
+                estado: estado
+            })
+            .then(response => {
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case 'OK':
+                        this.listar();
                         break;
                 }
             });
