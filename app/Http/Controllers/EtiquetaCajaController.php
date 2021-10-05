@@ -35,7 +35,9 @@ class EtiquetaCajaController extends Controller
                         ->join('marca_empaque as MAE','MAE.id','=','etiqueta_caja.marca_empaque_id')
                         ->join('plu','plu.id','=','etiqueta_caja.plu_id')
                         ->where('etiqueta_caja.fecha_empaque',$request->fecha_empaque)
-                        ->orderBy('id','DESC')->paginate(10);
+                        ->whereIn('etiqueta_caja.estado',explode(',',$request->estado))
+                        ->orderBy('id','DESC')
+                        ->paginate(10);
         return response()->json($etiquetaCaja);
     }
 
