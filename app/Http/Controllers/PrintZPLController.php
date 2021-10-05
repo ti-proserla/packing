@@ -460,6 +460,9 @@ class PrintZPLController extends Controller
                         DB::raw("DAYOFYEAR(DATE_FORMAT(etiqueta_caja.fecha_empaque, '2016-%m-%d')) jul_emp"),
                         DB::raw("DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) jul_cos"),
                         DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 2))) fecha_empaque"),
+                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%Y') as e_yyyy"),
+                        DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 2))) as e_mb"),
+                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),
                         'LI.codigo as codigo_lote',
                         'CLI.descripcion as productor',
                         'CL.nombre_calibre as calibre',
@@ -468,15 +471,22 @@ class PrintZPLController extends Controller
                         'VA.nombre_variedad as variedad',
                         'VA.variedad_licenciada',
                         'FU.cod_lugar_produccion',
-                        'CT.nombre_categoria as categoria')
+                        'PLU.nombre_plu as plu',
+                        'CT.nombre_categoria as categoria',
+                        'EAN.descripcion as codigo_ean')
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                     ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
                     ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
                     ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
+                    ->join('plu as PLU','PLU.id','=','etiqueta_caja.plu_id')
                     ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
                     ->join('materia as MA','MA.id','=','LI.materia_id')
                     ->join('fundo as FU','FU.id','=','LI.fundo_id')
                     ->join('variedad as VA','VA.id','=','LI.variedad_id')
+                    ->leftJoin('codigo_ean as EAN',function ($join) {
+                        $join->on('EAN.variedad_id', '=', 'LI.variedad_id')
+                        ->on('EAN.calibre_id', '=', 'etiqueta_caja.calibre_id');
+                    })
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
