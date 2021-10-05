@@ -472,8 +472,9 @@ class PrintZPLController extends Controller
                         'VA.variedad_licenciada',
                         'FU.cod_lugar_produccion',
                         'PLU.nombre_plu as plu',
-                        'CT.nombre_categoria as categoria',
-                        'EAN.descripcion as codigo_ean')
+                        // 'EAN.descripcion as codigo_ean',
+                        'CT.nombre_categoria as categoria'
+                        )
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                     ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
                     ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
@@ -483,10 +484,10 @@ class PrintZPLController extends Controller
                     ->join('materia as MA','MA.id','=','LI.materia_id')
                     ->join('fundo as FU','FU.id','=','LI.fundo_id')
                     ->join('variedad as VA','VA.id','=','LI.variedad_id')
-                    ->leftJoin('codigo_ean as EAN',function ($join) {
-                        $join->on('EAN.variedad_id', '=', 'LI.variedad_id')
-                        ->on('EAN.calibre_id', '=', 'etiqueta_caja.calibre_id');
-                    })
+                    // ->leftJoin('codigo_ean as EAN',function ($join) {
+                    //     $join->on('EAN.variedad_id', '=', 'LI.variedad_id')
+                    //     ->on('EAN.calibre_id', '=', 'etiqueta_caja.calibre_id');
+                    // })
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
