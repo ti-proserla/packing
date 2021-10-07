@@ -12,6 +12,15 @@
                             type="date">
                         </v-text-field>
                     </v-col>
+                    <v-col cols="12" sm=6 lg="3">
+                        <v-select
+                            label="Linea:"
+                            v-model="consulta.linea"
+                            :items="lineas"
+                            :item-text="(item) => item.numero"
+                            item-value="numero">
+                            </v-select>
+                    </v-col>
                     <v-col cols="12" sm=4 lg="2">
                         <v-btn color="info" @click="buscar">
                             <i class="fas fa-search"></i>
@@ -42,7 +51,16 @@ export default {
         return {
             consulta:{
                 fecha_proceso: moment().format('YYYY-MM-DD'),
+                linea: 1
             },
+            lineas: [
+                {numero: 1},
+                {numero: 2},
+                {numero: 3},
+                {numero: 4},
+                {numero: 5},
+                {numero: 6}
+            ],
             table: [],
             header: [
                 { text: 'Productor', value: 'nombre_productor'},
