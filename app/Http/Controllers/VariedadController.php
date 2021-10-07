@@ -25,6 +25,7 @@ class VariedadController extends Controller
         $variedades=new Variedad();
         $variedades->cod_cartilla=$request->cod_cartilla;
         $variedades->nombre_variedad=$request->nombre_variedad;
+        $variedades->variedad_licenciada=$request->variedad_licenciada;
         $variedades->materia_id=$request->materia_id;
         $variedades->save();
 
@@ -47,6 +48,7 @@ class VariedadController extends Controller
         $variedades=Variedad::where('id',$id)->first();
         $variedades->cod_cartilla=$request->cod_cartilla;
         $variedades->nombre_variedad=$request->nombre_variedad;
+        $variedades->variedad_licenciada=$request->variedad_licenciada;
         $variedades->materia_id=$request->materia_id;
         $variedades->save();
 

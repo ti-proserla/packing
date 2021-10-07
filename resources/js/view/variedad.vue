@@ -39,6 +39,13 @@
                                     :error-messages="error.nombre_variedad"
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Variedad Licenciada" 
+                                    v-model="variedad.variedad_licenciada"
+                                    :error-messages="error.variedad_licenciada"
+                                ></v-text-field>
+                            </v-col>
                             <v-col>
                                 <v-select
                                     label="Materia:"
@@ -70,25 +77,40 @@
                 <v-card>
                     <v-card-title class="headline">Editar variedad</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            label="cod_cartilla" 
-                            v-model="variedad_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="Nombre" 
-                            v-model="variedad_editar.nombre_variedad"
-                            :error-messages="error_editar.nombre_variedad"
-                        ></v-text-field>
-                        <v-select
-                                label="Materia:"
-                                v-model="variedad_editar.materia_id"
-                                :error-messages="error_editar.materia_id"
-                                :items="materias"
-                                item-text="nombre_materia"
-                                item-value="id">
-                                </v-select>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="variedad_editar.cod_cartilla"
+                                    :error-messages="error_editar.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="variedad_editar.nombre_variedad"
+                                    :error-messages="error_editar.nombre_variedad"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Variedad Licenciada" 
+                                    v-model="variedad_editar.variedad_licenciada"
+                                    :error-messages="error_editar.variedad_licenciada"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-select
+                                        label="Materia:"
+                                        v-model="variedad_editar.materia_id"
+                                        :error-messages="error_editar.materia_id"
+                                        :items="materias"
+                                        item-text="nombre_materia"
+                                        item-value="id">
+                                        </v-select>
+                            </v-col>
+                        </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
                                 outlined 
@@ -115,6 +137,7 @@ export default {
             header:[
                 { text: 'Código Cartilla', value: 'cod_cartilla' },
                 { text: 'Descripción', value: 'nombre_variedad' },
+                { text: 'Variedad licenciada', value: 'variedad_licenciada' },
                 { text: 'Materia', value: 'nombre_materia' },
                 { text: 'Editar', value: 'editar' },
             ],
