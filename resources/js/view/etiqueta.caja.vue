@@ -360,12 +360,6 @@ export default {
         
     },
     computed:{
-        listarClientes(){
-            axios.get(url_base+'/cliente?all')
-            .then(response => {
-                this.clientes=response.data
-            });
-        },
         getMateriaId(){
             var materia_id=0;
             for (let i = 0; i < this.lotes.length; i++) {
@@ -388,6 +382,12 @@ export default {
         }
     },
     methods: {
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes=response.data
+            });
+        },
         initForm(){
             return {
                 cod_cartilla: '',

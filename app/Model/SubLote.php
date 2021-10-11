@@ -12,5 +12,8 @@ class SubLote extends Model
     {
         return $this->hasMany('App\Model\PaletEntrada');
     }
-    
+    public function count()
+    {
+        return $this->hasMany('App\Model\PaletEntrada')->count();
+    }
 }

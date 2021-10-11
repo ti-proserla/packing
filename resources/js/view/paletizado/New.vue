@@ -25,7 +25,7 @@
                             item-value="etapas">
                         </v-select>
                     </v-col>
-                    <v-col cols="12" lg="4">
+                    <v-col cols="12" lg="3">
                         <v-select
                             v-model="palet_salida.tipo_palet_id"
                             label="Tipo de Palet:"
@@ -35,7 +35,7 @@
                             item-value="id">
                         </v-select>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" lg="2">
                         <v-select
                             v-model="palet_salida.campania_id"
                             label="Campañas:"
@@ -43,6 +43,17 @@
                             :item-text="campania => `${campania.id} - ${campania.nombre_materia}`"
                             :error-messages="error.campania_id"
                             item-value="id">
+                        </v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            v-model="palet_salida.parihuela_id"
+                            label="Parihuela:"
+                            :items="parihuelas"
+                            item-value="id"
+                            item-text="nombre_parihuela"
+                            :error-messages="error.parihuela_id"
+                        >
                         </v-select>
                     </v-col>
                     <v-col cols="12" lg="4">
@@ -78,6 +89,7 @@ export default {
             },
             productos: [],
             clientes: [],
+            parihuelas: [],
             campanias: [],
             procesos: [
                 {'etapas' : 1 , "descripcion" : "Solo Clanshell (1 Etiqueta)"},
@@ -105,6 +117,7 @@ export default {
         this.listarOperaciones();
         this.listarTiposPalet();
         this.listarTiposCampanias();
+        this.listarParihuelas();
     },
     methods: {
         listarTiposPalet(){
@@ -129,6 +142,12 @@ export default {
             axios.get(url_base+'/cliente?all')
             .then(response => {
                 this.clientes=response.data
+            })
+        },
+        listarParihuelas(){
+            axios.get(url_base+'/parihuela?all')
+            .then(response => {
+                this.parihuelas=response.data
             })
         },
         listarPresentaciones(){

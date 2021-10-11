@@ -27,6 +27,7 @@ Route::resource('impresora', 'ImpresoraController');
 Route::resource('materia', 'MateriaController');
 Route::resource('campania', 'CampaniaController');
 Route::resource('variedad', 'VariedadController');
+Route::resource('parihuela', 'ParihuelaController');
 Route::resource('calibre', 'CalibreController');
 Route::resource('categoria', 'CategoriaController');
 Route::resource('presentacion', 'PresentacionController');
