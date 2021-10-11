@@ -34,6 +34,7 @@ class EtiquetaCajaController extends Controller
                         ->join('tipo_empaque as TIE','TIE.id','=','etiqueta_caja.tipo_empaque_id')
                         ->join('marca_empaque as MAE','MAE.id','=','etiqueta_caja.marca_empaque_id')
                         ->join('plu','plu.id','=','etiqueta_caja.plu_id')
+                        ->where('CLI.id',$request->productor_id)
                         ->where('etiqueta_caja.fecha_empaque',$request->fecha_empaque)
                         ->whereIn('etiqueta_caja.estado',explode(',',$request->estado))
                         ->orderBy('id','DESC')

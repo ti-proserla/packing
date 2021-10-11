@@ -5,7 +5,7 @@
             <v-card-text>
                 <v-row>
                     
-                    <v-col cols="12" sm=6 lg="3">
+                    <v-col cols="12" sm=6 lg="2">
                         <v-text-field
                             @keydown="listar()"
                             label="Fecha Empaque:"
@@ -13,7 +13,19 @@
                             type="date">
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" sm=6 lg="3">
+                    <v-col cols=12 sm=6 lg=4>
+                        <v-select
+                            outlined
+                            dense
+                            v-model="consulta.productor_id"
+                            label="Productor:"
+                            :items="clientes"
+                            item-text="descripcion"
+                            item-value="id"
+                            >
+                            </v-select>
+                    </v-col>
+                    <v-col cols="12" sm=6 lg="2">
                         <v-select
                             label="Estado:"
                             v-model="consulta.estado"
@@ -26,15 +38,15 @@
                         </v-select>
                     </v-col>
 
-                    <v-col cols="12" sm=6 lg="3">
+                    <v-col cols="12" sm=6 lg="2">
                         <v-btn 
                             color="primary"
                             @click="listar()">
                             Listar
                         </v-btn>
                     </v-col>
-                    <v-col class="text-right" cols="12" sm=6 lg="3">
-                        <v-btn  @click="open_nuevo=true" outlined color="info">Nueva Etiqueta Caja</v-btn>
+                    <v-col class="text-right" cols="12" sm=6 lg="2">
+                        <v-btn  @click="open_nuevo=true" outlined color="info">Nueva Etiqueta</v-btn>
                     </v-col>
                 </v-row>
                 <v-data-table
@@ -74,7 +86,7 @@
             <!-- Nuevo -->
             <v-dialog v-model="open_nuevo" persistent max-width="650">
                 <v-card>
-                    <v-card-title class="headline">Nueva Etiqueta Caja</v-card-title>
+                    <v-card-title class="headline">Nueva Etiqueta</v-card-title>
                     <v-card-text>
                         <v-row>
                             <v-col 
@@ -266,7 +278,8 @@ export default {
         return {
             consulta:{
                 fecha_empaque: moment().format('YYYY-MM-DD'),
-                estado: 'Pendiente'
+                estado: 'Pendiente',
+                productor_id: 1
             },
             print_count: 1,
             zpl: '',
@@ -277,6 +290,7 @@ export default {
             categorias: [],
             presentaciones: [],
             marca_cajas: [],
+            clientes: [],
             tipo_empaques: [],
             marca_empaques: [],
             plus: [],
@@ -338,6 +352,7 @@ export default {
         this.listarTipoEmpaque();
         this.listarMarcaEmpaque();
         this.listarZpls();
+        this.listarClientes();
         var t = this;
         BrowserPrint.getDefaultDevice("printer", function(device){
             t.printer_select=device;
@@ -345,6 +360,12 @@ export default {
         
     },
     computed:{
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes=response.data
+            });
+        },
         getMateriaId(){
             var materia_id=0;
             for (let i = 0; i < this.lotes.length; i++) {
