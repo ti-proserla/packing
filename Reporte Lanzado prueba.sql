@@ -1,11 +1,12 @@
+DELIMITER //
 CREATE OR REPLACE PROCEDURE lanzado_por_linea(IN pFechaProceso date,IN pLinea INTEGER)
 BEGIN
 
 			SET @fecha_proceso=pFechaProceso;
-			SET @lanzado='';
+			
 			SET @linea=pLinea;
 
-			SELECT @lanzado:= PE.fecha_lanzado
+			SET @lanzado:= (SELECT PE.fecha_lanzado
 
 			FROM palet_entrada PE
 			INNER JOIN sub_lote SL ON SL.id=PE.sub_lote_id
@@ -14,7 +15,7 @@ BEGIN
 			AND LI.fecha_proceso=@fecha_proceso
 			AND PE.linea_lanzado=@linea
 			ORDER BY fecha_lanzado ASC
-			LIMIT 1;
+			LIMIT 1);
 
 			-- DROP TEMPORARY TABLE new_tbl;
 			CREATE OR REPLACE TEMPORARY TABLE new_tbl 
@@ -49,17 +50,17 @@ BEGIN
 							nombre_fundo,
 							nombre_materia,
 							nombre_variedad,
-							IF(
+							DATE_FORMAT(IF(
 								TIMESTAMPDIFF(HOUR,@lanzado,fecha_lanzado)>0,
 								@lanzado:=DATE_ADD(@lanzado, INTERVAL 1 HOUR),
 								@lanzado
-							) hora_inicio,
-							
+							),'%H:%i') hora_inicio,
+							DATE_FORMAT(
 								IF(
 										(SELECT fecha_lanzado FROM new_tbl where fecha_lanzado>=MAX(N.fecha_fin_lanzado) LIMIT 1) IS NOT NULL ,
 										MAX(DATE_ADD(@lanzado, INTERVAL 1 HOUR)),
 										MAX(fecha_fin_lanzado)
-								) hora_fin,
+								),'%H:%i') hora_fin,
 							SUM(num_jabas) num_jabas
 			FROM new_tbl N
 			GROUP BY hora_inicio;
@@ -67,5 +68,6 @@ BEGIN
 			DROP TEMPORARY TABLE new_tbl;
 
 END;
+//
 
 CALL lanzado_por_linea('2021-09-27',4);
