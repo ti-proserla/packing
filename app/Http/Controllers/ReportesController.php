@@ -219,7 +219,7 @@ class ReportesController extends Controller
                 AND DATE(EC.fecha_empaque)<=?
                 $queryProductor
                 AND PS.estado <> 'Remonte'
-                GROUP BY PS.id,LI.id 
+                GROUP BY PS.id,EC.id 
                 ORDER BY PS.numero ASC, EC.id ASC";
         $data=DB::select(DB::raw("$query"),[$desde,$hasta,$cliente_id]);   
         if ($request->has('excel')) {
