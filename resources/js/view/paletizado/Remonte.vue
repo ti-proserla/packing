@@ -23,6 +23,25 @@
                             item-value="id">
                             </v-select>
                     </v-col>
+                    <v-col cols="12" lg="3" >
+                        <v-select
+                            v-model="palet_salida.parihuela_id"
+                            label="Parihuela:"
+                            :items="parihuelas"
+                            item-value="id"
+                            item-text="nombre_parihuela"
+                        >
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="2">
+                        <v-select
+                            v-model="palet_salida.etiqueta_adicional"
+                            label="Etiqueta Adicional:"
+                            :items="[{opt: 'No'},{opt: 'Si'}]"
+                            item-text="opt"
+                            item-value="opt">
+                        </v-select>
+                    </v-col>
                     <v-col cols="12">
                         <v-simple-table>
                             <template v-slot:default>
@@ -74,12 +93,14 @@ export default {
             palet_salida: {
                 cliente_id: null,
                 etapas: null,
-                palets_id: []
+                palets_id: [],
+                etiqueta_adicional: 'No',
             },
             palets_id: [],
             productos: [],
             clientes: [],
             campanias: [],
+            parihuelas: [],
             procesos: [
                 {'etapas' : 1 , "descripcion" : "Solo Empaque"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
@@ -95,6 +116,7 @@ export default {
         this.listarTiposPalet();
         this.listarTiposCampanias();
         this.listarPaletsSaldos();
+        this.listarParihuelas();
     },
     methods: {
         listarPaletsSaldos(){
@@ -114,6 +136,12 @@ export default {
             .then(response => {
                 this.campanias=response.data
             });
+        },
+        listarParihuelas(){
+            axios.get(url_base+'/parihuela?all')
+            .then(response => {
+                this.parihuelas=response.data
+            })
         },
         listarLoteIngreso(){
             axios.get(url_base+`/lote_ingreso?estado=Pendiente`)

@@ -23,7 +23,7 @@ class SubLoteController extends Controller
                         ->leftJoin('parcela','parcela.id','=','lote_ingreso.parcela_id')
                         ->leftJoin('palet_entrada','palet_entrada.sub_lote_id','=','sub_lote.id')
                         ->whereIn('sub_lote.estado',explode(',',$request->estado))
-                        // ->where('cliente_id',$request->cliente_id)    
+                        ->where('cliente_id',$request->cliente_id)    
                         ->select('sub_lote.*',
                             'lote_ingreso.codigo',
                             'cliente.descripcion as cliente',

@@ -53,9 +53,11 @@ class PaletSalidaController extends Controller
                                 ->leftJoin('calibre as CAL','CAL.id','=','EC.calibre_id')
                                 ->leftJoin('marca_caja as MC','MC.id','=','EC.marca_caja_id')
                                 ->leftJoin('lote_ingreso as LO','EC.lote_ingreso_id','=','LO.id')
+                                ->leftJoin('parihuela as PAR','palet_salida.parihuela_id','=','PAR.id')
                                 ->select(
                                     'palet_salida.*',
                                     'cliente.descripcion as cliente',
+                                    'nombre_parihuela as parihuela',
                                     DB::raw('COUNT(caja.id) cajas_contadas'),
                                     DB::raw("GROUP_CONCAT(DISTINCT CONCAT(LO.codigo,' | ',nombre_presentacion,' | ',nombre_calibre,' | ',nombre_marca_caja)) as detalles"),
                                 )
@@ -84,11 +86,12 @@ class PaletSalidaController extends Controller
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;
-        // $paletSalida->presentacion_id=$request->presentacion_id;
         $paletSalida->tope_cajas=$request->tope_cajas;
         $paletSalida->nave=1;
         $paletSalida->camara=null;
         $paletSalida->estado="Pendiente";
+        $paletSalida->parihuela_id=$request->parihuela_id;
+        $paletSalida->etiqueta_adicional=$request->etiqueta_adicional;
         $paletSalida->save();
         return response()->json([
             "status" => "OK",
@@ -161,6 +164,8 @@ class PaletSalidaController extends Controller
         $paletSalida->nave=1;
         $paletSalida->camara=null;
         $paletSalida->estado="Cerrado";
+        $paletSalida->parihuela_id=$request->parihuela_id;
+        $paletSalida->etiqueta_adicional=$request->etiqueta_adicional;
         $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio'])
                     ->where('tipo_palet_id','TER')
                     ->where('campania_id',$paletSalida->campania_id)

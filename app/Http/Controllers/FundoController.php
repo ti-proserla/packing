@@ -15,7 +15,13 @@ class FundoController extends Controller
     public function index(Request $request)
     {
         if ($request->has('all')) {
-            $fundos=Fundo::all();
+            if ($request->has('productor_id')) {
+                $fundos=Fundo::where('productor_id',$request->productor_id)
+                    ->get();
+            }else{
+                $fundos=Fundo::all();
+            }
+
         }else{
             $fundos=Fundo::paginate(10);
         }

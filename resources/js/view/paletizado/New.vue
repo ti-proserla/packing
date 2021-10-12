@@ -45,7 +45,7 @@
                             item-value="id">
                         </v-select>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" lg="3" >
                         <v-select
                             v-model="palet_salida.parihuela_id"
                             label="Parihuela:"
@@ -56,10 +56,20 @@
                         >
                         </v-select>
                     </v-col>
-                    <v-col cols="12" lg="4">
+                    <v-col cols="12" lg="2">
+                        <v-select
+                            v-model="palet_salida.etiqueta_adicional"
+                            label="Etiqueta Adicional:"
+                            :items="[{opt: 'No'},{opt: 'Si'}]"
+                            item-text="opt"
+                            item-value="opt"
+                            :error-messages="error.etiqueta_adicional">
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="2">
                         <v-select
                             v-model="palet_salida.tope_cajas"
-                            label="Cajas Maximas por palet:"
+                            label="Cajas Max. por palet:"
                             :items="topes"
                             item-text="cantidad"
                             :error-messages="error.tope_cajas"
@@ -81,11 +91,11 @@ export default {
             error:{
 
             },
-
             lote_ingreso:[],
             palet_salida: {
                 cliente_id: null,
-                etapas: null
+                etapas: null,
+                etiqueta_adicional: 'No'
             },
             productos: [],
             clientes: [],
