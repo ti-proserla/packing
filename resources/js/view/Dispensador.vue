@@ -120,6 +120,7 @@ export default {
                 clearTimeout(this.timer);
             }
             var str_return = (this.printing_local) ? 'return': '';
+            var t=this;
             axios.get(`${url_base}/print/zpl/cajas?${str_return}`,{
                 params: this.form
             })
@@ -135,6 +136,11 @@ export default {
                             this.alert.visible= true;
                             this.alert.message= 'Imprimiendo.';
                             break;
+                        case 'ERROR':
+                            this.alert.status= 'warning';
+                            this.alert.visible= true;
+                            this.alert.message= respuesta.data;
+                            break;
                     }
                 }else{
                     switch (respuesta.status) {
@@ -144,6 +150,7 @@ export default {
                             this.alert.message= respuesta.data;
                             break;
                         case 'ERROR':
+                            console.log("error");
                             this.alert.status= 'warning';
                             this.alert.visible= true;
                             this.alert.message= respuesta.data;
@@ -154,6 +161,9 @@ export default {
                 this.timer=setTimeout(() => {
                     this.alert=this.initAlert();
                 }, 10000);
+            }).catch(function (error) {
+                console.log("hola");
+                t.form.codigo_operador='';
             });
         },
         changePrint(){

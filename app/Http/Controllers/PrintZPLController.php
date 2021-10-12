@@ -34,14 +34,14 @@ class PrintZPLController extends Controller
                     ->join('operador','tareo.codigo_operador','=','operador.dni')
                     ->orderBy('id','DESC')
                     ->first();
+        if ($tareo==null) {
+            return response()->json([
+                "status"    => "ERROR",
+                "data"      => "Tareo no existe."
+            ]);
+        }
         $nombre_operador=$tareo->ape_operador;
 
-        if ($tareo==null) {
-           return response()->json([
-               "status"    => "ERROR",
-               "data"      => "Tareo no existe."
-           ]);
-        }
         // dd($tareo);
         $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
             ->first();
