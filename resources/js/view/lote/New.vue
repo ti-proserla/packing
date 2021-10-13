@@ -7,6 +7,7 @@
                     <v-row>
                         <v-col cols=12 sm=6>
                             <v-select
+                                @change="listarFundos"
                                 outlined
                                 dense
                                 v-model="lote.cliente_id"
@@ -62,7 +63,7 @@
                                 v-model="lote.fundo_id"
                                 label="Fundo:"
                                 :items="fundos"
-                                :item-text="item => item.nombre_fundo + ' -'  + item.lugar_produccion"
+                                :item-text="item => `${item.nombre_fundo} - ${item.lugar_produccion}`"
                                 item-value="id"
                                 :error-messages="lote_error.fundo_id"
                                 >
@@ -176,7 +177,7 @@ export default {
             });
         },
         listarFundos(){
-            axios.get(url_base+'/fundo/detallado')
+            axios.get(url_base+'/fundo?all&productor_id='+this.lote.cliente_id)
             .then(response => {
                 this.fundos=response.data
             });
