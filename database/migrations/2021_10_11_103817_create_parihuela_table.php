@@ -15,13 +15,14 @@ class CreateParihuelaTable extends Migration
     {
         Schema::create('parihuela', function (Blueprint $table) {
             $table->increments('id');            
-            $table->string('nombre_parihuela',50);
+            $table->string('modelo_parihuela',50);
+            $table->string('medidas_parihuela',50);
             $table->timestamps();
         });
 
-        Schema::table('palet_salida', function (Blueprint $table) {
-            $table->integer('parihuela_id')->nullable();
-        });
+        // Schema::table('palet_salida', function (Blueprint $table) {
+        //     $table->integer('parihuela_id')->nullable();
+        // });
     }
 
     /**
