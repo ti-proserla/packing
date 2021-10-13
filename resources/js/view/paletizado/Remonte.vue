@@ -29,7 +29,7 @@
                             label="Parihuela:"
                             :items="parihuelas"
                             item-value="id"
-                            item-text="nombre_parihuela"
+                            item-text="modelo_parihuela"
                         >
                         </v-select>
                     </v-col>
