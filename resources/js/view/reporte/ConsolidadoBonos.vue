@@ -52,16 +52,8 @@ export default {
             },
             table: [],
             header: [
-                { text: 'Fecha', value: 'fecha' },
                 { text: 'Código', value: 'dni' },
                 { text: 'Trabajador', value: 'trabajador'},
-                { text: 'Labor', value: 'labor' },
-                { text: 'Presentacion', value: 'nombre_presentacion' },
-                { text: 'Hora Laborada', value: 'hora_laborada' },
-                { text: 'Cajas Producidas', value: 'cantidad' },
-                { text: 'Cajas/Hora', value: 'cajas_hora' },
-                { text: 'Bono x Caja', value: 'bono_caja' },
-                { text: 'Meta', value: 'meta' },
                 { text: 'Bono Optenido', value: 'bono_optenido' }
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
