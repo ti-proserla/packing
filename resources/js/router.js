@@ -181,6 +181,10 @@ var routes =[
         component: require('./view/reporte/BonoPersonal.vue').default
     },
     {
+        path: '/reporte/consolidado-bonos',
+        component: require('./view/reporte/ConsolidadoBonos.vue').default
+    },
+    {
         path: '/dispensador',
         component: require('./view/Dispensador.vue').default
     },

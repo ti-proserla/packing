@@ -274,6 +274,11 @@
                             Bono Personal
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/consolidado-bonos">
+                        <v-list-item-content>
+                            Consolidado Bonos
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>

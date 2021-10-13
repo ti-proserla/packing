@@ -105,6 +105,15 @@ class ReportesController extends Controller
             return response()->json($data);  
         }   
     }
+    public function consolidado_bonos(Request $request){
+        $query="CALL consolidado_bonos(?,?);";
+        $data=DB::select(DB::raw("$query"),[$request->desde,$request->hasta]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte consolidado Bonos ".$request->desde." - ".$request->hasta.".xlsx");
+        }else{
+            return response()->json($data);  
+        }   
+    }
 
     public function bono_personal(Request $request){
         $query="CALL rendimiento_por_presentacion(?,?);";
