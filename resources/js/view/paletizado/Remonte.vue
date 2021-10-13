@@ -48,6 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-left"></th>
+                                        <th class="text-left">Código</th>
                                         <th class="text-left">Materia</th>
                                         <th class="text-left">Variedad</th>
                                         <th class="text-left">Calibre</th>
@@ -65,6 +66,7 @@
                                             >
                                             </v-checkbox>
                                         </td>
+                                        <td>{{`${palet.tipo_palet_id} - ${palet.numero}`}}</td>
                                         <td>{{palet.materia}}</td>
                                         <td>{{palet.variedad}}</td>
                                         <td>{{palet.calibre}}</td>

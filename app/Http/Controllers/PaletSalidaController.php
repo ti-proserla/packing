@@ -26,7 +26,7 @@ class PaletSalidaController extends Controller
                                     'PE.peso_neto',
                                     'VA.nombre_variedad as variedad',
                                     'CT.nombre_categoria as categoria',
-                                    'PRE.nombre_presentacion as presentacion'
+                                    DB::raw('GROUP_CONCAT(DISTINCT PRE.nombre_presentacion) as presentacion')
                                 )
                                 ->join('cliente','cliente.id','=','palet_salida.cliente_id')
                                 ->join('caja','caja.palet_salida_id','=','palet_salida.id')
