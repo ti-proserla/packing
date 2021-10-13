@@ -57,7 +57,7 @@ class PaletSalidaController extends Controller
                                 ->select(
                                     'palet_salida.*',
                                     'cliente.descripcion as cliente',
-                                    'nombre_parihuela as parihuela',
+                                    'modelo_parihuela as parihuela',
                                     DB::raw('COUNT(caja.id) cajas_contadas'),
                                     DB::raw("GROUP_CONCAT(DISTINCT CONCAT(LO.codigo,' | ',nombre_presentacion,' | ',nombre_calibre,' | ',nombre_marca_caja)) as detalles"),
                                 )
