@@ -111,6 +111,14 @@ var routes =[
         component: require('./view/paletizado/Remonte.vue').default
     },
     {
+        path: '/paletizado/reetiquetar',
+        component: require('./view/paletizado/Reetiquetar.vue').default
+    },
+    {
+        path: '/palet/:id',
+        component: require('./view/paletizado/Palet.vue').default
+    },
+    {
         path: '/paletizado/:id',
         component: require('./view/paletizado/Count.vue').default
     },

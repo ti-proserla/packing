@@ -42,6 +42,7 @@ Route::resource('operacion', 'OperacionController');
 Route::resource('produccion', 'ProduccionController');
 Route::resource('descarte', 'DescarteController');
 Route::resource('etiqueta-caja', 'EtiquetaCajaController');
+Route::resource('rendimiento-personal', 'RendimientoPersonalController');
 Route::put('presentacion_linea/{id}', 'PresentacionLineaController@cerrar');
 Route::resource('presentacion_linea', 'PresentacionLineaController');
 

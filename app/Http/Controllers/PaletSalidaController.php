@@ -6,6 +6,7 @@ use App\Model\LoteIngreso;
 use App\Model\PaletSalida;
 use App\Model\JabaSalida;
 use App\Model\RendimientoPersonal;
+use App\Model\EtiquetaCaja;
 use App\Model\Caja;
 use App\Model\Cliente;
 use Illuminate\Http\Request;
@@ -108,7 +109,7 @@ class PaletSalidaController extends Controller
         $caja->palet_salida_id=(int)$id;
         $caja->etiqueta_caja_id=$array_palet[1];
         $caja->save();
-
+        $etiqueta_caja=EtiquetaCaja::where('id',$array_palet[1])->first();
         foreach ($request->codigos_trabajador as $key => $codigo) {
             if (!strpos($codigo,"00000000")) {
                 $rendimientoPersonal=new RendimientoPersonal();
@@ -117,6 +118,8 @@ class PaletSalidaController extends Controller
                 $rendimientoPersonal->codigo_operador=substr($codigo,4,8);
                 $rendimientoPersonal->linea=substr($codigo,0,2);
                 $rendimientoPersonal->codigo_labor=substr($codigo,2,2);
+                $rendimientoPersonal->presentacion_id=$etiqueta_caja->presentacion_id;
+                $rendimientoPersonal->fecha_empaque=$etiqueta_caja->fecha_empaque;
                 $rendimientoPersonal->save();
                 $caja->linea=$rendimientoPersonal->linea;
                 $caja->save();

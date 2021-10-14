@@ -205,6 +205,7 @@ class ReportesController extends Controller
                         TIE.nombre_tipo_empaque,
                         MAE.nombre_marca_empaque,
                         plu.nombre_plu,
+                        PAR.modelo_parihuela,
                         DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) juliano,
                         LI.codigo codigo_lote,
                         CL.descripcion nombre_productor,
@@ -224,6 +225,7 @@ class ReportesController extends Controller
                 INNER JOIN lote_ingreso LI ON EC.lote_ingreso_id=LI.id
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
+                LEFT JOIN parihuela PAR ON PAR.id=PS.parihuela_id
                 WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
                 $queryProductor

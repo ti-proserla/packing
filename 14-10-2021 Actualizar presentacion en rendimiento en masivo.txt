@@ -1,0 +1,7 @@
+UPDATE 
+-- SELECT * FROM 
+rendimiento_personal RP 
+INNER JOIN caja C ON C.id=RP.caja_id
+INNER JOIN etiqueta_caja EC ON EC.id=C.etiqueta_caja_id
+SET RP.presentacion_id=EC.presentacion_id,
+		RP.fecha_empaque=EC.fecha_empaque
