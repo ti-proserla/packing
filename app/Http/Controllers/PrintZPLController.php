@@ -465,6 +465,7 @@ class PrintZPLController extends Controller
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),
                         'LI.codigo as codigo_lote',
                         'CLI.descripcion as productor',
+                        'CLI.provincia',
                         'CL.nombre_calibre as calibre',
                         'MA.nombre_materia as materia',
                         DB::raw("IF(SUBSTR(peso_neto,-1) = '0', LEFT(peso_neto,length(peso_neto)-1),peso_neto) peso_neto"),
