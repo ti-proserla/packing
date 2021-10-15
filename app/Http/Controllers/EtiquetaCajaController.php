@@ -13,6 +13,7 @@ class EtiquetaCajaController extends Controller
                             DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
                             'etiqueta_caja.*',
                             'LI.codigo',
+                            'LI.codigo as codigo_lote',
                             'CLI.descripcion as nombre_cliente',
                             'CL.nombre_calibre',
                             'MA.nombre_materia',

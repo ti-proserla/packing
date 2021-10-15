@@ -265,7 +265,6 @@ class PaletSalidaController extends Controller
         $palet_destino_id=$request->palet_destino_id;
         $etiqueta_caja_id=$request->etiqueta_caja_id;
         $cajas=Caja::whereIn('id',explode(',',$cajas_id))->get();
-        // dd($cajas,$palet_destino_id,$etiqueta_caja_id);
         foreach ($cajas as $key => $caja) {
             $transferencia=new TransferenciaCaja();
             $transferencia->palet_destino_id=$palet_destino_id;

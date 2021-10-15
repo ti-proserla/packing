@@ -6,7 +6,6 @@
                 <v-btn @click="open_nuevo=true">Transferir</v-btn>
                 <v-data-table
                     item-key="id"
-                    v-model="selected"
                     show-select
                     :disable-sort="false"
                     :headers="header"
@@ -67,7 +66,7 @@
                             <v-flex style="overflow: auto"> 
                                 <v-data-table
                                     item-key="id"
-                                    v-model="selected"
+                                    v-model="selected_transferir"
                                     show-select
                                     :disable-sort="false"
                                     :headers="header"
@@ -91,6 +90,7 @@
                         <v-row>
                             <v-col cols="12" sm=6 lg="4">
                                 <v-text-field
+                                    readonly
                                     label="Fecha Empaque:"
                                     v-model="consulta_etiqueta.fecha_empaque"
                                     type="date">
@@ -98,6 +98,24 @@
                             </v-col>
                             <v-col cols="12" sm=6 lg="2">
                                 <v-btn @click="listarEtiquetas">Listar</v-btn>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-layout v-if="etiquetas!=null" column style="height: 400px"> 
+                                    <v-flex style="overflow: auto"> 
+                                        <v-data-table
+                                            item-key="id"
+                                            v-model="selected_etiqueta_id"
+                                            show-select
+                                            :disable-sort="false"
+                                            :headers="header"
+                                            :items="etiquetas"
+                                            :single-select="true"
+                                            disable-pagination
+                                            :search="search"
+                                            >
+                                        </v-data-table>
+                                    </v-flex>
+                                </v-layout>
                             </v-col>
                         </v-row>
 
@@ -127,8 +145,8 @@
                             Transferir
                         </v-btn>
 
-                        <v-btn text>
-                        Cancel
+                        <v-btn text @click="e1=2">
+                            Atras
                         </v-btn>
                     </v-stepper-content>
                 </v-stepper-items>
@@ -173,6 +191,7 @@
 export default {
     data(){
         return {
+            selected_etiqueta_id: [],
             e1: 1,
             search: '',
             palet_busqueda: {
@@ -181,7 +200,7 @@ export default {
             palet_transferir: null,
             open_nuevo: false,
             palet: null,
-            selected: [],
+            selected_transferir: [],
             header:[
                 { text: 'Fecha Empaque', value: 'fecha_empaque' },
                 { text: 'Lote', value: 'codigo_lote' },
@@ -197,7 +216,8 @@ export default {
             consulta_etiqueta:{
                 estado: 'Pendiente'
             },
-            etiquetas: []
+            etiquetas: [],
+            fecha_empaque: '',
         }
     },
     mounted(){
@@ -206,14 +226,17 @@ export default {
     },
     computed:{
         seleccionadas(){
-            return this.selected.length
+            return this.selected_transferir.length
         },
         fechaSelect(){
             var fecha="";
-            var fechas=this.selected.map((fila)=>fila.fecha_empaque);
+            var fechas=this.selected_transferir.map((fila)=>fila.fecha_empaque);
             var newFechas = fechas.filter((valor, indice) => {
                 return fechas.indexOf(valor) === indice;
             });
+            if (newFechas.length>0) {
+                this.consulta_etiqueta.fecha_empaque=newFechas[0];
+            }
             return newFechas;
         }
     },
@@ -243,11 +266,26 @@ export default {
         },
         transferir(){
             axios.post(url_base+`/palet_salida/transferencia`,{
-                cajas_id: this.selected.map((fila)=>fila.id).join(','),
+                cajas_id: this.selected_transferir.map((fila)=>fila.id).join(','),
                 palet_destino_id: this.palet.id,
-                
+                etiqueta_caja_id: (this.selected_etiqueta_id.length>0) ? this.selected_etiqueta_id[0].id: null
             })
             .then(response => {
+                var respuesta=response.data;
+                switch (respuesta.status) {
+                    case 'OK':
+                        this.getPaletSalida();
+                        this.buscar();
+                        swal("Transferencia Realizada", {
+                                    icon: "success",
+                                    timer: 2000,
+                                    buttons: false
+                                });
+                        break;
+                
+                    default:
+                        break;
+                }
             });
         },
         listarEtiquetas(){
