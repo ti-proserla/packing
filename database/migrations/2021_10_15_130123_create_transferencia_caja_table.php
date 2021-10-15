@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMovimientoCajaTable extends Migration
+class CreateTransferenciaCajaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateMovimientoCajaTable extends Migration
      */
     public function up()
     {
-        Schema::create('movimiento_caja', function (Blueprint $table) {
+        Schema::create('transferencia_caja', function (Blueprint $table) {
             $table->id();
-            $table->integer('paled_entrada_id');
-            $table->integer('paled_salida_id');
+            $table->integer('palet_destino_id');
+            $table->integer('palet_salida_id');
             $table->unsignedBigInteger('caja_id');
             $table->unsignedInteger('etiqueta_caja_id');
-            $table->date('fecha_movimiento');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateMovimientoCajaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movimiento_caja');
+        Schema::dropIfExists('transferencia_caja');
     }
 }

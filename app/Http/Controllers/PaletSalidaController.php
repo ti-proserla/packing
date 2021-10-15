@@ -7,6 +7,7 @@ use App\Model\PaletSalida;
 use App\Model\JabaSalida;
 use App\Model\RendimientoPersonal;
 use App\Model\EtiquetaCaja;
+use App\Model\TransferenciaCaja;
 use App\Model\Caja;
 use App\Model\Cliente;
 use Illuminate\Http\Request;
@@ -138,13 +139,72 @@ class PaletSalidaController extends Controller
         // $caja->
     }
 
+    
+
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
-                                ->where('palet_salida.id',$id)
-                                ->select('palet_salida.*')
-                                ->first();
+            ->where('palet_salida.id',$id)
+            ->select('palet_salida.*')
+            ->first();
+        if ($request->has('cajas')) {
+            $paletSalida->detalle=Caja::where('palet_salida_id',$paletSalida->id)
+                ->join('etiqueta_caja as EC','EC.id','=','caja.etiqueta_caja_id')
+                ->join('calibre as CL','CL.id','=','EC.calibre_id')
+                ->join('categoria as CT','CT.id','=','EC.categoria_id')    
+                ->join('presentacion as PE','PE.id','=','EC.presentacion_id')
+                ->join('marca_caja as MC','MC.id','=','EC.marca_caja_id')
+                ->join('marca_empaque as ME','ME.id','=','EC.marca_empaque_id')
+                ->join('tipo_empaque as TE','TE.id','=','EC.tipo_empaque_id')
+                ->join('lote_ingreso as LI','LI.id','=','EC.lote_ingreso_id')
+                ->join('plu as PLU','PLU.id','=','EC.plu_id')
+                ->select(
+                    'caja.id',
+                    'LI.codigo as codigo_lote',
+                    'EC.fecha_empaque',
+                    'caja.palet_salida_id',
+                    'CL.nombre_calibre',
+                    'CT.nombre_categoria',
+                    'PE.nombre_presentacion',
+                    'TE.nombre_tipo_empaque',
+                    'ME.nombre_marca_empaque',
+                    'MC.nombre_marca_caja',
+                    'PLU.nombre_plu'
+                )
+                ->get();
+        }
         return response()->json($paletSalida);
-        
+    }
+    public function search(Request $request){
+        $paletSalida=PaletSalida::where('tipo_palet_id',$request->tipo_palet_id)
+                        ->where('numero',$request->numero)
+                        ->where('cliente_id',$request->cliente_id)
+                        ->first();
+        $paletSalida->detalle=Caja::where('palet_salida_id',$paletSalida->id)
+            ->join('etiqueta_caja as EC','EC.id','=','caja.etiqueta_caja_id')
+            ->join('calibre as CL','CL.id','=','EC.calibre_id')
+            ->join('categoria as CT','CT.id','=','EC.categoria_id')    
+            ->join('presentacion as PE','PE.id','=','EC.presentacion_id')
+            ->join('marca_caja as MC','MC.id','=','EC.marca_caja_id')
+            ->join('marca_empaque as ME','ME.id','=','EC.marca_empaque_id')
+            ->join('tipo_empaque as TE','TE.id','=','EC.tipo_empaque_id')
+            ->join('lote_ingreso as LI','LI.id','=','EC.lote_ingreso_id')
+            ->join('plu as PLU','PLU.id','=','EC.plu_id')
+            ->select(
+                'caja.id',
+                'LI.codigo as codigo_lote',
+                'EC.fecha_empaque',
+                'caja.palet_salida_id',
+                'CL.nombre_calibre',
+                'CT.nombre_categoria',
+                'PE.nombre_presentacion',
+                'TE.nombre_tipo_empaque',
+                'ME.nombre_marca_empaque',
+                'MC.nombre_marca_caja',
+                'PLU.nombre_plu'
+            )
+            ->get();
+            // $paletSalida->detalle=$paletSalida->detalle==null ? [] : $paletSalida->detalle;
+        return response()->json($paletSalida);
     }
     public function codigos(Request $request,$id){
         $paletSalida=PaletSalida::join('caja as CA','CA.palet_salida_id','=','palet_salida.id')
@@ -197,6 +257,28 @@ class PaletSalidaController extends Controller
         return response()->json([
             "status" => "OK",
             "data"  => $paletSalida
+        ]);
+    }
+
+    public function transferencia(Request $request){
+        $cajas_id=$request->cajas_id; //ids separados por comas
+        $palet_destino_id=$request->palet_destino_id;
+        $etiqueta_caja_id=$request->etiqueta_caja_id;
+        $cajas=Caja::whereIn('id',explode(',',$cajas_id))->get();
+        // dd($cajas,$palet_destino_id,$etiqueta_caja_id);
+        foreach ($cajas as $key => $caja) {
+            $transferencia=new TransferenciaCaja();
+            $transferencia->palet_destino_id=$palet_destino_id;
+            $transferencia->palet_salida_id=$caja->palet_salida_id;
+            $transferencia->etiqueta_caja_id=$caja->etiqueta_caja_id;
+            $transferencia->caja_id=$caja->id;
+            $transferencia->save();
+            $caja->palet_salida_id=$palet_destino_id;
+            $caja->etiqueta_caja_id=($etiqueta_caja_id==null)?$caja->etiqueta_caja_id : $etiqueta_caja_id;
+            $caja->save();
+        }
+        return response()->json([
+            "status" => "OK"
         ]);
     }
 

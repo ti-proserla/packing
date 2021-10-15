@@ -52,11 +52,14 @@ Route::resource('fundo', 'FundoController');
 
 Route::resource('transportista', 'TransportistaController');
 Route::resource('palet_salida/{id}/jaba', 'JabaSalidaController');
+Route::get('palet_salida/search', 'PaletSalidaController@search');
+Route::post('palet_salida/transferencia', 'PaletSalidaController@transferencia');
 Route::post('palet_salida/remonte', 'PaletSalidaController@remonte');
 Route::post('palet_salida/{id}/caja', 'PaletSalidaController@caja_store');
 Route::resource('palet_salida', 'PaletSalidaController');
 Route::get('lote_ingreso/generar_codigo', 'LoteIngresoController@generar_codigo');
 Route::get('lote_ingreso/palets_salida', 'LoteIngresoController@palets_salida');
+Route::post('lote_ingreso/{codigo}/codigo', 'LoteIngresoController@codigo');
 Route::resource('lote_ingreso', 'LoteIngresoController');
 Route::get('sub_lote/{id}/palets', 'SubLoteController@palets');
 Route::put('sub_lote/{sub_lote_id}/estado', 'SubLoteController@estado');

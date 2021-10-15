@@ -105,7 +105,18 @@ class LoteIngresoController extends Controller
     {
         $loteIngreso=LoteIngreso::where('lote_ingreso.id',$id)
                     ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
-                    ->select('lote_ingreso.*','cliente.ruc','cliente.descripcion')
+                    ->join('materia','materia.id','=','lote_ingreso.materia_id')
+                    ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
+                    ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad')
+                    ->first();
+        return response()->json($loteIngreso);
+    }
+    public function codigo($codigo){
+        $loteIngreso=LoteIngreso::where('lote_ingreso.codigo',$codigo)
+                    ->join('cliente','cliente.id','=','lote_ingreso.cliente_id')
+                    ->join('materia','materia.id','=','lote_ingreso.materia_id')
+                    ->join('variedad','variedad.id','=','lote_ingreso.variedad_id')
+                    ->select('lote_ingreso.*','cliente.descripcion','materia.nombre_materia','variedad.nombre_variedad')
                     ->first();
         return response()->json($loteIngreso);
     }

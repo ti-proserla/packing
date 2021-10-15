@@ -37,8 +37,12 @@ class EtiquetaCajaController extends Controller
                         ->where('CLI.id',$request->productor_id)
                         ->where('etiqueta_caja.fecha_empaque',$request->fecha_empaque)
                         ->whereIn('etiqueta_caja.estado',explode(',',$request->estado))
-                        ->orderBy('id','DESC')
-                        ->paginate(10);
+                        ->orderBy('id','DESC');
+        if ($request->has('all')) {
+            $etiquetaCaja=$etiquetaCaja->get();
+        }else{
+            $etiquetaCaja=$etiquetaCaja->paginate(10);
+        }
         return response()->json($etiquetaCaja);
     }
 
