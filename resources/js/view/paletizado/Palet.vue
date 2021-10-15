@@ -244,7 +244,8 @@ export default {
         transferir(){
             axios.post(url_base+`/palet_salida/transferencia`,{
                 cajas_id: this.selected.map((fila)=>fila.id).join(','),
-                palet_destino_id: this.palet.id
+                palet_destino_id: this.palet.id,
+                
             })
             .then(response => {
             });
