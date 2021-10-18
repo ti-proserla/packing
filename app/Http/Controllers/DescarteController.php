@@ -25,16 +25,6 @@ class DescarteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -78,7 +68,6 @@ class DescarteController extends Controller
                 $subLote=SubLote::where('id',$row->id)->first();
                 $subLote->descarte_racimos=$row->descarte_racimos;
                 $subLote->descarte_granos=$row->descarte_granos;
-                // $subLote->cantidad_jabas_descarte=$request->cantidad_jabas_descarte;
                 $subLote->save();
             }
             DB::commit();
@@ -113,13 +102,53 @@ class DescarteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $descarte=Descarte::where('id',$id)->first();
-        $descarte->save();
-        return response()->json([
-            "status" => "OK",
-            "data"  => $descarte,
-            "message"=> "Descarte Actualizado"
-        ]);
+        DB::beginTransaction();
+        try {
+            $descarte=Descarte::where('id',$id)->first();
+            $descarte->descarte_racimos=$request->descarte_racimos;
+            $descarte->descarte_granos=$request->descarte_granos;
+            $descarte->cantidad_jabas_descarte=$request->cantidad_jabas_descarte;
+            $descarte->lote_id=$request->lote_id;
+            $descarte->save();
+
+            $query="SELECT 	SL.id,SL.lote_id, 
+                                    ROUND(
+                                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)*DES.descarte_racimos
+                                        /DES.peso_total_lote
+                                        ,2) descarte_racimos, 
+                                    ROUND(
+                                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)*DES.descarte_granos
+                                        /DES.peso_total_lote
+                                        ,2) descarte_granos
+                            FROM sub_lote SL
+                            LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
+                            LEFT JOIN (
+                            SELECT 	DE.*,
+                                            SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_total_lote 
+                            FROM descarte DE
+                            LEFT JOIN sub_lote SL ON DE.lote_id = SL.lote_id
+                            LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
+                            GROUP BY DE.lote_id
+                            ) DES ON DES.lote_id=SL.lote_id
+                            WHERE SL.lote_id=?
+                            GROUP BY SL.id";
+            $data=DB::select(DB::raw("$query"),[$request->lote_id]);
+            foreach ($data as $key => $row) {
+                $subLote=SubLote::where('id',$row->id)->first();
+                $subLote->descarte_racimos=$row->descarte_racimos;
+                $subLote->descarte_granos=$row->descarte_granos;
+                $subLote->save();
+            }
+            DB::commit();
+            return response()->json([
+                "status" => "OK",
+                "data"  => $descarte,
+                "message"=> "Descarte Actualizado"
+            ]);
+        } catch (\Exception $ex) {
+            DB::rollback();
+            
+        }
     }
 
     /**
