@@ -30,7 +30,7 @@ class PrintZPLController extends Controller
         $codigo_operador = $request->codigo_operador;
 
         $tareo=Tareo::where('codigo_operador',$codigo_operador)
-                    ->select('tareo.*','operador.ape_operador')
+                    ->select('tareo.*',DB::raw("CONCAT(SUBSTRING_INDEX(operador.nom_operador,' ',1),' ',operador.ape_operador) trabajador"))
                     ->join('operador','tareo.codigo_operador','=','operador.dni')
                     ->orderBy('id','DESC')
                     ->first();
@@ -40,7 +40,7 @@ class PrintZPLController extends Controller
                 "data"      => "Tareo no existe."
             ]);
         }
-        $nombre_operador=$tareo->ape_operador;
+        $nombre_operador=($tareo->trabajador=='Nuevo Trabajador') ? $codigo_operador : $tareo->trabajador;
 
         // dd($tareo);
         $labor=Labor::where('codigo_auxiliar','like','%'.$tareo->labor_id.'%')
