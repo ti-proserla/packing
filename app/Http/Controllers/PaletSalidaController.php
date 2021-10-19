@@ -83,6 +83,11 @@ class PaletSalidaController extends Controller
      */
     public function store(PaletSalidaValidate $request)
     {
+        $siguiente=PaletSalida::select(DB::raw('MAX(numero) numero'))
+            ->where('tipo_palet_id',$request->tipo_palet_id)
+            ->where('campania_id',$request->campania_id)
+            ->where('cliente_id',$request->cliente_id)
+            ->first();
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
@@ -90,6 +95,7 @@ class PaletSalidaController extends Controller
         $paletSalida->etapas=$request->etapas;
         $paletSalida->tope_cajas=$request->tope_cajas;
         $paletSalida->nave=1;
+        $paletSalida->numero=$siguiente->numero+1;
         $paletSalida->camara=null;
         $paletSalida->estado="Pendiente";
         $paletSalida->parihuela_id=$request->parihuela_id;
@@ -285,12 +291,12 @@ class PaletSalidaController extends Controller
         switch ($request->estado) {
             case 'Cerrado':
                 $paletSalida=PaletSalida::where('id',$id)->first();
-                $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio','Remonte'])
-                    ->where('tipo_palet_id',$paletSalida->tipo_palet_id)
-                    ->where('campania_id',$paletSalida->campania_id)
-                    ->where('cliente_id',$paletSalida->cliente_id)
-                    ->count();
-                $paletSalida->numero=$conteo+1;
+                // $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio','Remonte'])
+                //     ->where('tipo_palet_id',$paletSalida->tipo_palet_id)
+                //     ->where('campania_id',$paletSalida->campania_id)
+                //     ->where('cliente_id',$paletSalida->cliente_id)
+                //     ->count();
+                // $paletSalida->numero=$conteo+1;
                 $paletSalida->estado=$request->estado;
                 $paletSalida->fecha_cierre=Carbon::now();
                 $paletSalida->save();

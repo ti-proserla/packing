@@ -1,16 +1,15 @@
 <template>
     <v-container fluid>
-        <v-row>
-            <v-col cols="12" sm="6" class="text-right">
-                <v-btn @click="$router.push('/paletizado')" color="error">Continuar Despues</v-btn>
-                <v-btn @click="terminar()" color="success" v-if="palet.estado=='Pendiente'">Cerrar</v-btn>
-            </v-col>
-            <v-col cols=12 sm=6>
                 <v-card>
+                    <v-card-title>Palet {{ palet.tipo_palet_id }} - {{ palet.numero }}</v-card-title>
                     <v-card-text>
-                        <v-row v-if="palet.estado=='Pendiente'">
-                            <v-col cols=12>
-                                <v-form autocomplete="off" @submit.prevent="agregar()">
+                        <v-row>
+                            <v-col cols="12" sm="6" class="text-right">
+                                <v-btn @click="$router.push('/paletizado')" small color="error">Salir</v-btn>
+                                <v-btn @click="terminar()" small color="success" v-if="palet.estado=='Pendiente'">Cerrar</v-btn>
+                            </v-col>
+                            <v-col  cols=12 v-if="palet.estado=='Pendiente'">
+                                <v-form v-if="!tope" autocomplete="off" @submit.prevent="agregar()">
                                     <v-text-field 
                                         dense 
                                         outlined 
@@ -24,17 +23,16 @@
                                         </v-text-field>
                                     <button type="submit" hidden>Submin</button>
                                     <br>
-                                    <h2 v-if="tope">Palet completado ...</h2>
                                     
-                                    <v-alert v-model="alert.visible" 
+                                    <v-alert 
+                                        dense
+                                        v-model="alert.visible" 
                                         :color="alert.status" 
                                         dark 
                                         transition="scale-transition"
                                     >{{ alert.message }}</v-alert>
                                 </v-form>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-simple-table>
+                                <v-simple-table dense v-if="!tope">
                                     <template v-slot:default>
                                         <tbody>
                                             <tr>
@@ -58,19 +56,20 @@
                                         </tbody>
                                     </template>
                                 </v-simple-table>
+                                <h2 v-if="tope">Palet completado ...</h2>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-data-table
+                                    :disable-sort="false"
+                                    :headers="header"
+                                    :items="palet.cajas"
+                                    hide-default-footer
+                                    >
+                                </v-data-table>
                             </v-col>
                         </v-row>
-                        <v-data-table
-                            :disable-sort="false"
-                            :headers="header"
-                            :items="palet.cajas"
-                            hide-default-footer
-                            >
-                        </v-data-table>
                     </v-card-text>
                 </v-card>
-            </v-col>
-        </v-row>
     </v-container>
 </template>
 <style>

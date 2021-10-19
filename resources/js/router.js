@@ -115,6 +115,10 @@ var routes =[
         component: require('./view/paletizado/Reetiquetar.vue').default
     },
     {
+        path: '/palet',
+        component: require('./view/paletizado/Palet.vue').default
+    },
+    {
         path: '/palet/:id',
         component: require('./view/paletizado/Palet.vue').default
     },

@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class NisiraConectorController extends Controller
 {
-    
+    public function puerto(){
+        
+    }
 }

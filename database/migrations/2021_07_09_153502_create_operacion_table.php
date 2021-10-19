@@ -25,9 +25,9 @@ class CreateOperacionTable extends Migration
             $table->integer('categoria_id');
             $table->integer('tipo_empaque_id');
             $table->integer('marca_empaque_id');
-            $table->string('',100);
-            $table->date('fecha_operacion');
             $table->string('estado',30)->default('Generado');
+            $table->date('fecha_operacion');
+            $table->string('',100);
             $table->timestamps();
         });
     }
