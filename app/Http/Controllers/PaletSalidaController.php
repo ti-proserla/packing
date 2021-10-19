@@ -235,12 +235,12 @@ class PaletSalidaController extends Controller
         $paletSalida->estado="Cerrado";
         $paletSalida->parihuela_id=$request->parihuela_id;
         $paletSalida->etiqueta_adicional=$request->etiqueta_adicional;
-        $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio'])
-                    ->where('tipo_palet_id','TER')
-                    ->where('campania_id',$paletSalida->campania_id)
-                    ->where('cliente_id',$paletSalida->cliente_id)
-                    ->count();
-        $paletSalida->numero=$conteo+1;
+        $siguiente=PaletSalida::select(DB::raw('MAX(numero) numero'))
+            ->where('tipo_palet_id','TER')
+            ->where('campania_id',$request->campania_id)
+            ->where('cliente_id',$request->cliente_id)
+            ->first();
+        $paletSalida->numero=$siguiente->numero+1;
         $paletSalida->fecha_cierre=Carbon::now();
         $paletSalida->save();
 
