@@ -60,6 +60,7 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-data-table
+                                    dense
                                     :disable-sort="false"
                                     :headers="header"
                                     :items="palet.cajas"

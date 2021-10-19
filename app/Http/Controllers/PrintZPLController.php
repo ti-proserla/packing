@@ -476,7 +476,8 @@ class PrintZPLController extends Controller
                         'FU.cod_lugar_produccion',
                         'PLU.nombre_plu as plu',
                         // 'EAN.descripcion as codigo_ean',
-                        'CT.nombre_categoria as categoria'
+                        'CT.nombre_categoria as categoria',
+                        DB::raw("CONCAT(SUBSTRING(PE.nombre_presentacion, 1, 3),'.',SUBSTRING(MA_CA.nombre_marca_caja, 1, 3)) resumen")
                         )
                     ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
                     ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
@@ -487,6 +488,7 @@ class PrintZPLController extends Controller
                     ->join('materia as MA','MA.id','=','LI.materia_id')
                     ->join('fundo as FU','FU.id','=','LI.fundo_id')
                     ->join('variedad as VA','VA.id','=','LI.variedad_id')
+                    ->join('marca_caja as MA_CA','MA_CA.id','=','etiqueta_caja.marca_caja_id')
                     // ->leftJoin('codigo_ean as EAN',function ($join) {
                     //     $join->on('EAN.variedad_id', '=', 'LI.variedad_id')
                     //     ->on('EAN.calibre_id', '=', 'etiqueta_caja.calibre_id');
