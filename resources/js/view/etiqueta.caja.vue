@@ -465,7 +465,7 @@ export default {
             })
         },
         getZpl(id){
-            
+            this.preview=null;
             axios.get(url_base+'/print/muestra_etiqueta_caja?zpl_id='+this.zpl_id+'&etiqueta_caja_id='+this.etiqueta_caja_id)
             .then(response => {
 
