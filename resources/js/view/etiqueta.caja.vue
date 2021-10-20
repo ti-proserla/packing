@@ -249,8 +249,7 @@
                         </v-row>
                     </v-card-title>
                     <v-card-text style="height: 400px;">
-                                <v-img :src="preview"></v-img>
-                        
+                        <v-img :src="preview"></v-img>                 
                     </v-card-text>
                     <v-card-actions>
                         <div class="text-right mt-3">
@@ -511,12 +510,9 @@ export default {
             });
         },
         buscar(id){
+            this.preview=null;
             this.etiqueta_caja_id=id;
             this.open_ver=true;
-            // axios.get(url_base+'/etiqueta_caja/'+id)
-            // .then(response => {
-            //     this.etiqueta_caja_editar = response.data;
-            // })
         },
         actualizar(){
             axios.post(url_base+`/etiqueta_caja/${this.etiqueta_caja_editar.id}?_method=PUT`,this.etiqueta_caja_editar)
