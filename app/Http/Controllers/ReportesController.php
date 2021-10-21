@@ -74,7 +74,7 @@ class ReportesController extends Controller
                         op.ape_operador,
                         COUNT(*) conteo,
                         LA.descripcion labor,
-                        EC.fecha_empaque,
+                        RP.fecha_empaque,
                         DATE_FORMAT(MIN(RP.created_at),'%H:%i') primera_lectura,
                         DATE_FORMAT(MAX(RP.created_at),'%H:%i') ultima_lectura,				 
                         TIMESTAMPDIFF(MINUTE, MIN(RP.created_at), MAX(RP.created_at))/60 diferencia
@@ -84,7 +84,7 @@ class ReportesController extends Controller
                 INNER JOIN rendimiento_personal RP ON RP.caja_id=CA.id
                 INNER JOIN (SELECT * FROM labor group by codigo_labor) LA ON LA.codigo_labor=RP.codigo_labor
                 LEFT JOIN db_asistencia_produccion.operador op ON op.dni=RP.codigo_operador
-                WHERE fecha_empaque=?
+                WHERE RP.fecha_empaque=?
                 $query_labor
                 GROUP BY RP.codigo_operador,EC.fecha_empaque, RP.codigo_labor
                 ORDER BY conteo DESC";
