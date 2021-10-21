@@ -1,8 +1,45 @@
 <template>
-    <v-container fluid>
+    <v-container fluid>        
+        <v-card>
+            <v-card-text>
+                <v-row>
+                    <v-col cols="12" lg="4">
+                        <v-select
+                            v-model="palet_busqueda_1.cliente_id"
+                            label="Cliente:"
+                            :items="clientes"
+                            :item-text="cliente => `${cliente.descripcion}`"
+                            item-value="id"
+                            >
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="4">
+                        <v-select
+                            v-model="palet_busqueda_1.tipo_palet_id"
+                            label="Tipo de Palet:"
+                            :items="tipos_palet"
+                            :item-text="tipo => `${tipo.descripcion}`"
+                            item-value="id">
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="2">
+                        <v-text-field 
+                            required 
+                            label="Número" 
+                            v-model="palet_busqueda_1.numero"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" lg="2">
+                        <v-btn @click="getPaletSalida">
+                            Buscar
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-card-text>
+        </v-card>
         <v-card v-if="palet!=null">
             <v-card-title>Palet {{ palet.tipo_palet_id }} - {{ palet.numero }}</v-card-title>
-            <v-card-text>
+            <v-card-text >
                 <v-btn @click="open_nuevo=true">Transferir</v-btn>
                 <v-data-table
                     item-key="id"
@@ -194,6 +231,11 @@ export default {
             selected_etiqueta_id: [],
             e1: 1,
             search: '',
+            palet_busqueda_1:{
+                tipo_palet_id: null,
+                numero: null,
+                cliente_id: null
+            },
             palet_busqueda: {
                 tipo_palet_id: ''
             },
@@ -218,11 +260,13 @@ export default {
             },
             etiquetas: [],
             fecha_empaque: '',
+            clientes: []
         }
     },
     mounted(){
-        this.getPaletSalida();
+        // this.getPaletSalida();
         this.listarTiposPalet();
+        this.listarClientes();
     },
     computed:{
         seleccionadas(){
@@ -241,9 +285,16 @@ export default {
         }
     },
     methods:{
-        getPaletSalida(){
-            axios.get(url_base+`/palet_salida/${this.$route.params.id}?cajas`)
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
             .then(response => {
+                this.clientes=response.data
+            })
+        },
+        getPaletSalida(){
+            axios.get(url_base+`/palet_salida/search`,{
+                params: this.palet_busqueda_1
+            }).then(response => {
                 this.palet=response.data;
                 this.palet_busqueda.cliente_id=this.palet.cliente_id;
                 this.consulta_etiqueta.productor_id=this.palet.cliente_id;
