@@ -223,8 +223,6 @@ class PaletSalidaController extends Controller
     }
 
     public function remonte(Request $request){
-        
-
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
         $paletSalida->tipo_palet_id='TER';
@@ -311,7 +309,8 @@ class PaletSalidaController extends Controller
 
             default:
                 $paletSalida=PaletSalida::where('id',$id)->first();
-                $paletSalida->estado=$request->estado;
+                $paletSalida->parihuela_id=$request->parihuela_id;
+                $paletSalida->etiqueta_adicional=$request->etiqueta_adicional;
                 $paletSalida->save();
                 break;
         }

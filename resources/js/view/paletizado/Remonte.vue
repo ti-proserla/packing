@@ -136,7 +136,8 @@ export default {
         listarTiposCampanias(){
             axios.get(url_base+`/campania?all&estado=Abierto`)
             .then(response => {
-                this.campanias=response.data
+                this.campanias=response.data;
+                this.palet_salida.campania_id=this.campanias[0].id;
             });
         },
         listarParihuelas(){
