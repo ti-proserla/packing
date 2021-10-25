@@ -168,7 +168,7 @@ class ReportesController extends Controller
                 AND DATE(SL.fecha_recepcion)>=?
                 AND DATE(SL.fecha_recepcion)<=?
                 GROUP BY LI.id, SL.id
-                ORDER BY SL.id";
+                ORDER BY SL.id ASC";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Acopio $desde - $hasta.xlsx");
