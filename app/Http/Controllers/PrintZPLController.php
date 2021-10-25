@@ -30,7 +30,7 @@ class PrintZPLController extends Controller
         $codigo_operador = $request->codigo_operador;
 
         $tareo=Tareo::where('codigo_operador',$codigo_operador)
-                    ->select('tareo.*',DB::raw("CONCAT(SUBSTRING_INDEX(operador.nom_operador,' ',1),' ',operador.ape_operador) trabajador"))
+                    ->select('tareo.*',DB::raw("CONCAT(SUBSTRING_INDEX(operador.nom_operador,' ',1),' ',SUBSTRING_INDEX(operador.ape_operador,' ',1)) trabajador"))
                     ->join('operador','tareo.codigo_operador','=','operador.dni')
                     ->orderBy('id','DESC')
                     ->first();
@@ -397,10 +397,29 @@ class PrintZPLController extends Controller
 
         $print="";
         $number=0;
-
         $parametro=Parametro::where('descripcion','index_codigo_trabajador')->first();
         $index_db=(int)$parametro->valor;
-        $cantidad=60;
+        switch ($parametros["labor"]) {
+            case '01':
+                $cantidad=40;
+                break;
+
+            case '02':
+                $cantidad=60;
+                break;
+            
+            case '03':
+                $cantidad=60;
+                break;
+
+            case '04':
+                $cantidad=27;
+                break;
+            
+            default:
+                $cantidad=10;
+                break;
+        }
         
         if(-1<strpos($string_zpl,'{autonumerico}')){
             $separate_autonumerico=explode('{autonumerico}',$string_zpl);
@@ -496,7 +515,6 @@ class PrintZPLController extends Controller
                     ->where('etiqueta_caja.id',$etiqueta_id)
                     ->orderBy('id','DESC')
                     ->first();
-                    // dd($etiquetaCaja);
         
         $zpl=ZPL::where('id',$request->zpl_id)->first()->contenido;
                  

@@ -162,7 +162,6 @@ export default {
                     this.alert=this.initAlert();
                 }, 10000);
             }).catch(function (error) {
-                console.log("hola");
                 t.form.codigo_operador='';
             });
         },
