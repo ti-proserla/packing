@@ -140,6 +140,7 @@ class ReportesController extends Controller
                         WEEK(SL.fecha_recepcion) semana,
                         DATE(SL.fecha_recepcion) fecha_recepcion,
                         DATE_FORMAT(SL.fecha_recepcion,'%H:%i') hora_ingreso,
+                        DATE_FORMAT(MIN(PE.fecha_lanzado),'%H:%i') primer_lanzado,
                         LI.fecha_proceso,
                         MA.nombre_materia,
                         VA.nombre_variedad,
@@ -166,7 +167,8 @@ class ReportesController extends Controller
                 where CL.id=?
                 AND DATE(SL.fecha_recepcion)>=?
                 AND DATE(SL.fecha_recepcion)<=?
-                GROUP BY LI.id, SL.id";
+                GROUP BY LI.id, SL.id
+                ORDER BY SL.id";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
         if ($request->has('excel')) {
             return (new GeneralExcel($data))->download("Reporte Acopio $desde - $hasta.xlsx");
