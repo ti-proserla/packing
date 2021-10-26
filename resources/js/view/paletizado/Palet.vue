@@ -114,7 +114,7 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-                        <v-layout v-if="palet_transferir!=null" column style="height: 400px"> 
+                        <v-layout v-if="palet_transferir!=null" column style="max-height: 400px"> 
                             <v-flex style="overflow: auto"> 
                                 <v-data-table
                                     item-key="id"

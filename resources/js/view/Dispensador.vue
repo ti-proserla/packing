@@ -81,7 +81,8 @@ export default {
             form: {
                 codigo_operador: null,
                 ip_print: localStorage.getItem('ip_print') || null,
-            }
+            },
+            codigo_operador_anterior: []
         }
     },
     mounted() {
