@@ -38,9 +38,19 @@
             </v-card-text>
         </v-card>
         <v-card v-if="palet!=null">
-            <v-card-title>Palet {{ palet.tipo_palet_id }} - {{ palet.numero }}</v-card-title>
+            <v-card-title>
+                Palet {{ palet.tipo_palet_id }} - {{ palet.numero }}  
+                <v-chip small
+                        class="ma-2"
+                        :color="colorGet(palet.estado)"
+                        text-color="white"
+                        >
+                        {{palet.estado}}
+                </v-chip>
+            </v-card-title>
             <v-card-text >
-                <v-btn @click="open_nuevo=true">Transferir</v-btn>
+                <v-btn @click="open_nuevo=true" color="primary" small>Transferir</v-btn>
+                <v-btn @click="cambiarPendiente" color="warning" small>Cambiar a Pendiente</v-btn>
                 <v-data-table
                     item-key="id"
                     show-select
@@ -48,6 +58,11 @@
                     :headers="header"
                     :items="palet.detalle"
                     >
+                    <template v-slot:item.opciones="{ item }">
+                        <v-btn text color="red" @click="eliminar(item.id)">
+                            <i class="fas fa-trash-alt"></i>
+                        </v-btn>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -253,6 +268,7 @@ export default {
                 { text: 'Marca Empaque', value: 'nombre_marca_empaque' },
                 { text: 'Marca Caja', value: 'nombre_marca_caja' },
                 { text: 'PLU', value: 'nombre_plu' },
+                { text: 'Opciones', value: 'opciones' },
             ],
             tipos_palet: [],
             consulta_etiqueta:{
@@ -260,7 +276,13 @@ export default {
             },
             etiquetas: [],
             fecha_empaque: '',
-            clientes: []
+            clientes: [],
+            estados: [
+                {color: 'success', estado: 'Pendiente'},
+                {color: 'warning', estado: 'Lanzado'},
+                {color: 'primary', estado: 'Cerrado'},
+                {color: 'danger', estado: 'Pendiente'}
+            ]
         }
     },
     mounted(){
@@ -285,6 +307,15 @@ export default {
         }
     },
     methods:{
+        colorGet(estado){
+            for (let i = 0; i < this.estados.length; i++) {
+                const element = this.estados[i];
+                if (element.estado==estado) {
+                    return element.color;
+                }
+            }
+            return '';
+        },
         listarClientes(){
             axios.get(url_base+'/cliente?all')
             .then(response => {
@@ -347,6 +378,58 @@ export default {
                 this.etiquetas = response.data;
             })
         },
+        eliminar(id){
+            swal({
+                title: "¿Desea Eliminar Caja?",
+                buttons: ['Cancelar',"OK"],
+            })
+            .then((res) => {
+                if (res) {
+                    axios.post(url_base+`/caja/${ id }?_method=DELETE`)
+                    .then(response => {
+                        var res=response.data;
+                        switch (res.status) {
+                            case 'OK':
+                                swal(res.message, {
+                                    icon: "success",
+                                    timer: 2000,
+                                    buttons: false
+                                });
+                                this.getPaletSalida();
+                                break;
+                        }
+                    });
+                }
+            });
+        },
+        cambiarPendiente(){
+            swal({
+                title: "¿Desea cambiar a Pendiente?",
+                buttons: ['Cancelar',"OK"],
+            })
+            .then((res) => {
+                if (res) {
+                    axios.post(url_base+`/palet_salida/${ this.palet.id }?_method=patch`,{
+                        estado: 'Pendiente'
+                    })
+                    .then(response => {
+                        var res=response.data;
+                        switch (res.status) {
+                            case 'OK':
+                                swal(res.message, {
+                                    icon: "success",
+                                    timer: 2000,
+                                    buttons: false
+                                });
+                                this.getPaletSalida();
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+            });
+        }
     }
 }
 </script>

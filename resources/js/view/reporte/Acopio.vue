@@ -78,6 +78,7 @@ export default {
                 { text: 'Semana', value: 'semana' },
                 { text: 'Fecha Recepción', value: 'fecha_recepcion' },
                 { text: 'Hr. Ingreso Camión', value: 'hora_ingreso' },
+                { text: 'Hr. Lanzado', value: 'primer_lanzado' },
                 { text: 'Fecha Proceso', value: 'fecha_proceso' },
                 { text: 'Materia', value: 'nombre_materia' },
                 { text: 'Variedad', value: 'nombre_variedad' },

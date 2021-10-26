@@ -287,6 +287,11 @@ class PaletSalidaController extends Controller
 
     public function update(Request $request,$id){
         switch ($request->estado) {
+            case 'Pendiente':
+                $paletSalida=PaletSalida::find($id);
+                $paletSalida->estado=$request->estado;
+                $paletSalida->save();
+                break;
             case 'Cerrado':
                 $paletSalida=PaletSalida::where('id',$id)->first();
                 // $conteo=PaletSalida::whereIn('estado',['Cerrado','Frio','Remonte'])
