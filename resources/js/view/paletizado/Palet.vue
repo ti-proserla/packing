@@ -13,7 +13,7 @@
                             >
                         </v-select>
                     </v-col>
-                    <v-col cols="12" lg="4">
+                    <v-col cols="8" lg="4">
                         <v-select
                             v-model="palet_busqueda_1.tipo_palet_id"
                             label="Tipo de Palet:"
@@ -22,7 +22,7 @@
                             item-value="id">
                         </v-select>
                     </v-col>
-                    <v-col cols="12" lg="2">
+                    <v-col cols="4" lg="2">
                         <v-text-field 
                             required 
                             label="Número" 
@@ -68,55 +68,60 @@
         </v-card>
         
         <v-dialog v-model="open_nuevo" persistent max-width="900" scrollable>
-            <v-stepper v-model="e1">
-                <v-stepper-header>
-                    <v-stepper-step :complete="e1 > 1" step="1">
-                        Seleccionar Palet
-                    </v-stepper-step>
-                    <v-divider></v-divider>
-                    <v-stepper-step :complete="e1 > 2" step="2">
-                        Seleccionar Nueva Etiqueta
-                    </v-stepper-step>
-                    <v-divider></v-divider>
-                    <v-stepper-step step="3">Confirmar</v-stepper-step>
-                </v-stepper-header>
-                <v-stepper-items>
-                    <v-stepper-content step="1">
-                        <v-row>
-                            <v-col cols="12" lg="4">
-                                <v-select
-                                    v-model="palet_busqueda.tipo_palet_id"
-                                    label="Tipo de Palet:"
-                                    :items="tipos_palet"
-                                    :item-text="tipo => `${tipo.descripcion}`"
-                                    item-value="id">
-                                </v-select>
-                            </v-col>
-                            <v-col cols="12" lg="2">
-                                <v-text-field 
-                                    required 
-                                    label="Número" 
-                                    v-model="palet_busqueda.numero"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" lg="2">
-                                <v-btn @click="buscar">
-                                    Buscar
-                                </v-btn>
-                            </v-col>
-                            <v-col cols="12" lg="4">
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-layout v-if="palet_transferir!=null" column style="max-height: 400px"> 
-                            <v-flex style="overflow: auto"> 
+            <v-card>
+                <v-card-title>
+                    Transferencia de Cajas
+                </v-card-title>
+                <v-card-text>
+
+                    <v-stepper v-model="e1">
+                        <v-stepper-header>
+                            <v-stepper-step :complete="e1 > 1" step="1">
+                                Seleccionar Palet
+                            </v-stepper-step>
+                            <v-divider></v-divider>
+                            <v-stepper-step :complete="e1 > 2" step="2">
+                                Seleccionar Nueva Etiqueta
+                            </v-stepper-step>
+                            <v-divider></v-divider>
+                            <v-stepper-step step="3">Confirmar</v-stepper-step>
+                        </v-stepper-header>
+                        <v-stepper-items>
+                            <v-stepper-content step="1">
+                                <v-row>
+                                    <v-col cols="12" sm="6" lg="4">
+                                        <v-select
+                                            v-model="palet_busqueda.tipo_palet_id"
+                                            label="Tipo de Palet:"
+                                            :items="tipos_palet"
+                                            :item-text="tipo => `${tipo.descripcion}`"
+                                            item-value="id">
+                                        </v-select>
+                                    </v-col>
+                                    <v-col cols="12" lg="2">
+                                        <v-text-field 
+                                            required 
+                                            label="Número" 
+                                            v-model="palet_busqueda.numero"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" lg="2">
+                                        <v-btn @click="buscar">
+                                            Buscar
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col cols="12" lg="4">
+                                        <v-text-field
+                                            v-model="search"
+                                            append-icon="mdi-magnify"
+                                            label="Search"
+                                            single-line
+                                            hide-details
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
                                 <v-data-table
+                                    v-if="palet_transferir!=null"
                                     item-key="id"
                                     v-model="selected_transferir"
                                     show-select
@@ -127,82 +132,89 @@
                                     :search="search"
                                     >
                                 </v-data-table>
-                            </v-flex>
-                        </v-layout>
-                        <v-row>
-                            <v-col cols="12" lg="4">
-                                Seleccionadas: {{seleccionadas}} - Empaque: {{fechaSelect}}
+                            </v-stepper-content>
+                            <v-stepper-content step="2">
+                                <v-row>
+                                    <v-col cols="12" sm=6 lg="4">
+                                        <v-text-field
+                                            readonly
+                                            label="Fecha Empaque:"
+                                            v-model="consulta_etiqueta.fecha_empaque"
+                                            type="date">
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm=6 lg="2">
+                                        <v-btn @click="listarEtiquetas">Listar</v-btn>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-layout v-if="etiquetas!=null" column style="height: 400px"> 
+                                            <v-flex style="overflow: auto"> 
+                                                <v-data-table
+                                                    item-key="id"
+                                                    v-model="selected_etiqueta_id"
+                                                    show-select
+                                                    :disable-sort="false"
+                                                    :headers="header"
+                                                    :items="etiquetas"
+                                                    :single-select="true"
+                                                    disable-pagination
+                                                    :search="search"
+                                                    >
+                                                </v-data-table>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-col>
+                                </v-row>
+
+                                <v-btn
+                                color="primary"
+                                @click="e1 = 3"
+                                >
+                                Continue
+                                </v-btn>
+
+                                <v-btn @click="e1=1" text>
+                                    Atras
+                                </v-btn>
+                            </v-stepper-content>
+
+                            <v-stepper-content step="3">
+                                <v-card
+                                class="mb-12"
+                                color="grey lighten-1"
+                                height="200px"
+                                ></v-card>
+
+                                <v-btn
+                                color="primary"
+                                @click="transferir()"
+                                >
+                                    Transferir
+                                </v-btn>
+
+                                <v-btn text @click="e1=2">
+                                    Atras
+                                </v-btn>
+                            </v-stepper-content>
+                        </v-stepper-items>
+                    </v-stepper>
+                </v-card-text>
+                <v-card-actions>
+                    <v-container>
+                        <v-row v-if="e1==1">
+                            <v-col cols="12" sm="6" lg="4">
+                                Seleccionadas: {{seleccionadas}} 
                             </v-col>
-                            <v-col cols="12" lg="8" class="text-right" v-if="fechaSelect.length==1">
+                            <v-col cols="12" sm="6" lg="4">
+                                Empaque: {{fechaSelect}}
+                            </v-col>
+                            <v-col cols="12" lg="4" class="text-right" v-if="fechaSelect.length==1">
                                 <v-btn color="primary" @click="e1 = 2">Continuar</v-btn>
                             </v-col>
                         </v-row>
-                    </v-stepper-content>
-                    <v-stepper-content step="2">
-                        <v-row>
-                            <v-col cols="12" sm=6 lg="4">
-                                <v-text-field
-                                    readonly
-                                    label="Fecha Empaque:"
-                                    v-model="consulta_etiqueta.fecha_empaque"
-                                    type="date">
-                                </v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm=6 lg="2">
-                                <v-btn @click="listarEtiquetas">Listar</v-btn>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-layout v-if="etiquetas!=null" column style="height: 400px"> 
-                                    <v-flex style="overflow: auto"> 
-                                        <v-data-table
-                                            item-key="id"
-                                            v-model="selected_etiqueta_id"
-                                            show-select
-                                            :disable-sort="false"
-                                            :headers="header"
-                                            :items="etiquetas"
-                                            :single-select="true"
-                                            disable-pagination
-                                            :search="search"
-                                            >
-                                        </v-data-table>
-                                    </v-flex>
-                                </v-layout>
-                            </v-col>
-                        </v-row>
-
-                        <v-btn
-                        color="primary"
-                        @click="e1 = 3"
-                        >
-                        Continue
-                        </v-btn>
-
-                        <v-btn @click="e1=1" text>
-                            Atras
-                        </v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="3">
-                        <v-card
-                        class="mb-12"
-                        color="grey lighten-1"
-                        height="200px"
-                        ></v-card>
-
-                        <v-btn
-                        color="primary"
-                        @click="transferir()"
-                        >
-                            Transferir
-                        </v-btn>
-
-                        <v-btn text @click="e1=2">
-                            Atras
-                        </v-btn>
-                    </v-stepper-content>
-                </v-stepper-items>
-            </v-stepper>
+                    </v-container>
+                </v-card-actions>
+            </v-card>
             <!--v-card>
                 <v-card-title class="headline">
                     

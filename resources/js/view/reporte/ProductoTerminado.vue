@@ -102,6 +102,7 @@ export default {
             header: [
                 { text: 'Productor', value: 'nombre_productor'},
                 { text: 'Fecha Empaque', value: 'fecha_empaque'},
+                { text: 'Fecha Cosecha', value: 'fecha_cosecha'},
                 { text: 'Tipo Palet', value: 'tipo_palet_id'},
                 { text: 'N° Palet', value: 'numero'},
                 { text: 'Calibre', value: 'nombre_calibre'},
