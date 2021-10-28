@@ -136,6 +136,7 @@ class ReportesController extends Controller
                         FU.lugar_produccion lugar_produccion,
                         SL.viaje,
                         SL.guia,
+                        SL.placa,
                         FU.cod_lugar_produccion cod_lugar_produccion,
                         WEEK(SL.fecha_recepcion) semana,
                         DATE(SL.fecha_recepcion) fecha_recepcion,

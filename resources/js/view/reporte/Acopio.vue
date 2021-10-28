@@ -74,6 +74,7 @@ export default {
                 { text: 'Lugar Producción', value: 'lugar_produccion' },
                 { text: 'N° Viaje', value: 'viaje' },
                 { text: 'N° Guia', value: 'guia' },
+                { text: 'Placa', value: 'placa' },
                 { text: 'Código Lugar Producción', value: 'cod_lugar_produccion' },
                 { text: 'Semana', value: 'semana' },
                 { text: 'Fecha Recepción', value: 'fecha_recepcion' },

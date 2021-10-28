@@ -55,6 +55,7 @@ class SubLoteController extends Controller
         $subLotes->guia=$request->guia;
         $subLotes->fecha_recepcion=$request->fecha_recepcion;
         $subLotes->peso_guia=$request->peso_guia;
+        $subLotes->placa=$request->placa;
         $subLotes->estado='Pendiente';
         $subLotes->save();
         return response()->json([
@@ -74,7 +75,7 @@ class SubLoteController extends Controller
 
     public function show($id)
     {
-        
+        return response()->json(SubLote::find($id));
     }
     public function palets($id){
         $subLote=SubLote::with('palets')
@@ -89,9 +90,18 @@ class SubLoteController extends Controller
 
    
    
-    public function update(SubLoteValidate $request, $id)
+    public function update(Request $request, $id)
     {
-        //
+        $subLotes=SubLote::find($id);
+        $subLotes->viaje=$request->viaje;
+        $subLotes->guia=$request->guia;
+        $subLotes->fecha_recepcion=$request->fecha_recepcion;
+        $subLotes->peso_guia=$request->peso_guia;
+        $subLotes->placa=$request->placa;
+        $subLotes->save();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
     

@@ -43,7 +43,7 @@
                             </v-col>
                             <v-col cols="12" sm="3">
                                 <v-text-field 
-                                    label="Peso Palet (Kg):" 
+                                    label="Peso Parihuela (Kg):" 
                                     v-model="peso_palet"
                                     clearable
                                     type="number"
@@ -202,7 +202,7 @@
                                 >
                                 </v-select>
                         </v-col>
-                        <v-col cols=4>
+                        <v-col cols=4 lg="4">
                             <v-text-field 
                                 label="Viaje:" 
                                 type="number"
@@ -212,13 +212,22 @@
                                 clearable
                             ></v-text-field>
                         </v-col>
-                        <v-col cols=8>
+                        <v-col cols=4 lg="4">
                             <v-text-field 
                                 label="Guia:" 
                                 v-model="sub_lote.guia"
                                 :outlined="true"
                                 clearable
                                 :error-messages="sub_lote_error.guia"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=4 lg="4">
+                            <v-text-field 
+                                label="Placa Camión:" 
+                                v-model="sub_lote.placa"
+                                :outlined="true"
+                                clearable
+                                :error-messages="sub_lote_error.placa"
                             ></v-text-field>
                         </v-col>
                         <v-col cols=12>
@@ -258,62 +267,64 @@
             </v-card>               
         </v-dialog>
         <v-dialog 
+            v-model="modal_editar"
             max-width="600"
             persistent>
             <v-card>
-                <v-card-title class="headline">Nuevo Sub Lote</v-card-title>
-                <v-card-text>
+                <v-card-title class="headline">Editar Sub Lote</v-card-title>
+                <v-card-text v-if="sub_lote_editar!=null">
                     <v-row>
                         <v-col cols=12>
                             <v-select
-                                v-model="sub_lote.lote_id"
+                                readonly
+                                v-model="sub_lote_editar.lote_id"
                                 label="Lote:"
                                 :items="lotes"
                                 :item-text=" (item) => `${item.codigo} : ${item.descripcion} - ${item.nombre_materia}/${item.nombre_variedad}`"
                                 item-value="id"
-                                :error-messages="sub_lote_error.lote_id"
                                 >
                                 </v-select>
                         </v-col>
-                        <v-col cols=4>
+                        <v-col cols=4 lg="4">
                             <v-text-field 
                                 label="Viaje:" 
                                 type="number"
-                                v-model="sub_lote.viaje"
-                                :outlined="true"
+                                v-model="sub_lote_editar.viaje"
                                 dense
                                 clearable
                             ></v-text-field>
                         </v-col>
-                        <v-col cols=8>
+                        <v-col cols=6 lg="4">
                             <v-text-field 
                                 label="Guia:" 
-                                v-model="sub_lote.guia"
-                                :outlined="true"
+                                v-model="sub_lote_editar.guia"
                                 clearable
-                                :error-messages="sub_lote_error.guia"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols=6 lg="4">
+                            <v-text-field 
+                                label="Placa Camión:" 
+                                v-model="sub_lote_editar.placa"
+                                clearable
                             ></v-text-field>
                         </v-col>
                         <v-col cols=12>
                             <v-text-field 
                                 label="Peso Guia (Kg):" 
-                                v-model="sub_lote.peso_guia"
-                                :outlined="true"
+                                v-model="sub_lote_editar.peso_guia"
                                 dense
                                 type="number"
                                 clearable
-                                :error-messages="sub_lote_error.peso_guia"
                             ></v-text-field>
                         </v-col>
                         <v-col cols=12 sm=12>
                             <v-text-field 
                                 label="Fecha Recepcion:" 
-                                v-model="sub_lote.fecha_recepcion"
+                                v-model="sub_lote_editar.fecha_recepcion"
                                 outlined
                                 dense
                                 clearable
                                 type="datetime-local"
-                                :error-messages="sub_lote_error.fecha_recepcion"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -321,9 +332,9 @@
                         <v-btn 
                             outlined 
                             color="secondary" 
-                            @click="open_nuevo=false"
+                            @click="modal_editar=false"
                             >Cancelar</v-btn>
-                        <v-btn color="primary" @click="guardarSubLote()">
+                        <v-btn color="primary" @click="updateSubLote()">
                             Guardar
                         </v-btn>
                     </div>
@@ -380,6 +391,8 @@
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.materia }} - {{ sub.variedad }} - {{ sub.tipo }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Guia:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.guia }}</v-col>
+                                                        <v-col class="pb-0 pt-0" cols="4"><b>Placa Camión:</b></v-col>
+                                                        <v-col class="pb-0 pt-0" cols="8">{{ sub.placa }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Recepción:</b></v-col>
                                                         <v-col class="pb-0 pt-0" cols="8">{{ sub.fecha_recepcion }}</v-col>
                                                         <v-col class="pb-0 pt-0" cols="4"><b>Peso Guia:</b></v-col>
@@ -400,7 +413,7 @@
                                                             <v-btn 
                                                                 small
                                                                 color="amber" 
-                                                                @click="abrirEditar(sub.id)">
+                                                                @click="openEditar(sub.id)">
                                                                 <i class="far fa-edit"></i>
                                                             </v-btn>
                                                         </v-col>
@@ -445,6 +458,7 @@ export default {
             alert: {},
             //modal
             open_nuevo:false,
+            modal_editar: false,
             open_palets: false,
             //operaciones
             num_jabas: 0,
@@ -470,7 +484,8 @@ export default {
             seleccionado_estado_sub_lote: null,
             getZPL: true,
             printAdd: true,
-            index_edit: -1
+            index_edit: -1,
+            sub_lote_editar: null
         }
     },
     computed: {
@@ -500,6 +515,31 @@ export default {
         });
     },
     methods: {
+        openEditar(id){
+            this.modal_editar=true;
+            axios.get(`${url_base}/sub_lote/${id}`)
+            .then(response => {
+                this.sub_lote_editar=response.data
+                this.sub_lote_editar.fecha_recepcion=moment(this.sub_lote_editar.fecha_recepcion,'YYYY-MM-DD HH:mm').format('YYYY-MM-DDTHH:mm')
+            });
+        },
+        updateSubLote(){
+            axios.post(url_base+`/sub_lote/${this.sub_lote_editar.id}?_method=PATCH`,this.sub_lote_editar)
+            .then(response => {
+                var res=response.data;
+                switch (res.status) {
+                    case 'OK':
+                        this.modal_editar=false;
+                        this.sub_lote_editar=this.init();
+                        swal("Sub Lote Actualizado", { icon: "success", timer: 2000, buttons: false });
+                        this.listarSublote();
+                        break;
+                
+                    default:
+                        break;
+                }
+            });
+        },
         openNuevo(){
             this.open_nuevo=true;
             this.sub_lote=this.init();
