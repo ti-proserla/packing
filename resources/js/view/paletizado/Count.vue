@@ -247,12 +247,10 @@ this.labores=this.palet.etapas==1 ?
                 switch (data.status) {
                     case "OK":
                         this.getPaletSalida();
-                        // this.palet.cajas.push(data.data);
-                        // this.matriz_codigos.push(this.fila_codigos);
                         this.fila_codigos=[];
                        break;
                     case "ERROR":
-                        this.alerta("Código de caja no existe o Lote ya esta cerrado.");
+                        this.alerta(data.message);
                         break;
                     default:
                         break;
@@ -265,12 +263,13 @@ this.labores=this.palet.etapas==1 ?
                     this.alerta("Escanear codigo de palet.");
                 }else{
                     var repetido=0;
-
                     for (let i = 0; i < this.palet.cajas.length; i++) {
-                        var codigos = this.palet.cajas[i].codigos;
-                        if (codigos.includes(this.codigo_barras)) {
-                            repetido=1;
-                            break;
+                        var codigos = (this.palet.cajas[i].codigos ===null) ? '' : this.palet.cajas[i].codigos ;
+                        if (codigos!='') {
+                            if (codigos.includes(this.codigo_barras)) {
+                                repetido=1;
+                                break;
+                            }
                         }
                     }
                     

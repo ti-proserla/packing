@@ -111,18 +111,20 @@ class PaletSalidaController extends Controller
         $codigo_palet = $request->codigo_palet;
         $array_palet= explode('-',$codigo_palet);
         
+        $paletSalida=PaletSalida::find($id);
+        $etiqueta_caja=EtiquetaCaja::find($array_palet[1]);
+        $loteIngreso=LoteIngreso::find($etiqueta_caja->lote_ingreso_id);
+        // dd($paletSalida,$loteIngreso);
+        if ($paletSalida->cliente_id!=$loteIngreso->cliente_id) {
+            return response()->json([
+                "status" => "ERROR",
+                "message"=> "Caja no pertenece al cliente, Verificar etiqueta Trazabilidadf."
+            ]);
+        }
         $caja=new Caja();
         $caja->palet_salida_id=(int)$id;
         $caja->etiqueta_caja_id=$array_palet[1];
         $caja->save();
-        $paletSalida=PaletSalida::find($id);
-        $etiqueta_caja=EtiquetaCaja::find($array_palet[1]);
-        if ($paletSalida->cliente_id!=$etiqueta_caja->cliente_id) {
-            return response()->json([
-                "status" => "ERROR",
-                "message"=> "Caja no pertenece al cliente, Verificar etiqueta Trazabilidad."
-            ]);
-        }
         foreach ($request->codigos_trabajador as $key => $codigo) {
             if (!strpos($codigo,"00000000")) {
                 $rendimientoPersonal=new RendimientoPersonal();
@@ -148,7 +150,7 @@ class PaletSalidaController extends Controller
 
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
-            ->where('palet_salida.id',$id)
+        ->where('palet_salida.id',$id)
             ->select('palet_salida.*')
             ->first();
         if ($request->has('cajas')) {
