@@ -2,28 +2,25 @@
     <v-container fluid>
         <v-card>
             <v-card-title>LISTA DE PALETS</v-card-title>
+            <v-card-text>
+                <v-row>
+                    <v-col cols="12" lg="4">
+                        <v-select
+                            v-model="consulta.tipo_palet_id"
+                            label="Tipo de Palet:"
+                            :items="tipos_palet"
+                            :item-text="tipo => `${tipo.descripcion}`"
+                            item-value="id">
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="4">
+                        
+                    </v-col>
+                </v-row>
+            </v-card-text>
         </v-card>
-        <!-- <v-btn
-            fab
-            bottom
-            :fixed="true"
-            left
-            color="primary"
-            @click="$router.push('/paletizado/new')">
-              <v-icon>+</v-icon>
-        </v-btn> -->
-        
         <v-row>
-            <v-col cols="12">
-                <v-data-table
-                    class="table-lineal"
-                    :headers="header"
-                    :items="lotes"
-                    hide-default-footer
-                    >
-                </v-data-table>
-            </v-col>
-            <v-col sm=4 cols="12" v-for="(lote,i) in lotes" :key="i">
+            <v-col sm=4 cols="12" v-for="(lote,i) in lotes.data" :key="i">
                 <v-card>
                     <v-card-text>
                         <p class="mb-0"><b class="detalles">Tipo:</b> {{ lote.tipo_palet_id}}</p>
@@ -45,6 +42,14 @@
                         </div>
                     </v-card-text>
                 </v-card>
+            </v-col>
+            <v-col cols="12">
+                <v-pagination 
+                    v-model="lotes.current_page" 
+                    :length="lotes.last_page" 
+                    circle 
+                    @input="listar">
+                </v-pagination>
             </v-col>
         </v-row>
         <v-speed-dial
@@ -94,11 +99,21 @@
 export default {
     data() {
         return {
-            lotes: [],
+            
+            tipos_palet:[],
+            lotes: {
+                current_page: 1,
+                last_page: 1,
+                data: []
+            },
             printer_select: null,
             zpl: '',
             header: [],
-            fab: false
+            fab: false,
+            consulta: {
+                tipo_palet_id: 'TER',
+                estado: 'Pendiente,Cerrado'
+            }
         }
     },
     methods: {
@@ -112,8 +127,15 @@ export default {
         BrowserPrint.getDefaultDevice("printer", function(device){
             t.printer_select=device;
         });
+        this.listarTiposPalet();
     },
     methods:{
+        listarTiposPalet(){
+            axios.get(url_base+`/tipo-palet`)
+            .then(response => {
+                this.tipos_palet=response.data
+            });
+        },
         print(id){
             axios.get(url_base+`/print/zpl/palet_salida?palet_id=`+id)
             .then(response => {
@@ -124,8 +146,11 @@ export default {
                 });
             });
         },
-        listar(){
-            axios.get(url_base+`/palet_salida?estado=Pendiente,Cerrado`)
+        listar(n=this.lotes.current_page){
+            this.consulta.page=n;
+            axios.get(url_base+`/palet_salida`,{
+                params: this.consulta
+            })
             .then(response => {
                 this.lotes=response.data
             });

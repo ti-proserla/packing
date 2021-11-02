@@ -65,9 +65,8 @@ class PaletSalidaController extends Controller
                                 )
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('palet_salida.estado',explode(',',$request->estado))
-                                ->orderBy('palet_salida.updated_at','DESC')
-                                ->limit(100)
-                                ->get();
+                                ->orderBy('palet_salida.created_at','DESC')
+                                ->paginate(15);
         }else{
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
                                 ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
@@ -116,7 +115,14 @@ class PaletSalidaController extends Controller
         $caja->palet_salida_id=(int)$id;
         $caja->etiqueta_caja_id=$array_palet[1];
         $caja->save();
-        $etiqueta_caja=EtiquetaCaja::where('id',$array_palet[1])->first();
+        $paletSalida=PaletSalida::find($id);
+        $etiqueta_caja=EtiquetaCaja::find($array_palet[1]);
+        if ($paletSalida->cliente_id!=$etiqueta_caja->cliente_id) {
+            return response()->json([
+                "status" => "ERROR",
+                "message"=> "Caja no pertenece al cliente, Verificar etiqueta Trazabilidad."
+            ]);
+        }
         foreach ($request->codigos_trabajador as $key => $codigo) {
             if (!strpos($codigo,"00000000")) {
                 $rendimientoPersonal=new RendimientoPersonal();
@@ -134,15 +140,8 @@ class PaletSalidaController extends Controller
         }
 
         return response()->json([
-            "status" => "OK",
-            "data"  => [
-                "calibre" => $caja->calibre,
-                "categoria" => $caja->categoria,
-                "presentacion" => $caja->presentacion,
-            ]
-        ]);
-        
-        // $caja->
+            "status" => "OK"
+        ]);        
     }
 
     
