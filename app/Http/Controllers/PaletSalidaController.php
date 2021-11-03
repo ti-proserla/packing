@@ -113,12 +113,17 @@ class PaletSalidaController extends Controller
         
         $paletSalida=PaletSalida::find($id);
         $etiqueta_caja=EtiquetaCaja::find($array_palet[1]);
+        if ($etiqueta_caja==null) {
+            return response()->json([
+                "status" => "ERROR",
+                "message"=> "No existe etiqueta."
+            ]);
+        }
         $loteIngreso=LoteIngreso::find($etiqueta_caja->lote_ingreso_id);
-        // dd($paletSalida,$loteIngreso);
         if ($paletSalida->cliente_id!=$loteIngreso->cliente_id) {
             return response()->json([
                 "status" => "ERROR",
-                "message"=> "Caja no pertenece al cliente, Verificar etiqueta Trazabilidadf."
+                "message"=> "Caja no pertenece al cliente, Verificar Etiq. Trazabilidad."
             ]);
         }
         $caja=new Caja();
