@@ -66,7 +66,7 @@ class PaletSalidaController extends Controller
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('palet_salida.estado',explode(',',$request->estado))
                                 ->orderBy('palet_salida.created_at','DESC')
-                                ->paginate(15);
+                                ->paginate(50);
         }else{
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
                                 ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
