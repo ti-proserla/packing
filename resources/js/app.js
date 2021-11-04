@@ -71,6 +71,10 @@ Vue.component('VSelect', {
   }
 })
 
+import VueApexCharts from 'vue-apexcharts'
+
+Vue.use(VueApexCharts)
+
 new Vue({
   el: '#app',
   vuetify: new Vuetify({

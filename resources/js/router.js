@@ -200,6 +200,10 @@ var routes =[
         path: '/reporte/consumo-viaje',
         component: require('./view/reporte/ConsumoViaje.vue').default
     },
+    {
+        path: '/dashboard/consumo-viaje',
+        component: require('./view/dashboard/ConsumoViaje.vue').default
+    },
     
     {
         path: '/dispensador',
