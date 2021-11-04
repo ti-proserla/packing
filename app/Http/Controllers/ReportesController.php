@@ -295,6 +295,56 @@ class ReportesController extends Controller
             return response()->json($data);  
         }
     }
+    public function consumo_viaje(Request $request){
+        $cliente_id=$request->cliente_id;
+        $desde=$request->desde;
+        $hasta=$request->hasta;
+        $queryProductor=($cliente_id==null) ? '' : ' AND CL.id=?';
+        $query="SELECT 	CL.descripcion nombre_productor,
+                    FU.nombre_fundo,
+                    SL.viaje,
+                    SL.guia,
+                    SL.placa,
+                    WEEK(SL.fecha_recepcion) semana,
+                    DATE(SL.fecha_recepcion) fecha_recepcion,
+                    DATE_FORMAT(SL.fecha_recepcion,'%H:%i') hora_ingreso,
+                    DATE(MIN(PE.fecha_lanzado)) fecha_lanzado,
+                    DATE_FORMAT(MIN(PE.fecha_lanzado),'%H:%i') hora_lanzado,
+                    MA.nombre_materia,
+                    VA.nombre_variedad,
+                    LI.codigo lote_materia,
+                    SUM(PE.num_jabas) numero_jabas,
+                    ROUND(SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas),2) peso_promedio_jaba,
+                    -- SL.peso_guia,
+                    SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto,
+                    SUM( CASE WHEN PE.estado='Lanzado' THEN PE.num_jabas ELSE 0 END) jabas_lanzadas,
+                    SUM( CASE WHEN PE.estado='Lanzado' THEN PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba ELSE 0 END) peso_lanzado,
+                    ROUND((
+                        SUM( CASE WHEN PE.estado='Lanzado' THEN PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba ELSE 0 END)
+                        /
+                        SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
+                    )*100,2) `%_lanzado`
+            FROM lote_ingreso LI
+            LEFT JOIN sub_lote SL ON LI.id = SL.lote_id
+            INNER JOIN fundo FU ON FU.id = LI.fundo_id
+            LEFT JOIN parcela PA ON PA.id = LI.parcela_id 
+            INNER JOIN cliente CL ON CL.id=LI.cliente_id
+            INNER JOIN materia MA ON MA.id=LI.materia_id
+            INNER JOIN variedad VA ON VA.id=LI.variedad_id
+            LEFT JOIN tipo TI ON TI.id=LI.tipo_id
+            LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
+            where LI.fecha_cosecha>=?
+            AND LI.fecha_cosecha<=?
+            $queryProductor
+            GROUP BY LI.id, SL.id
+            ORDER BY SL.id ASC";
+        $data=DB::select(DB::raw("$query"),[$desde,$hasta,$cliente_id]);   
+        if ($request->has('excel')) {
+            return (new GeneralExcel($data))->download("Reporte Consumo de Materia por Viaje $desde - $hasta.xlsx");
+        }else{
+            return response()->json($data);  
+        }
+    }
 
     public function rendimiento_linea(Request $request){
         $desde=$request->desde;

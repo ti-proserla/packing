@@ -279,6 +279,11 @@
                             Consolidado Bonos
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/consumo-viaje">
+                        <v-list-item-content>
+                            Consumo por Viaje
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>
