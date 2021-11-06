@@ -32,6 +32,7 @@ class PrintZPLController extends Controller
         $tareo=Tareo::where('codigo_operador',$codigo_operador)
                     ->select('tareo.*',DB::raw("CONCAT(SUBSTRING_INDEX(operador.nom_operador,' ',1),' ',SUBSTRING_INDEX(operador.ape_operador,' ',1)) trabajador"))
                     ->join('operador','tareo.codigo_operador','=','operador.dni')
+                    ->orderBy('fecha','DESC')
                     ->orderBy('id','DESC')
                     ->first();
         if ($tareo==null) {
