@@ -244,16 +244,16 @@
                             Reporte Lanzado 
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item link to="/reporte/rendimiento-linea">
+                    <!-- <v-list-item link to="/reporte/rendimiento-linea">
                         <v-list-item-content>
                             Reporte Rendimiento Linea 
                         </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/reporte/avance-lote">
+                    </v-list-item> -->
+                    <!-- <v-list-item link to="/reporte/avance-lote">
                         <v-list-item-content>
                             Reporte Avance Lote 
                         </v-list-item-content>
-                    </v-list-item>
+                    </v-list-item> -->
                     <v-list-item link to="/reporte/personal">
                         <v-list-item-content>
                             Rendimiento Personal
