@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col cols="12" lg="4">
+            <v-col cols="12" lg="6">
                 <v-card>
                     <v-card-text>
                         <v-row>
@@ -23,19 +23,13 @@
                                 </v-select>
                             </v-col>
                             <v-col cols="12" sm="4" class="text-center">
-                                <v-btn @click="buscar" color="primary">
+                                <v-btn @click="actualizar" color="primary">
                                     Actualizar
                                 </v-btn>
                             </v-col>
                         </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" lg="5">
-                <v-card>
-                    <!-- <v-card-title>Consumo por Fecha</v-card-title>               -->
-                    <v-card-text>
                         <apexcharts 
+                            height="400"
                             type="bar" 
                             :options="chartOptions" 
                             :series="series"
@@ -43,7 +37,7 @@
                     </v-card-text>
                 </v-card>
             </v-col>
-            <v-col cols="12" lg="5">
+            <v-col cols="12" lg="6">
                 <v-card>
                     <v-card-title>Listado de Labores</v-card-title>              
                     <v-card-text>
@@ -134,7 +128,6 @@ export default {
                 chart: {
                     id: 'vuechart-example',
                     type: 'bar',
-                    height: 350,
                     stacked: true,
                     toolbar: {
                         show: true
@@ -145,7 +138,9 @@ export default {
                 },
                 legend: {
                     position: 'right',
-                    offsetY: 40
+                    offsetY: 100,
+                    fontSize: '10px',
+                    fontWeight: 600,
                 },
                 xaxis: {
                     categories: [
@@ -157,6 +152,30 @@ export default {
                         'Linea 01',
                     ]
                 },
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            // margin: -15,
+                            size: "50%"
+                        },
+                        
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                offsetY: -10,
+                                show: true,
+                                color: "#888",
+                                fontSize: "12px"
+                            },
+                            value: {
+                                offsetY: -5,
+                                color: "#111",
+                                fontSize: "12px",
+                                show: true
+                            }
+                        }
+                    }
+                }
             },
             turno: [
                 {turno: '01'},
@@ -184,8 +203,7 @@ export default {
         }
     },
     mounted() {
-        this.buscar();
-        this.labores();
+        this.actualizar();
     },
     computed:{
         excel(){
@@ -197,6 +215,10 @@ export default {
         }
     },
     methods:{
+        actualizar(){
+            this.buscar();
+        this.labores();
+        },
         labores(){
             axios.get(`${url_base}/reporte/cantidad-labor`,{
                 params: this.consulta
