@@ -391,6 +391,50 @@ class ReportesController extends Controller
         $data=DB::select(DB::raw("$query"),[]);      
         return response()->json($data);
     }
+    public function aforo(Request $request){
+        $fecha_produccion=$request->fecha_produccion;
+        $query="SELECT LB.codigo_labor,
+                    LB.descripcion labor,
+                    SUM(CASE WHEN TR.linea_id=1 THEN 1 ELSE 0 END) linea_1,
+                    SUM(CASE WHEN TR.linea_id=2 THEN 1 ELSE 0 END) linea_2,
+                    SUM(CASE WHEN TR.linea_id=3 THEN 1 ELSE 0 END) linea_3,
+                    SUM(CASE WHEN TR.linea_id=4 THEN 1 ELSE 0 END) linea_4,
+                    SUM(CASE WHEN TR.linea_id=5 THEN 1 ELSE 0 END) linea_5,
+                    SUM(CASE WHEN TR.linea_id=6 THEN 1 ELSE 0 END) linea_6
+                FROM 
+                (
+                    SELECT MAX(id) id 
+                    FROM db_asistencia_produccion.tareo 
+                    where fecha=?
+                    AND turno_id=?
+                    GROUP BY codigo_operador
+                ) UT INNER JOIN db_asistencia_produccion.tareo TR ON UT.id=TR.id
+                INNER JOIN labor LB 
+                ON LB.codigo_auxiliar=TR.labor_id
+                WHERE linea_id>0
+                GROUP BY LB.codigo_labor";
+        $data=DB::select(DB::raw("$query"),[$request->fecha_produccion,$request->turno]);      
+        return response()->json($data);
+    }
+    public function cantidad_labor(Request $request){
+        $fecha_produccion=$request->fecha_produccion;
+        $query="SELECT 	LB.nom_labor,
+                        COUNT(TR.id) cantidad
+                FROM 
+                (
+                    SELECT MAX(id) id 
+                    FROM db_asistencia_produccion.tareo 
+                    where fecha=?
+                    AND turno_id=?
+                    GROUP BY codigo_operador
+                ) UT 
+                INNER JOIN db_asistencia_produccion.tareo TR ON UT.id=TR.id
+                INNER JOIN db_asistencia_produccion.labor LB ON LB.id=TR.labor_id
+                GROUP BY TR.labor_id
+                ORDER BY nom_labor ASC";
+        $data=DB::select(DB::raw("$query"),[$request->fecha_produccion,$request->turno]);      
+        return response()->json($data);
+    }
 
     public function avance_personal(){
         $query="SELECT RP.linea,RP.codigo_labor,L.descripcion,COUNT(RP.id) contador

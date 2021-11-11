@@ -204,6 +204,10 @@ var routes =[
         path: '/dashboard/consumo-viaje',
         component: require('./view/dashboard/ConsumoViaje.vue').default
     },
+    {
+        path: '/dashboard/aforo',
+        component: require('./view/dashboard/Aforo.vue').default
+    },
     
     {
         path: '/dispensador',
