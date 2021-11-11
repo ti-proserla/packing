@@ -284,6 +284,11 @@
                             Consumo por Viaje
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/dashboard/aforo">
+                        <v-list-item-content>
+                            Aforo en Planta
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>
