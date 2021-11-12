@@ -208,7 +208,6 @@ var routes =[
         path: '/dashboard/aforo',
         component: require('./view/dashboard/Aforo.vue').default
     },
-    
     {
         path: '/dispensador',
         component: require('./view/Dispensador.vue').default
