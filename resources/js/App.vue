@@ -217,12 +217,12 @@
                         Cámara de Frío
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/despacho">
+                <v-list-item link to="/operacion">
                     <v-list-item-icon>
                         <i class="fas fa-icicles"></i>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        Despacho
+                        Operación
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-group
