@@ -14,7 +14,7 @@
                                     outlined
                                     dense
                                     required 
-                                    label="Código:" 
+                                    label="Descripcion:" 
                                     v-model="operacion.descripcion"
                                 ></v-text-field>
                             </v-col>
@@ -44,7 +44,7 @@
                             <v-btn 
                                 outlined 
                                 color="secondary" 
-                                @click="open_nuevo=false"
+                                @click="$router.push('/operacion')"
                                 >Cancelar</v-btn>
                             <v-btn 
                                 outlined 
@@ -89,7 +89,7 @@ export default {
                             timer: 2000, 
                             buttons: false
                         });
-                        this.$router.push(`/despacho/${respuesta.data.id}`);
+                        this.$router.push(`/operacion`);
                         break;
                     case 'VALIDATION':
                         this.error=respuesta.data;

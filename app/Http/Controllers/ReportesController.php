@@ -214,7 +214,8 @@ class ReportesController extends Controller
                         LI.codigo codigo_lote,
                         CL.descripcion nombre_productor,
                         PS.id palet_id,
-                        COUNT(CA.id) numero_cajas
+                        COUNT(CA.id) numero_cajas,
+                        OPE.descripcion operacion 
                 FROM palet_salida PS 
                 INNER JOIN cliente CL ON PS.cliente_id=CL.id
                 INNER JOIN caja CA ON CA.palet_salida_id=PS.id
@@ -230,6 +231,7 @@ class ReportesController extends Controller
                 INNER JOIN variedad VAR ON VAR.id = LI.variedad_id
                 INNER JOIN fundo FUN ON FUN.id=LI.fundo_id
                 LEFT JOIN parihuela PAR ON PAR.id=PS.parihuela_id
+                LEFT JOIN operacion OPE ON OPE.id=PS.operacion_id
                 WHERE DATE(EC.fecha_empaque)>=?
                 AND DATE(EC.fecha_empaque)<=?
                 $queryProductor

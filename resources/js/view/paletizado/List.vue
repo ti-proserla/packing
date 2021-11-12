@@ -30,6 +30,7 @@
                         <p class="mb-0"><b class="detalles">Estado:</b> {{ lote.estado }}</p>
                         <p class="mb-0"><b class="detalles">Parihuela:</b> {{ lote.parihuela }}</p>
                         <p class="mb-0"><b class="detalles">Etiq. Adicional:</b> {{ lote.etiqueta_adicional }}</p>
+                        <p class="mb-0"><b class="detalles">Operación:</b> {{ lote.operacion }}</p>
                         <div v-if="lote.detalles!=null">
                             <p class="mb-0" v-for="detalle in lote.detalles.split(',')"><b>{{detalle }}</b></p>
                         </div>

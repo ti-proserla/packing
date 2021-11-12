@@ -49,6 +49,7 @@ class PaletSalidaController extends Controller
         }
         if ($request->has('estado')) {
             $paletSalidas=PaletSalida::join('cliente','cliente.id','=','palet_salida.cliente_id')
+                                ->leftJoin('operacion','operacion.id','=','palet_salida.operacion_id')
                                 ->leftJoin('caja','caja.palet_salida_id','=','palet_salida.id')
                                 ->leftJoin('etiqueta_caja as EC','caja.etiqueta_caja_id','=','EC.id')
                                 ->leftJoin('presentacion as PRE','PRE.id','=','EC.presentacion_id')
@@ -58,6 +59,7 @@ class PaletSalidaController extends Controller
                                 ->leftJoin('parihuela as PAR','palet_salida.parihuela_id','=','PAR.id')
                                 ->select(
                                     'palet_salida.*',
+                                    'operacion.descripcion as operacion',
                                     'cliente.descripcion as cliente',
                                     'modelo_parihuela as parihuela',
                                     DB::raw('COUNT(caja.id) cajas_contadas'),
@@ -90,6 +92,7 @@ class PaletSalidaController extends Controller
             ->first();
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
+        $paletSalida->operacion_id=$request->operacion_id;
         $paletSalida->tipo_palet_id=$request->tipo_palet_id;
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=$request->etapas;

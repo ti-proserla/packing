@@ -1,11 +1,11 @@
 <template>
     <v-container fluid>
         <v-card outlined>
-            <v-card-title>Operaciones de Despachos</v-card-title>
+            <v-card-title>Operaciones</v-card-title>
             <v-card-text>
                 <v-row>
                     <v-col cols="12" lg=4>
-                        <v-btn :to="`/despacho/new`" 
+                        <v-btn :to="`/operacion/new`" 
                             outlined 
                             color="info">
                             Nueva Operación
@@ -42,7 +42,7 @@
                     hide-default-footer
                     >
                     <template v-slot:item.ver="{ item }">
-                        <v-btn text color="info" :to="`/despacho/${item.id}`">
+                        <v-btn text color="info" :to="`/operacion/${item.id}`">
                             <i class="far fa-clipboard"></i>
                         </v-btn>
                     </template>

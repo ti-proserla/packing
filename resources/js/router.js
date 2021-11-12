@@ -78,16 +78,16 @@ var routes =[
         component: require('./view/producto.vue').default
     },
     {
-        path: '/despacho',
-        component: require('./view/despacho.vue').default
+        path: '/operacion',
+        component: require('./view/operacion.vue').default
     },
     {
-        path: '/despacho/new',
-        component: require('./view/despacho.new.vue').default
+        path: '/operacion/new',
+        component: require('./view/operacion.new.vue').default
     },
     {
-        path: '/despacho/:id',
-        component: require('./view/despacho.count.vue').default
+        path: '/operacion/:id',
+        component: require('./view/operacion.count.vue').default
     },
     {
         path: '/produccion',
@@ -207,6 +207,10 @@ var routes =[
     {
         path: '/dashboard/aforo',
         component: require('./view/dashboard/Aforo.vue').default
+    },
+    {
+        path: '/dashboard/rendimiento-linea',
+        component: require('./view/dashboard/RendimientoLinea.vue').default
     },
     {
         path: '/dispensador',

@@ -289,6 +289,11 @@
                             Aforo en Planta
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/dashboard/rendimiento-linea">
+                        <v-list-item-content>
+                            Rendimiento Linea
+                        </v-list-item-content>
+                    </v-list-item>
                     <!-- 
                     <v-list-item link to="/reporte/lote">
                         <v-list-item-content>

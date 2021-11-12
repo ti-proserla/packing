@@ -17,7 +17,7 @@ class OperacionController extends Controller
     {
         if ($request->has('estado')) {
             $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
-                            ->where('estado','>=',$request->estado)
+                            ->where('estado','=',$request->estado)
                             ->select('operacion.*','cliente.descripcion as cliente')
                             ->get();
         }else{

@@ -117,6 +117,7 @@ export default {
                 { text: 'Marca Empaque', value: 'nombre_marca_empaque' },
                 { text: 'PLU', value: 'nombre_plu' },
                 { text: 'N° Cajas', value: 'numero_cajas'},
+                { text: 'Operacion', value: 'operacion'},
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,

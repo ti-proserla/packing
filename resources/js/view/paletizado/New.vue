@@ -76,6 +76,17 @@
                             item-value="id">
                         </v-select>
                     </v-col>
+                    <v-col cols="12" lg="3" >
+                        <v-select
+                            v-model="palet_salida.operacion_id"
+                            label="Operacion:"
+                            :items="operaciones"
+                            item-value="id"
+                            item-text="descripcion"
+                            :error-messages="error.operacion_id"
+                        >
+                        </v-select>
+                    </v-col>
                 </v-row>
                 <v-btn color=primary @click="crear()">
                     Crear
