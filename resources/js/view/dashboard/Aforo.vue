@@ -2,8 +2,16 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="6">
-                <v-card>
+                <v-card>              
                     <v-card-text>
+                        <v-row>
+                            <v-col cols="8" sm="8">
+                                <h4>AFORO EN LINEA</h4>
+                            </v-col>
+                            <v-col cols="4" sm="4">
+                                <h4 class="text-right">Total: {{ total_en_linea }}</h4>
+                            </v-col>
+                        </v-row>
                         <v-row>
                             <v-col cols="12" sm="4">
                                 <v-text-field
@@ -39,17 +47,26 @@
             </v-col>
             <v-col cols="12" lg="6">
                 <v-card>
-                    <v-card-title>Listado de Labores</v-card-title>              
                     <v-card-text>
-                            <v-col cols="12" lg="4">
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
-                                ></v-text-field>
+                        <v-row>
+                            <v-col cols="8" sm="8">
+                                <h4>LISTADO DE LABORES</h4>
                             </v-col>
+                            <v-col cols="4" sm="4">
+                                <h4 class="text-right">Total: {{ total }}</h4>
+                            </v-col>
+                        </v-row>
+                            <v-row>
+                                <v-col cols="12" lg="8">
+                                    <v-text-field
+                                        v-model="search"
+                                        append-icon="mdi-magnify"
+                                        label="Search"
+                                        single-line
+                                        hide-details
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
                             <v-data-table
                                 :search="search"
                                 class="table-lineal"
@@ -199,7 +216,8 @@ export default {
                 { text: 'Labor', value: 'nom_labor'},
                 { text: 'Cantidad', value: 'cantidad'},
             ],
-
+            total: 0,
+            total_en_linea: 0
         }
     },
     mounted() {
@@ -217,7 +235,7 @@ export default {
     methods:{
         actualizar(){
             this.buscar();
-        this.labores();
+            this.labores();
         },
         labores(){
             axios.get(`${url_base}/reporte/cantidad-labor`,{
@@ -225,6 +243,13 @@ export default {
             })
             .then(response => {
                 this.table=response.data;
+                this.total=0;
+                var _total=0;
+                for (let i = 0; i < this.table.length; i++) {
+                    const element = this.table[i];
+                    _total+=element.cantidad;   
+                }
+                this.total=_total;
             })
         },
         buscar(){
@@ -253,13 +278,20 @@ export default {
                             element.linea_1, 
                         ]
                     })
-                    this.total_linea_1+=element.linea_1;
-                    this.total_linea_2+=element.linea_2;
-                    this.total_linea_3+=element.linea_3;
-                    this.total_linea_4+=element.linea_4;
-                    this.total_linea_5+=element.linea_5;
-                    this.total_linea_6+=element.linea_6;
+                    this.total_linea_1+=Number(element.linea_1);
+                    this.total_linea_2+=Number(element.linea_2);
+                    this.total_linea_3+=Number(element.linea_3);
+                    this.total_linea_4+=Number(element.linea_4);
+                    this.total_linea_5+=Number(element.linea_5);
+                    this.total_linea_6+=Number(element.linea_6);
                 }
+                this.total_en_linea=
+                    this.total_linea_1+
+                    this.total_linea_2+
+                    this.total_linea_3+
+                    this.total_linea_4+
+                    this.total_linea_5+
+                    this.total_linea_6;
             });
         }
     }
