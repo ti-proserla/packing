@@ -151,7 +151,7 @@ export default {
                 // },
                 dataLabels:{
                     offsetX: 30,
-                    textAnchor: 'start',
+                    // textAnchor: 'start',
                     formatter: function (val, opts) {
                         return val.toFixed(0)
                     },
