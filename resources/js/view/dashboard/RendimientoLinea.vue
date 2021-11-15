@@ -234,7 +234,8 @@ export default {
             for (let j = 0; j < this.resultados.length; j++) {
                 const data = this.resultados[j];
                 if (this.seleccionadas.indexOf(data.nombre_presentacion)>-1) {
-                    series[data.hora_inicio.split(':')[0]]+=Number(data.salida)
+                    console.log(Number(data.salida));
+                    series[data.hora_inicio.split(':')[0]]=series[data.hora_inicio.split(':')[0]]+Number(Number(data.salida).toFixed(0))
                 }
             }
                 console.log(series);
