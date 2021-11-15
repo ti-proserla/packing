@@ -5,7 +5,7 @@
                 <v-card>
                     <v-card-text>
                         <v-row>
-                            <v-col cols="12" lg="12">
+                            <!-- <v-col cols="12" lg="12">
                                 <v-select
                                 dense
                                 v-model="consulta.cliente_id"
@@ -15,7 +15,7 @@
                                 item-value="id"
                                 >
                                 </v-select>
-                            </v-col>
+                            </v-col> -->
                             <v-col cols="12" lg="12">
                                 <v-text-field
                                     v-model="consulta.desde"
@@ -29,8 +29,8 @@
                                 </v-btn>
                             </v-col>
                             <v-col cols="12" lg="12">
-                                <h4>Variedades</h4>
-                                <div v-for="data in variedades">
+                                <h4>Presentaciones</h4>
+                                <div v-for="data in presentaciones">
                                     <v-checkbox 
                                         dense
                                         v-model="seleccionadas"
@@ -46,7 +46,7 @@
                     </v-card-text>
                 </v-card>
             </v-col>
-            <v-col cols="12" lg="3">
+            <!-- <v-col cols="12" lg="3">
                 <v-card>
                     <v-card-text>
                         <v-row>
@@ -65,12 +65,13 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-            </v-col>
-            <v-col cols="12" lg="5">
+            </v-col> -->
+            <v-col cols="12" lg="8">
                 <v-card>
                     <!-- <v-card-title>Consumo por Fecha</v-card-title>               -->
                     <v-card-text>
                         <apexcharts 
+                            height="500"
                             type="bar" 
                             :options="chartOptions" 
                             :series="series"
@@ -96,7 +97,7 @@ export default {
     data() {
         return {
             resultados: [],
-            variedades: [],
+            presentaciones: [],
             seleccionadas: [],
             series_bar:[],
             series: [],
@@ -118,6 +119,7 @@ export default {
                         },
                         
                         dataLabels: {
+                            enabled:true ,
                             showOn: "always",
                             name: {
                                 offsetY: -10,
@@ -139,12 +141,48 @@ export default {
                 chart: {
                     id: 'vuechart-example'
                 },
-                colors: ['#77B6EA', '#545454'],
+                // dataLabels:{
+                    
+                    //     // enabled: false,
+                //     style: {
+                    //         fontSize: '12px',
+                //         colors: ['#333']
+                //     },
+                // },
+                dataLabels:{
+                    offsetX: 30,
+                    textAnchor: 'start',
+                    formatter: function (val, opts) {
+                        return val.toFixed(0)
+                    },
+                    style: {
+                        fontSize: '12px',
+                        colors:['#333' ]
+        
+                    },
+
+                },
+                plotOptions: {
+                    bar: {
+                        // borderRadius: 4,
+                        horizontal: true,
+                        dataLabels: {
+                            position: 'top',
+                            // offsetX: 100,
+
+                        },
+                    },
+                    // dataLabels: {
+                    //     position: 'top',
+                    //     offsetX: 100,
+                    // },
+                },
+                // colors: ['#77B6EA'],
                 xaxis: {
                 },
                 yaxis: {
                     title: {
-                        text: 'Jabas'
+                        text: ''
                     }
                 },
             },
@@ -154,27 +192,6 @@ export default {
                 cliente_id: 1
             },
             table: [],
-            header: [
-                { text: 'Productor', value: 'nombre_productor'},
-                { text: 'Fundo', value: 'nombre_fundo'},
-                { text: 'Viaje', value: 'viaje'},
-                { text: 'Guia', value: 'guia'},
-                { text: 'Placa', value: 'placa'},
-                { text: 'Semana', value: 'semana'},
-                { text: 'Recepción', value: 'fecha_recepcion'},
-                { text: 'Hora', value: 'hora_ingreso'},
-                { text: 'Lanzado', value: 'fecha_lanzado'},
-                { text: 'Hora', value: 'hora_lanzado'},
-                { text: 'Materia', value: 'nombre_materia'},
-                { text: 'Variedad', value: 'nombre_variedad'},
-                { text: 'Lote Materia', value: 'lote_materia' },
-                { text: 'Número de Jabas', value: 'numero_jabas' },
-                { text: 'Peso Promedio Jabas', value: 'peso_promedio_jaba' },
-                { text: 'Peso Neto', value: 'peso_neto' },
-                { text: 'Jabas Lanzadas', value: 'jabas_lanzadas'},
-                { text: 'Peso Lanzado', value: 'peso_lanzado'},
-                { text: '% Lanzado', value: '%_lanzado'},
-            ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,
             clientes: [],
@@ -187,31 +204,11 @@ export default {
         }
     },
     mounted() {
-        this.listarClientes();
         this.buscar();
     },
-    computed:{
-        excel(){
-            var query="";
-            Object.entries(this.consulta).forEach(([key, value]) => {
-                query+=`&${key}=${value}`;
-            });
-            return `${url_base}/reporte/consumo-viaje?excel${query}`
-        }
-    },
     methods:{
-        listarClientes(){
-            axios.get(url_base+'/cliente?all')
-            .then(response => {
-                this.clientes = response.data;
-                this.clientes.push({
-                    descripcion: 'Todos los Clientes',
-                    id: ''
-                })
-            })
-        },
         buscar(){
-            axios.get(`${url_base}/reporte/consumo-viaje`,{
+            axios.get(`${url_base}/reporte/rendimiento_linea`,{
                 params: {
                     desde: this.consulta.desde,
                     hasta: this.consulta.desde,
@@ -220,38 +217,33 @@ export default {
             })
             .then(response => {
                 this.resultados=response.data;
-                this.variedades = this.resultados.map(item => item.nombre_variedad)
+                this.presentaciones = this.resultados.map(item => item.nombre_presentacion)
                 .filter((value, index, self) => self.indexOf(value) === index);
-                this.seleccionadas = this.variedades;
+                this.seleccionadas = this.presentaciones;
                 this.graficar();
             });
         },
         graficar(){
-            var series_1=0;
-            var series_2=0;
-            var viajes='0000-00-00';
-            for (let i = 0; i < this.resultados.length; i++) {
-                const data = this.resultados[i];
-                if (this.seleccionadas.indexOf(data.nombre_variedad)>-1) {
-                    series_1+=Number(data.numero_jabas);
-                    series_2+=Number(data.jabas_lanzadas);
-                }
-                viajes=data.fecha_recepcion;
+            var series=[];
+            var categorias=[];
+            for (let i = 0; i < 24; i++) {
+                series.push(0); 
+                categorias.push(`${i}:00 `);
             }
-            
-            this.variedades = this.resultados.map(item => item.nombre_variedad)
-                .filter((value, index, self) => self.indexOf(value) === index);
+
+            for (let j = 0; j < this.resultados.length; j++) {
+                const data = this.resultados[j];
+                if (this.seleccionadas.indexOf(data.nombre_presentacion)>-1) {
+                    series[data.hora_inicio.split(':')[0]]+=Number(data.salida)
+                }
+            }
+                console.log(series);
+            this.series=[{data: series}];
             this.chartOptions={
                 xaxis: {
-                    categories: [viajes],
+                    categories: categorias,
                 },
             };
-            this.series=[
-                {name: 'Jabas Ingresadas', data: [series_1] },
-                {name: 'Jabas Lanzadas', data: [series_2] }
-            ];
-            this.series_bar=[(series_2*100/series_1).toFixed(2)]
-            this.restantes=series_1-series_2;
         }
 
     }
