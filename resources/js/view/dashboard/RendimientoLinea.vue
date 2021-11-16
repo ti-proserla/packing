@@ -21,7 +21,26 @@
                                     v-model="consulta.desde"
                                     type="date">
                                 </v-text-field>
+                            </v-col>
 
+                            <v-col cols="12" lg="12">
+                                <v-select
+                                dense
+                                v-model="consulta.linea"
+                                label="Linea:"
+                                :items="[
+                                    {linea: 'TODAS LAS LINEAS', value: ''},
+                                    {linea: 'LINEA 1', value: 1},
+                                    {linea: 'LINEA 2', value: 2},
+                                    {linea: 'LINEA 3', value: 3},
+                                    {linea: 'LINEA 4', value: 4},
+                                    {linea: 'LINEA 5', value: 5},
+                                    {linea: 'LINEA 6', value: 6}
+                                ]"
+                                item-text="linea"
+                                item-value="value"
+                                >
+                                </v-select>
                             </v-col>
                             <v-col cols="12" lg="12" class="text-center">
                                 <v-btn @click="buscar" color="primary">
@@ -189,7 +208,7 @@ export default {
             consulta:{
                 desde: moment().format('YYYY-MM-DD'),
                 hasta: moment().format('YYYY-MM-DD'),
-                cliente_id: 1
+                linea: ''
             },
             table: [],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
@@ -212,7 +231,7 @@ export default {
                 params: {
                     desde: this.consulta.desde,
                     hasta: this.consulta.desde,
-                    cliente_id: this.consulta.cliente_id
+                    linea: this.consulta.linea
                 }
             })
             .then(response => {

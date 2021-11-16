@@ -351,6 +351,13 @@ class ReportesController extends Controller
     public function rendimiento_linea(Request $request){
         $desde=$request->desde;
         $hasta=$request->hasta;
+        $query_linea="";
+        if ($request->has('linea')) {
+            $linea=$request->linea;
+            if ($linea!=NULL) {
+                $query_linea="AND CA.linea=$linea";
+            }
+        }
         $query="SELECT 	CONCAT(HOUR(CA.created_at),':00') hora_inicio,
                         CONCAT(HOUR(DATE_ADD(CA.created_at, INTERVAL 1 HOUR)),':00') hora_fin,
                         EC.fecha_empaque,
@@ -363,6 +370,7 @@ class ReportesController extends Controller
                 INNER JOIN palet_salida PS ON PS.id=CA.palet_salida_id
                 WHERE EC.fecha_empaque>=?
                 AND EC.fecha_empaque<=?
+                $query_linea
                 AND PS.estado <> 'Remonte'
                 GROUP BY HOUR(CA.created_at),EC.fecha_empaque,CA.linea,EC.presentacion_id 
                 ORDER BY fecha_empaque ASC,CA.created_at ASC";
