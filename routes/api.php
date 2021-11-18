@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+ini_set('memory_limit', '256M');
 
 /*
 |--------------------------------------------------------------------------
