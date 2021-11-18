@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-ini_set('memory_limit', '456M');
+ini_set('memory_limit', '256M');
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +103,5 @@ Route::post('zpl/preview', 'PrintZPLController@preview');
 Route::get('conector/puerto-embarque','NisiraConector@puerto_embarque');
 
 Route::get('prueba',function(){
-    $temp_index_db=100000;
-    dd(substr(str_pad($temp_index_db, 4, "0", STR_PAD_LEFT),-5));
+    phpinfo();
 });
