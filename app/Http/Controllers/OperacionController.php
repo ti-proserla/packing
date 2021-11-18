@@ -18,8 +18,12 @@ class OperacionController extends Controller
         if ($request->has('estado')) {
             $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
                             ->where('estado','=',$request->estado)
-                            ->select('operacion.*','cliente.descripcion as cliente')
-                            ->get();
+                            ->select('operacion.*','cliente.descripcion as cliente');
+
+            if ($request->cliente_id!=null) {
+                $operaciones=$operaciones->where('cliente_id',$request->cliente_id);
+            }
+            $operaciones=$operaciones->get();
         }else{
             $operaciones=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
                             ->where('fecha_operacion','>=',$request->desde)

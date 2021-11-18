@@ -30,7 +30,7 @@
                         </v-text-field>
                     </v-col>
                     <v-col cols="12" sm="2" lg=2>
-                        <v-btn color="info" @click="buscar">
+                        <v-btn color="info" @click="listar(1)">
                             Buscar
                         </v-btn>
                     </v-col>
@@ -76,11 +76,11 @@ export default {
         }
     },
     mounted(){
-        this.buscar();
+        this.listar(1);
     },
     methods: {
-        buscar(){
-            axios.get(`${url_base}/operacion?desde=${this.data_post.desde}&hasta=${this.data_post.hasta}`)
+        listar(n=this.table.current_page){
+            axios.get(`${url_base}/operacion?page=${n}&desde=${this.data_post.desde}&hasta=${this.data_post.hasta}`)
             .then(response => {
                 this.table=response.data
                 // console.log(response.data)

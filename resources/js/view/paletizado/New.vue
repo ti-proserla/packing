@@ -12,6 +12,7 @@
                             :item-text="cliente => `${cliente.descripcion}`"
                             item-value="id"
                             :error-messages="error.cliente_id"
+                            @change="listarOperaciones"
                             >
                             </v-select>
                     </v-col>
@@ -185,7 +186,7 @@ export default {
             })
         },
         listarOperaciones(){
-            axios.get(url_base+'/operacion?estado=Pendiente')
+            axios.get(`${url_base}/operacion?estado=Pendiente&cliente_id=${this.palet_salida.cliente_id}`)
             .then(response => {
                 this.operaciones=response.data
             })
