@@ -107,7 +107,26 @@ class OperacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        switch ($request->estado) {
+            case 'Despachado':
+                $operacion=Operacion::find($id);
+                $operacion->estado='Despachado';
+                $operacion->fecha_despachado=$request->fecha_despachado;
+                $operacion->save();
+                PaletSalida::where('operacion_id',$id)
+                ->update(['estado' => 'Despachado']);
+
+                break;
+            
+            default:
+                
+                break;
+        }
+        
+        return response()->json([
+            "status"    =>  "OK",
+            "message"   =>  "Operación Actualizada.",
+        ]);
     }
 
     /**
