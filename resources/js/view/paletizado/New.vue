@@ -113,7 +113,8 @@ export default {
             parihuelas: [],
             campanias: [],
             procesos: [
-                {'etapas' : 1 , "descripcion" : "Solo Clanshell (1 Etiqueta)"},
+                {'etapas' : 1 , "descripcion" : "Solo Clamshell (1 Etiqueta)"},
+                {'etapas' : 2 , "descripcion" : "Clamshell - Selección"},
                 {'etapas' : 3 , "descripcion" : "Empaque - Selección - Pesado"},
             ],
             operaciones: [],

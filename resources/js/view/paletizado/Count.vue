@@ -177,13 +177,30 @@ export default {
             axios.get(url_base+`/palet_salida/${this.$route.params.id}`)
             .then(response => {
                 this.palet=response.data
-this.labores=this.palet.etapas==1 ? 
-            [{codigo: '04',descripcion: 'CLANSHELL'}] : 
-            [
-                {codigo: '01',descripcion: 'EMPAQUE'},
-                {codigo: '02',descripcion: 'PESADO'},
-                {codigo: '03',descripcion: 'SELECCION'},
-            ];
+
+                switch (this.palet.etapas) {
+                    case 1:
+                        this.labores=[{codigo: '04',descripcion: 'CLANSHELL'}]
+                        break;
+
+                    case 2:
+                        this.labores=[
+                            {codigo: '03',descripcion: 'SELECCION'},
+                            {codigo: '04',descripcion: 'CLANSHELL'}
+                        ]
+                        break;
+                    case 3:
+                        this.labores=[
+                            {codigo: '01',descripcion: 'EMPAQUE'},
+                            {codigo: '02',descripcion: 'PESADO'},
+                            {codigo: '03',descripcion: 'SELECCION'},
+                        ];
+                        break;
+                
+                    default:
+                        break;
+                }
+
                 var cajas=this.palet.cajas;
                 for (let i = 0; i < cajas.length; i++) {
                     const caja = cajas[i];
@@ -284,12 +301,9 @@ this.labores=this.palet.etapas==1 ?
                     if (repetido==1) {
                         this.alerta("Código repetido.");
                     }else{
-                        console.log("hola 01:",repetido);
 
                         for (let j = 0; j < this.fila_codigos.length; j++) {
                             const element2 = this.fila_codigos[j];
-                            console.log(element2.toString().substring(2,4));
-                            console.log(this.codigo_barras.substring(2,4));
                             if (element2.substring(2,4)==this.codigo_barras.substring(2,4)) {
                                 this.alerta("Labor ya registrada para esta caja.");
                                 repetido=1;
