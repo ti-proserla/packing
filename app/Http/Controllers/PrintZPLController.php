@@ -406,11 +406,11 @@ class PrintZPLController extends Controller
                 break;
 
             case '02':
-                $cantidad=45;
+                $cantidad=40;
                 break;
             
             case '03':
-                $cantidad=45;
+                $cantidad=40;
                 break;
 
             case '04':
