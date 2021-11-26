@@ -65,7 +65,7 @@ class PrintZPLController extends Controller
                 ^FD{nombre_operador}^FS
                 ^FT160,100
                 ^AAN,40,15
-                ^FD{labor_letra}^FS
+                ^FD{labor_letra}{linea}^FS
                 ^FT40,160
                 ^BQN,2,5
                 ^FDMA,{linea}{labor}{operador}{autonumerico}^FS
