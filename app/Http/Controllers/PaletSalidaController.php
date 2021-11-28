@@ -58,7 +58,12 @@ class PaletSalidaController extends Controller
                                 ->leftJoin('lote_ingreso as LO','EC.lote_ingreso_id','=','LO.id')
                                 ->leftJoin('parihuela as PAR','palet_salida.parihuela_id','=','PAR.id')
                                 ->select(
-                                    'palet_salida.*',
+                                    'palet_salida.id',
+                                    'palet_salida.campania_id',
+                                    'palet_salida.tipo_palet_id',
+                                    'palet_salida.numero',
+                                    'palet_salida.estado',
+                                    'palet_salida.etiqueta_adicional',
                                     'operacion.descripcion as operacion',
                                     'cliente.descripcion as cliente',
                                     'modelo_parihuela as parihuela',
@@ -67,7 +72,7 @@ class PaletSalidaController extends Controller
                                 )
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('palet_salida.estado',explode(',',$request->estado))
-                                ->orderBy('palet_salida.created_at','DESC')
+                                ->orderBy('palet_salida.id','DESC')
                                 ->paginate(50);
                                 // ->toSql();
         }else{
