@@ -47,8 +47,8 @@ export default {
     data() {
         return {
             consulta:{
-                desde: moment().startOf('month').format('YYYY-MM-DD'),
-                hasta: moment().endOf('month').format('YYYY-MM-DD')
+                desde: moment().startOf('isoWeek').format('YYYY-MM-DD'),
+                hasta: moment().endOf('isoWeek').format('YYYY-MM-DD')
             },
             table: [],
             header: [
