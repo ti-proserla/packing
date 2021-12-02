@@ -470,7 +470,7 @@ class PrintZPLController extends Controller
 
     public function muestra_etiqueta_caja(Request $request){
         $etiqueta_id=$request->etiqueta_caja_id;
-        DB::statement("SET lc_time_names = 'es_ES'");
+        // DB::statement("SET lc_time_names = 'es_ES'");
 
         $etiquetaCaja=EtiquetaCaja::select(
                         DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
