@@ -1,38 +1,59 @@
-SELECT 	CL.descripcion nombre_productor,
-				FU.nombre_fundo,
-				SL.viaje,
-				SL.guia,
-				SL.placa,
-				WEEK(SL.fecha_recepcion) semana,
-				DATE(SL.fecha_recepcion) fecha_recepcion,
-				DATE_FORMAT(SL.fecha_recepcion,'%H:%i') hora_ingreso,
-				DATE(MIN(PE.fecha_lanzado)) fecha_lanzado,
-				DATE_FORMAT(MIN(PE.fecha_lanzado),'%H:%i') hora_lanzado,
+SELECT 	LI.fecha_cosecha,
+				LI.codigo,
+				CL.descripcion nombre_productor,
 				MA.nombre_materia,
 				VA.nombre_variedad,
-				LI.codigo lote_materia,
+				FU.nombre_fundo,
+				COUNT(DISTINCT SL.viaje) viajes,
+				WEEK(SL.fecha_recepcion) semana,
 				SUM(PE.num_jabas) numero_jabas,
 				ROUND(SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)/SUM(PE.num_jabas),2) peso_promedio_jaba,
-				-- SL.peso_guia,
-				SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) peso_neto,
-				SUM( CASE WHEN PE.estado='Lanzado' THEN PE.num_jabas ELSE 0 END) jabas_lanzadas,
-				SUM( CASE WHEN PE.estado='Lanzado' THEN PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba ELSE 0 END) peso_lanzado,
-				ROUND((
-					SUM( CASE WHEN PE.estado='Lanzado' THEN PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba ELSE 0 END)
-					/
-					SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
-				)*100,2) `%_lanzado`
+				ROUND(SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba),2) peso_neto,
+				DE.descarte_granos +
+				DE.descarte_racimos descarte,
+				ROUND(
+					(
+						(DE.descarte_granos+DE.descarte_racimos)/
+						SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
+					)*100
+				,2) `descarte_%`,
+				PRODUCCION.acumulado produccion_kg,
+				ROUND(
+					(
+						PRODUCCION.acumulado/
+						SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
+					)*100
+				,2) `produccion_%`,
+				ROUND(
+					(
+						( SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba) - PRODUCCION.acumulado - (DE.descarte_granos+DE.descarte_racimos) )/
+						SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
+					)*100
+				,2) `merma_%`
+				
+
 FROM lote_ingreso LI
+LEFT JOIN descarte DE ON DE.lote_id=LI.id 
 LEFT JOIN sub_lote SL ON LI.id = SL.lote_id
 INNER JOIN fundo FU ON FU.id = LI.fundo_id
-LEFT JOIN parcela PA ON PA.id = LI.parcela_id 
 INNER JOIN cliente CL ON CL.id=LI.cliente_id
 INNER JOIN materia MA ON MA.id=LI.materia_id
 INNER JOIN variedad VA ON VA.id=LI.variedad_id
-LEFT JOIN tipo TI ON TI.id=LI.tipo_id
 LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
+LEFT JOIN 
+
+(
+SELECT EC.lote_ingreso_id,SUM(PRE.peso_neto) acumulado
+FROM
+etiqueta_caja EC 
+INNER JOIN presentacion PRE ON PRE.id=EC.presentacion_id
+LEFT JOIN caja CA ON CA.etiqueta_caja_id=EC.id
+GROUP BY EC.lote_ingreso_id
+) PRODUCCION
+ON PRODUCCION.lote_ingreso_id=LI.id
+
 where CL.id=1
-AND LI.fecha_cosecha>='2021-11-03'
-AND LI.fecha_cosecha<='2021-11-03'
-GROUP BY LI.id, SL.id
+AND LI.fecha_cosecha>='2021-11-01'
+AND LI.fecha_cosecha<='2021-11-05'
+GROUP BY LI.id
 ORDER BY SL.id ASC
