@@ -284,6 +284,11 @@
                             Consumo por Viaje
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/reporte/balance-materia">
+                        <v-list-item-content>
+                            Balance Materia
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item link to="/dashboard/aforo">
                         <v-list-item-content>
                             Aforo en Planta
