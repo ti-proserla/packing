@@ -89,6 +89,7 @@ Route::get('reporte/rendimiento_personal_presentacion', 'ReportesController@rend
 Route::get('reporte/bono-personal', 'ReportesController@bono_personal');
 Route::get('reporte/consolidado-bonos', 'ReportesController@consolidado_bonos');
 Route::get('reporte/consumo-viaje', 'ReportesController@consumo_viaje');
+Route::get('reporte/balance-materia', 'ReportesController@balance_materia');
 Route::get('reporte/aforo', 'ReportesController@aforo');
 Route::get('reporte/cantidad-labor', 'ReportesController@cantidad_labor');
 Route::get('print/muestra_etiqueta_caja', 'PrintZPLController@muestra_etiqueta_caja');

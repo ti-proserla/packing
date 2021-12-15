@@ -169,6 +169,10 @@ var routes =[
         component: require('./view/reporte/RendimientoLinea.vue').default
     },
     {
+        path: '/reporte/balance-materia',
+        component: require('./view/reporte/BalanceMateria.vue').default
+    },
+    {
         path: '/reporte/producto-terminado',
         component: require('./view/reporte/ProductoTerminado.vue').default
     },
