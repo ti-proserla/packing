@@ -160,12 +160,27 @@ class PaletSalidaController extends Controller
         ]);        
     }
 
-    
+    // public function codigos($id){
+    //     // $codigos=Caja::join('rendimiento_personal','caja.id','=','')
+
+    //     // ->where('palet_salida_id',$id)
+    //     // ->select(
+    //     //     DB::raw('GROUP_CONCAT(RP.codigo_barras) codigos'
+    //     // )->first();
+    // }
 
     public function show(Request $request,$id){
         $paletSalida=PaletSalida::with('cajas')
         ->where('palet_salida.id',$id)
-            ->select('palet_salida.*')
+            ->select(
+                'palet_salida.cliente_id',
+                'palet_salida.estado',
+                'palet_salida.etapas',
+                'palet_salida.id',
+                'palet_salida.numero',
+                'palet_salida.tipo_palet_id',
+                'palet_salida.tope_cajas',
+            )
             ->first();
         if ($request->has('cajas')) {
             $paletSalida->detalle=Caja::where('palet_salida_id',$paletSalida->id)
