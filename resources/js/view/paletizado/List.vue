@@ -4,7 +4,19 @@
             <v-card-title>LISTA DE PALETS</v-card-title>
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" lg="4">
+                    <v-col cols=12 sm=6>
+                            <v-select
+                                outlined
+                                dense
+                                v-model="consulta.cliente_id"
+                                label="Cliente:"
+                                :items="clientes"
+                                item-text="descripcion"
+                                item-value="id"
+                                >
+                                </v-select>
+                        </v-col>
+                    <!-- <v-col cols="12" lg="4">
                         <v-select
                             v-model="consulta.tipo_palet_id"
                             label="Tipo de Palet:"
@@ -12,9 +24,11 @@
                             :item-text="tipo => `${tipo.descripcion}`"
                             item-value="id">
                         </v-select>
-                    </v-col>
+                    </v-col> -->
                     <v-col cols="12" lg="4">
-                        
+                        <v-btn @click="listar()"
+                        color="primary"
+                        >Actualizar</v-btn>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -100,7 +114,7 @@
 export default {
     data() {
         return {
-            
+            clientes: [],
             tipos_palet:[],
             lotes: {
                 current_page: 1,
@@ -112,6 +126,7 @@ export default {
             header: [],
             fab: false,
             consulta: {
+                cliente_id: 1,
                 tipo_palet_id: 'TER',
                 estado: 'Pendiente,Cerrado'
             }
@@ -123,6 +138,7 @@ export default {
         }
     },
     mounted() {
+        this.listarClientes();
         this.listar();
         var t = this;
         BrowserPrint.getDefaultDevice("printer", function(device){
@@ -131,6 +147,12 @@ export default {
         this.listarTiposPalet();
     },
     methods:{
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes=response.data
+            });
+        },
         listarTiposPalet(){
             axios.get(url_base+`/tipo-palet`)
             .then(response => {

@@ -72,6 +72,7 @@ class PaletSalidaController extends Controller
                                 )
                                 ->groupBy('palet_salida.id')
                                 ->whereIn('palet_salida.estado',explode(',',$request->estado))
+                                ->where('cliente.id',$request->cliente_id)
                                 ->orderBy('palet_salida.id','DESC')
                                 ->paginate(50);
                                 // ->toSql();
