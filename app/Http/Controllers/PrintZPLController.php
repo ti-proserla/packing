@@ -81,14 +81,14 @@ class PrintZPLController extends Controller
             // foreach($data[$i*$columna+$j] as $key=>$value){
             //     $string_zpl_bk=str_replace('['.$key.']',$value,$string_zpl_bk);
             // }
-            $columna=3;
+            $columna=2;
             $string_zpl=str_replace('^XA','',$string_zpl);
             $string_zpl=str_replace('^XZ','',$string_zpl);
             
             $string_zpl_new="";
             $string_zpl_new.="^XA";
             for ($j=0; $j < $columna; $j++) {
-                $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,270);
+                $string_zpl_new.=$this->columnaEtiqueta($string_zpl,$j,405);
             }
             $string_zpl_new.="^XZ";
         if ($request->has('return')) {
