@@ -54,8 +54,8 @@ class LoteIngresoController extends Controller
                 CONCAT(
                     'J',
                     LPAD(DAYOFYEAR(DATE_FORMAT('$fecha_cosecha', '2016-%m-%d')),3,'0'),
-                    (SELECT cod_cartilla FROM cliente where id=$cliente_id)
-                    (SELECT cod_cartilla FROM fundo where id=$fundo_id),
+                    (SELECT cod_cartilla FROM cliente where id=$cliente_id),
+                    (SELECT cod_cartilla FROM fundo where id=$fundo_id)
                     -- (SELECT cod_cartilla FROM materia where id=$materia_id),
                     -- (SELECT cod_cartilla FROM variedad where id=$variedad_id),
                     -- SUBSTRING(YEAR('$fecha_cosecha'),-1,1),
