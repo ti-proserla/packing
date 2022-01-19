@@ -115,6 +115,44 @@ class PaletSalidaController extends Controller
             "data"  => $paletSalida
         ]);
     }
+
+    public function storeLleno(PaletSalidaValidate $request)
+    {
+        // dd("llego");
+        $siguiente=PaletSalida::select(DB::raw('MAX(numero) numero'))
+            ->where('tipo_palet_id',$request->tipo_palet_id)
+            ->where('campania_id',$request->campania_id)
+            ->where('cliente_id',$request->cliente_id)
+            ->first();
+        $paletSalida=new PaletSalida();
+        $paletSalida->campania_id=$request->campania_id;
+        $paletSalida->operacion_id=$request->operacion_id;
+        $paletSalida->tipo_palet_id=$request->tipo_palet_id;
+        $paletSalida->cliente_id=$request->cliente_id;
+        $paletSalida->etapas='0';
+        $paletSalida->tope_cajas=$request->numero_cajas;
+        $paletSalida->nave=1;
+        $paletSalida->numero=$siguiente->numero+1;
+        $paletSalida->camara=null;
+        $paletSalida->estado="Pendiente";
+        $paletSalida->parihuela_id=$request->parihuela_id;
+        $paletSalida->etiqueta_adicional=$request->etiqueta_adicional;
+        $paletSalida->save();
+        
+        $codigo_caja = $request->codigo_caja;
+        $etiqueta_caja_id= explode('-',$codigo_caja)[1];
+
+        for ($i=0; $i < $request->numero_cajas; $i++) { 
+            $caja=new Caja();
+            $caja->palet_salida_id=(int)$paletSalida->id;
+            $caja->etiqueta_caja_id=$etiqueta_caja_id;
+            $caja->save();
+        }
+        return response()->json([
+            "status" => "OK",
+            "data"  => $paletSalida
+        ]);
+    }
     
     public function caja_store($id,Request $request){
         // dd($request->all());

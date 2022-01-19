@@ -107,6 +107,10 @@ var routes =[
         component: require('./view/paletizado/New.vue').default
     },
     {
+        path: '/paletizado/newLleno',
+        component: require('./view/paletizado/newLleno.vue').default
+    },
+    {
         path: '/paletizado/remonte',
         component: require('./view/paletizado/Remonte.vue').default
     },

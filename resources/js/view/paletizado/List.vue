@@ -98,7 +98,7 @@
                 fab
                 dark
                 color="primary"
-                @click="$router.push('/paletizado/new')">
+                @click="$router.push('/paletizado/newLleno')">
                 <i class="fas fa-plus"></i>
             </v-btn>
         </v-speed-dial>

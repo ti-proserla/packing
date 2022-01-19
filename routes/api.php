@@ -58,6 +58,7 @@ Route::get('palet_salida/search', 'PaletSalidaController@search');
 Route::post('palet_salida/transferencia', 'PaletSalidaController@transferencia');
 Route::post('palet_salida/remonte', 'PaletSalidaController@remonte');
 Route::post('palet_salida/{id}/caja', 'PaletSalidaController@caja_store');
+Route::post('palet_salida/lleno', 'PaletSalidaController@storeLleno');
 Route::resource('palet_salida', 'PaletSalidaController');
 Route::get('lote_ingreso/generar_codigo', 'LoteIngresoController@generar_codigo');
 Route::get('lote_ingreso/palets_salida', 'LoteIngresoController@palets_salida');

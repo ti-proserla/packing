@@ -31,8 +31,9 @@ class PaletSalidaValidate extends FormRequest
             'campania_id' => 'required',
             'tipo_palet_id' => 'required',
             'cliente_id' => 'required|numeric',
-            'etapas' => 'required|numeric',
-            'tope_cajas' => 'required|numeric'
+            // 'etapas' => 'required|numeric',
+            // 'tope_cajas' => 'required|numeric',
+            'operacion_id' => 'required|numeric',
         ];
     }
     
