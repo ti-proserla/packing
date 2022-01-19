@@ -53,12 +53,13 @@ class LoteIngresoController extends Controller
         $query="SELECT 
                 CONCAT(
                     'J',
-                    (SELECT cod_cartilla FROM cliente where id=$cliente_id),
-                    (SELECT cod_cartilla FROM fundo where id=$fundo_id),
-                    (SELECT cod_cartilla FROM materia where id=$materia_id),
-                    (SELECT cod_cartilla FROM variedad where id=$variedad_id),
-                    SUBSTRING(YEAR('$fecha_cosecha'),-1,1),
-                    LPAD(DAYOFYEAR(DATE_FORMAT('$fecha_cosecha', '2016-%m-%d')),3,'0')
+                    1,
+                    LPAD(DAYOFYEAR(DATE_FORMAT('$fecha_cosecha', '2016-%m-%d')),3,'0'),
+                    (SELECT cod_cartilla FROM cliente where id=$cliente_id)
+                    -- (SELECT cod_cartilla FROM fundo where id=$fundo_id),
+                    -- (SELECT cod_cartilla FROM materia where id=$materia_id),
+                    -- (SELECT cod_cartilla FROM variedad where id=$variedad_id),
+                    -- SUBSTRING(YEAR('$fecha_cosecha'),-1,1),
                 ) codigo";
         $data=DB::select(DB::raw("$query"),[])[0];      
         return response()->json($data);  
