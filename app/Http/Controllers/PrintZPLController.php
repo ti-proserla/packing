@@ -480,6 +480,7 @@ class PrintZPLController extends Controller
                         DB::raw("DAYOFYEAR(DATE_FORMAT(etiqueta_caja.fecha_empaque, '2016-%m-%d')) jul_emp"),
                         DB::raw("DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) jul_cos"),
                         DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b-%d-%Y'), 2))) fecha_empaque"),
+                        DB::raw("UPPER(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d/%Y')) fecha_empaque_2"),
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%Y') as e_yyyy"),
                         DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 2))) as e_mb"),
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),

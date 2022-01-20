@@ -16,8 +16,9 @@ class CampaniaController extends Controller
     {
         if ($request->has('all')) {
             $campanias=Campania::join('materia','materia.id','=','campania.materia_id')
-                                ->select('campania.*','materia.nombre_materia')
-                                ->get();
+                            ->select('campania.*','materia.nombre_materia')
+                            ->where('estado',$request->estado)
+                            ->get();
         }else{
             $campanias=Campania::join('materia','materia.id','=','campania.materia_id')
                         ->select('campania.*','materia.nombre_materia')
