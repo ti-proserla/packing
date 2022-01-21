@@ -294,6 +294,7 @@ class PaletSalidaController extends Controller
     public function remonte(Request $request){
         $paletSalida=new PaletSalida();
         $paletSalida->campania_id=$request->campania_id;
+        $paletSalida->operacion_id=$request->operacion_id;
         $paletSalida->tipo_palet_id='TER';
         $paletSalida->cliente_id=$request->cliente_id;
         $paletSalida->etapas=1;

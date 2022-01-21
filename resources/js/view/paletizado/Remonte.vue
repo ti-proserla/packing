@@ -15,12 +15,13 @@
                     </v-col>
                     <v-col cols=12 lg=6>
                         <v-select
-                            @change="listarPaletsSaldos"
+                            @change="listarPaletsSaldos();listarOperaciones()"
                             v-model="palet_salida.cliente_id"
                             label="Cliente:"
                             :items="clientes"
                             :item-text="cliente => `${cliente.descripcion}`"
-                            item-value="id">
+                            item-value="id"
+                            >
                             </v-select>
                     </v-col>
                     <v-col cols="12" lg="3" >
@@ -40,6 +41,16 @@
                             :items="[{opt: 'No'},{opt: 'Si'}]"
                             item-text="opt"
                             item-value="opt">
+                        </v-select>
+                    </v-col>
+                    <v-col cols="12" lg="3" >
+                        <v-select
+                            v-model="palet_salida.operacion_id"
+                            label="Operacion:"
+                            :items="operaciones"
+                            item-value="id"
+                            item-text="descripcion"
+                        >
                         </v-select>
                     </v-col>
                     <v-col cols="12">
@@ -165,7 +176,7 @@ export default {
             })
         },
         listarOperaciones(){
-            axios.get(url_base+'/operacion?estado=Pendiente')
+            axios.get(`${url_base}/operacion?estado=Pendiente&cliente_id=${this.palet_salida.cliente_id}`)
             .then(response => {
                 this.operaciones=response.data
             })
