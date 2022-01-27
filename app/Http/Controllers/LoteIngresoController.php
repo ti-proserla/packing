@@ -60,8 +60,28 @@ class LoteIngresoController extends Controller
                     -- (SELECT cod_cartilla FROM variedad where id=$variedad_id),
                     -- SUBSTRING(YEAR('$fecha_cosecha'),-1,1),
                 ) codigo";
+        $query="SELECT 
+                    'J' codigo_planta,
+                    LPAD(DAYOFYEAR(DATE_FORMAT('$fecha_cosecha', '2016-%m-%d')),3,'0') juliano,
+                    (SELECT cod_cartilla FROM cliente where id=$cliente_id) codigo_cliente,
+                    (SELECT cod_cartilla FROM fundo where id=$fundo_id) codigo_fundo,
+                    (SELECT cod_cartilla FROM materia where id=$materia_id) codigo_materia,
+                    (SELECT cod_cartilla FROM variedad where id=$variedad_id) codigo_variedad,
+                    SUBSTRING(YEAR('$fecha_cosecha'),-1,1) digito_anio
+                ";
         $data=DB::select(DB::raw("$query"),[])[0];      
-        return response()->json($data);  
+        switch ($materia_id) {
+            case 3:
+                $data=$data->codigo_planta.$data->juliano.$data->codigo_cliente.$data->codigo_fundo;
+                break;
+            
+            default:
+                $data=$data->codigo_planta.$data->codigo_cliente.$data->codigo_fundo.$data->codigo_materia.$data->codigo_variedad.$data->digito_anio.$data->juliano;
+                break;
+        }
+        return response()->json([
+            "codigo" =>$data
+        ]);  
     }
 
     public function palets_salida(Request $request){
