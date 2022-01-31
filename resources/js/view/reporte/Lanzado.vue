@@ -90,7 +90,7 @@ export default {
     },
     computed:{
         excel(){
-            return `${url_base}/reporte/lanzado?excel&fecha_proceso=${this.consulta.fecha_proceso}`
+            return `${url_base}/reporte/lanzado?excel&fecha_proceso=${this.consulta.fecha_proceso}&linea=${this.consulta.linea}`
         }
     },
     methods:{
