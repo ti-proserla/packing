@@ -409,7 +409,7 @@ export default {
             });
         },
         listarZpls(){
-            axios.get(url_base+`/zpl?all`)
+            axios.get(url_base+`/zpl?all&estado=Activo`)
             .then(response => {
                 this.zpls=response.data
             });

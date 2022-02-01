@@ -14,8 +14,11 @@ class ZplController extends Controller
      */
     public function index(Request $request)
     {
+        $estado=$request->estado;
         if ($request->has('all')) {
-            $zpls=Zpl::select('id','nombre_zpl')->get();
+            $zpls=Zpl::select('id','nombre_zpl')
+                    ->where('estado','like',"$estado%")
+                    ->get();
         }else{
             $zpls=Zpl::paginate(10);
         }
