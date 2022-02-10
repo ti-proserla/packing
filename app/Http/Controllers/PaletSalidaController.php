@@ -251,6 +251,7 @@ class PaletSalidaController extends Controller
     }
     public function search(Request $request){
         $paletSalida=PaletSalida::where('tipo_palet_id',$request->tipo_palet_id)
+                        ->where('campania_id',$request->campania_id)
                         ->where('numero',$request->numero)
                         ->where('cliente_id',$request->cliente_id)
                         ->first();

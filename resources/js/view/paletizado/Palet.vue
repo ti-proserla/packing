@@ -13,6 +13,15 @@
                             >
                         </v-select>
                     </v-col>
+                    <v-col cols="12" lg="2">
+                        <v-select
+                            v-model="palet_busqueda_1.campania_id"
+                            label="Campañas:"
+                            :items="campanias"
+                            :item-text="campania => `${campania.id} - ${campania.nombre_materia}`"
+                            item-value="id">
+                        </v-select>
+                    </v-col>
                     <v-col cols="8" lg="4">
                         <v-select
                             v-model="palet_busqueda_1.tipo_palet_id"
@@ -70,7 +79,7 @@
         <v-dialog v-model="open_nuevo" persistent max-width="900" scrollable>
             <v-card>
                 <v-card-title>
-                    Transferencia de Cajas
+                    <v-btn color="red" @click="open_nuevo=false">Cerrar</v-btn> - Transferencia de Cajas 
                 </v-card-title>
                 <v-card-text>
 
@@ -261,7 +270,8 @@ export default {
             palet_busqueda_1:{
                 tipo_palet_id: null,
                 numero: null,
-                cliente_id: null
+                cliente_id: null,
+                campania_id: null
             },
             palet_busqueda: {
                 tipo_palet_id: ''
@@ -294,11 +304,14 @@ export default {
                 {color: 'warning', estado: 'Lanzado'},
                 {color: 'primary', estado: 'Cerrado'},
                 {color: 'danger', estado: 'Pendiente'}
-            ]
+            ],
+            campanias: [],
+
         }
     },
     mounted(){
         // this.getPaletSalida();
+        this.listarCampanias();
         this.listarTiposPalet();
         this.listarClientes();
     },
@@ -319,6 +332,12 @@ export default {
         }
     },
     methods:{
+        listarCampanias(){
+            axios.get(url_base+`/campania?all&estado=Abierto`)
+            .then(response => {
+                this.campanias=response.data
+            });
+        },
         colorGet(estado){
             for (let i = 0; i < this.estados.length; i++) {
                 const element = this.estados[i];
@@ -351,6 +370,7 @@ export default {
             });
         },
         buscar(){
+            this.palet_busqueda.campania_id=this.palet.campania_id;
             axios.get(url_base+`/palet_salida/search`,{
                 params: this.palet_busqueda
             })
@@ -375,6 +395,10 @@ export default {
                                     timer: 2000,
                                     buttons: false
                                 });
+                        this.selected_transferir=[];
+                        this.selected_etiqueta_id=[];
+                        this.e1=1;
+                        this.open_nuevo=false;
                         break;
                 
                     default:
