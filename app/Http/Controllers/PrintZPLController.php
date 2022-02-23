@@ -491,6 +491,8 @@ class PrintZPLController extends Controller
                         'CLI.direccion',
                         'PE.contenido',
                         'CL.nombre_calibre as calibre',
+                        'CL.min_gr',
+                        'CL.max_gr',
                         'MA.nombre_materia as materia',
                         DB::raw("IF(SUBSTR(peso_neto,-1) = '0', LEFT(peso_neto,length(peso_neto)-1),peso_neto) peso_neto"),
                         'VA.nombre_variedad as variedad',
