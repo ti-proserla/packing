@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Model\Camara;
-use App\Model\Posicion;
-use Illuminate\Support\Facades\DB;
+use App\Model\Sku;
+use Carbon\Carbon;
 
-class CamaraController extends Controller
+class SkuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class CamaraController extends Controller
      */
     public function index()
     {
-        return response()->json(Camara::all());
+        //
     }
 
     /**
@@ -37,7 +36,14 @@ class CamaraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sku=new Sku();
+        $sku->posicion_id=$request->posicion_id;
+        $sku->palet_id=explode("-",$request->codigo_palet)[1];
+        $sku->ingreso=Carbon::now();
+        $sku->save();
+        return response()->json([
+            "status" => "OK"
+        ]);
     }
 
     /**
@@ -48,26 +54,7 @@ class CamaraController extends Controller
      */
     public function show($id)
     {
-        $camara=Camara::where('codigo',$id)->first();
-        $pisos=array();
-        for ($k=0; $k < $camara->pisos; $k++) { 
-            $datos=array();
-            for ($i=0; $i < $camara->matriz_y; $i++) { 
-                for ($j=0; $j < $camara->matriz_x; $j++) { 
-                    $datos[$i][$j]=Posicion::where('codigo_camara',$id)
-                                    ->where('x',$i)
-                                    ->where('y',$j)
-                                    ->where('piso',($k+1))
-                                    ->leftJoin('sku','sku.posicion_id','=','posicion.id')
-                                    ->leftJoin('palet_salida as ps','ps.id','=','sku.palet_id')
-                                    ->leftJoin('cliente as cl','cl.id','=','ps.cliente_id')
-                                    ->select('posicion.id','posicion.codigo',DB::raw('DATE(sku.ingreso) ingreso'),DB::raw('CONCAT(ps.campania_id," ",ps.tipo_palet_id," ",cl.cod_cartilla,"-",ps.numero) palet'))
-                                    ->first();
-                }
-            }
-            $pisos[]=$datos;
-        }
-        return response()->json($pisos);
+        //
     }
 
     /**

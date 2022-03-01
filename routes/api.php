@@ -48,6 +48,7 @@ Route::resource('rendimiento-personal', 'RendimientoPersonalController');
 Route::put('presentacion_linea/{id}', 'PresentacionLineaController@cerrar');
 Route::resource('presentacion_linea', 'PresentacionLineaController');
 Route::resource('camara', 'CamaraController');
+Route::resource('sku', 'SkuController');
 
 
 Route::get('fundo/detallado', 'FundoController@detallado');
