@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="12" lg="4">
                 <v-card outlined>
-                    <v-card-title>Revisión de Cámaras</v-card-title>
+                    <v-card-title>Semaforizacion de Cámaras</v-card-title>
                     <v-card-text>
                         <v-row>
                             <v-col cols="12">
@@ -20,34 +20,27 @@
                                     Buscar
                                 </v-btn>
                             </v-col>
+                            <v-col cols="12">
+                                <div class="legend">
+                                    <span 
+                                        class="posicion-ocupada success posicion" 
+                                        >
+                                    </span> 1 - 2 Días
+                                    <span 
+                                        class="posicion-ocupada warning posicion" 
+                                        >
+                                    </span> 3 - 4 Días
+                                    <span 
+                                        class="posicion-ocupada error posicion" 
+                                        >
+                                    </span> 5 a más Días
+                                </div>
+                            </v-col>
                         </v-row>
                     </v-card-text>
                 </v-card>
             </v-col>
             <v-col cols="12" lg="8">
-                <v-card outlined>
-                    <v-card-title>Ingresar Palet</v-card-title>
-                    <v-card-text>
-                        <v-form v-on:submit.prevent="registrar">
-                            <v-row>
-                                <v-col cols="4">
-                                    <v-text-field 
-                                        label="Ingresar QR:" 
-                                        v-model="codigo_palet"
-                                        :disabled="seleccionado==0"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="2">
-                                    <v-btn
-                                        :disabled="seleccionado==0"
-                                        type="submit" color="primary">
-                                        Registrar
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
                 <v-expansion-panels
                     v-model="panel"
                     >
@@ -61,9 +54,8 @@
                                     <div :key="index2" v-for="(posicion,index2) in fila">
                                         <span 
                                             v-if="posicion!=null"
-                                            :class="(posicion.palet!=null ? 'posicion-ocupada' : 'posicion-seleccionable') + ' ' +(seleccionado==posicion.id ? 'posicion-seleccionada':'')" 
+                                            :class="(posicion.palet!=null ? 'posicion-ocupada' : 'posicion-disabled') + ' '+color(posicion.ingreso)" 
                                             class="posicion" 
-                                            @click="posicion.palet==null ? seleccionar(posicion.id) : ''"
                                             >
                                             {{ posicion.codigo }}
                                         </span>
@@ -74,6 +66,13 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
+                    <!-- <v-btn
+                        elevation="0"
+                        color="primary"
+                        outlined
+                        fab>
+                        B10
+                    </v-btn> -->
             </v-col>
         </v-row>
     </v-container>
@@ -87,6 +86,7 @@
         overflow-x: auto;
     }
     .posicion{
+        user-select: none;
         border-color: #1867c0!important;
         color: #1867c0!important;
         border: 1px solid;
@@ -101,7 +101,12 @@
         font-weight: 600;
     }
     .posicion-nula{
-        border-color: #fff!important;
+        border-color: transparent!important;
+    }
+    .posicion-disabled{
+        border-color: transparent!important;
+        background-color: rgba(0,0,0,.25)!important;
+        color: #fff!important;
     }
 
     .posicion-ocupada{
@@ -125,6 +130,27 @@
             height: 40px;
             padding: 8px 0;
         }
+    }
+    .posicion-ocupada.success{
+        background-color: #87cb16!important;
+        border-color: transparent!important;;
+    }
+    .posicion-ocupada.warning{
+        background-color: #ffa534!important;
+        border-color: transparent!important;;
+    }
+    .posicion-ocupada.error{
+        background-color: #fb404b!important;
+        border-color: transparent!important;;
+    }
+    .legend{
+        display: flex;
+        align-items: center;
+    }
+    .legend .posicion{
+        width: 20px!important;
+        height: 20px!important;
+        margin: 4px;
     }
 </style>
 <script>
@@ -160,6 +186,24 @@ export default {
         // this.ver();
     },
     methods: {
+        color(fecha){
+            var given = moment(fecha, "YYYY-MM-DD");
+            var current = moment().startOf('day');
+            var col='';
+            var diffDay=moment.duration(current.diff(given)).asDays();
+            switch (true) {
+                case (diffDay<3):
+                    col='success'
+                    break;
+                case (diffDay<5):
+                    col='warning'
+                    break;
+                case (diffDay>4):
+                    col='error'
+                    break;
+            }
+            return col;
+        },
         seleccionar(id){
             this.seleccionado=id;
         },

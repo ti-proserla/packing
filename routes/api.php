@@ -56,6 +56,7 @@ Route::resource('fundo', 'FundoController');
 
 Route::resource('transportista', 'TransportistaController');
 Route::resource('palet_salida/{id}/jaba', 'JabaSalidaController');
+Route::get('palet_salida/search/{codigo}', 'PaletSalidaController@search_codigo');
 Route::get('palet_salida/search', 'PaletSalidaController@search');
 Route::post('palet_salida/transferencia', 'PaletSalidaController@transferencia');
 Route::post('palet_salida/remonte', 'PaletSalidaController@remonte');

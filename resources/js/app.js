@@ -84,7 +84,7 @@ new Vue({
     theme:{
       themes: {
         light: {
-          primary: '#3472F7',
+          primary: '#1867c0',
           info: '#00bbff',
           success: '#87cb16',
           error: '#fb404b',

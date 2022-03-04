@@ -66,8 +66,12 @@ var routes =[
         component: require('./view/fundo.vue').default
     },
     {
-        path: '/camara',
-        component: require('./view/camara.vue').default
+        path: '/camara.ingreso',
+        component: require('./view/camara.ingreso.vue').default
+    },
+    {
+        path: '/camara.semaforizacion',
+        component: require('./view/camara.semaforizacion.vue').default
     },
     {
         path: '/impresora',

@@ -249,6 +249,11 @@ class PaletSalidaController extends Controller
         }
         return response()->json($paletSalida);
     }
+    public function search_codigo($codigo){
+        $paletSalida=PaletSalida::where('id',explode('-',$codigo)[1])
+                        ->first();
+        return response()->json($paletSalida);
+    }
     public function search(Request $request){
         $paletSalida=PaletSalida::where('tipo_palet_id',$request->tipo_palet_id)
                         ->where('campania_id',$request->campania_id)
