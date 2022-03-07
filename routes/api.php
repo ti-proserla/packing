@@ -47,6 +47,8 @@ Route::resource('etiqueta-caja', 'EtiquetaCajaController');
 Route::resource('rendimiento-personal', 'RendimientoPersonalController');
 Route::put('presentacion_linea/{id}', 'PresentacionLineaController@cerrar');
 Route::resource('presentacion_linea', 'PresentacionLineaController');
+
+Route::get('camara/operacion/{id}', 'CamaraController@operacion');
 Route::resource('camara', 'CamaraController');
 Route::resource('sku', 'SkuController');
 
