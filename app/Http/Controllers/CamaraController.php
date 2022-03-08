@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Camara;
 use App\Model\Posicion;
+use App\Model\operacion;
 use Illuminate\Support\Facades\DB;
 
 class CamaraController extends Controller
@@ -70,13 +71,16 @@ class CamaraController extends Controller
         return response()->json($pisos);
     }
     
-    public function operacion($id)
+    public function operacion($codigo_operacion)
     {
+        $operacion=Operacion::where('codigo_operacion',$codigo_operacion)->first();
+        // dd($operacion);
+        $operacion_id=$operacion->id;
         $queryLista="SELECT posicion.codigo_camara, posicion.piso 
                     FROM posicion 
                     LEFT JOIN sku ON sku.posicion_id=posicion.id
                     LEFT JOIN palet_salida as ps ON ps.id=sku.palet_id
-                    WHERE ps.operacion_id=$id
+                    WHERE ps.operacion_id=$operacion_id
                     GROUP BY posicion.codigo_camara, posicion.piso
                     ";
 
@@ -92,19 +96,18 @@ class CamaraController extends Controller
             for ($i=0; $i < $camara->matriz_y; $i++) { 
                 for ($j=0; $j < $camara->matriz_x; $j++) { 
                     $datos[$i][$j]=Posicion::where('codigo_camara',$preCamara->codigo_camara)
-                                    ->whereNull('ps.operacion_id')
-                                    ->orWhere('ps.operacion_id',$id)
                                     ->where('x',$i)
                                     ->where('y',$j)
                                     ->where('piso',$preCamara->piso)
                                     ->leftJoin('sku','sku.posicion_id','=','posicion.id')
-                                    ->leftJoin('palet_salida as ps', function ($join) {
-                                        $join->on('ps.id','=','sku.palet_id');
+                                    ->leftJoin('palet_salida as ps', function ($join)  use ($operacion_id) {
+                                        $join->on('ps.id','=','sku.palet_id')
+                                                ->where('ps.operacion_id',$operacion_id);
                                     })
                                     ->leftJoin('cliente as cl','cl.id','=','ps.cliente_id')
                                     ->select('posicion.id','posicion.codigo',DB::raw('DATE(sku.ingreso) ingreso'),DB::raw('CONCAT(ps.campania_id," ",ps.tipo_palet_id," ",cl.cod_cartilla,"-",ps.numero) palet'))
-                                    ->toSql();
-                                    dd($datos[$i][$j]);
+                                    ->first();
+                                    // dd($datos[$i][$j]);
                 }
             }
             $piso["datos"]=$datos;

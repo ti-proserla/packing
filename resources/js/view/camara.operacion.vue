@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="4">
-                <v-card class="mb-3" outlined>
+                <!-- <v-card class="mb-3" outlined>
                     <v-card-title>Revisión de Cámaras</v-card-title>
                     <v-card-text>
                         <v-row>
@@ -22,16 +22,16 @@
                             </v-col>
                         </v-row>
                     </v-card-text>
-                </v-card>
+                </v-card> -->
                 <v-card outlined>
-                    <v-card-title>Datos de Pallet</v-card-title>
+                    <v-card-title>Seleccionar Operacion</v-card-title>
                     <v-card-text>
-                        <v-form v-on:submit.prevent="searching">
+                        <v-form v-on:submit.prevent="listarCamaras">
                             <v-row>
                                 <v-col cols="6">
                                     <v-text-field 
-                                        label="Ingresar QR:" 
-                                        v-model="palet_search"
+                                        label="Ingresar Código Operación:" 
+                                        v-model="operacion_id"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="6">
@@ -75,22 +75,27 @@
                 <v-expansion-panels
                     v-model="panel"
                     >
-                    <v-expansion-panel :key="index" v-for="(piso,index) in camara">
+                    <v-expansion-panel :key="index" v-for="(piso,index) in camaras">
                         <v-expansion-panel-header>
-                            <h4>Piso {{ index + 1 }}</h4>
+                            <h4>{{ piso.titulo }}</h4>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <div class="piso">
-                                <div  class="filas" :key="index1" v-for="(fila,index1) in piso">
+                                <div  class="filas" :key="index1" v-for="(fila,index1) in piso.datos">
                                     <div :key="index2" v-for="(posicion,index2) in fila">
-                                        <span 
-                                            v-if="posicion!=null"
-                                            :class="(posicion.palet!=null ? 'posicion-ocupada' : 'posicion-seleccionable') + ' ' +(seleccionado==posicion.id ? 'posicion-seleccionada':'')" 
-                                            class="posicion" 
-                                            @click="posicion.palet==null ? seleccionar(posicion.id) : ''"
-                                            >
-                                            {{ posicion.codigo }}
-                                        </span>
+                                        <v-tooltip v-if="posicion!=null" top>
+                                            <template  v-slot:activator="{ on, attrs }">
+                                                <span 
+                                                    v-bind="attrs" 
+                                                    v-on="on"
+                                                    :class="(posicion.palet!=null ? 'posicion-ocupada' : 'posicion-disabled') + ' ' +(seleccionado==posicion.id ? 'posicion-seleccionada':'')" 
+                                                    class="posicion" 
+                                                    >
+                                                    {{ posicion.codigo }}
+                                                </span>
+                                            </template>
+                                            <span>{{ posicion.palet }}</span>
+                                        </v-tooltip>
                                         <span class="posicion posicion-nula" v-else></span>
                                     </div>
                                 </div>
@@ -123,55 +128,7 @@
     </v-container>
 </template>
 <style>
-    .filas{
-        display: flex;
-        grid-template-columns: auto;
-        /* justify-content: center; */
-    }
-    .piso{
-        overflow-x: auto;
-    }
-    .posicion{
-        user-select: none;
-        border-color: #1867c0!important;
-        color: #1867c0!important;
-        border: 1px solid;
-        font-size: 12px;
-        border-radius: 14px;
-        width: 28px;
-        height: 28px;
-        padding: 4px 0;
-        margin: 2px;
-        display: inline-block;
-        text-align: center;
-        font-weight: 600;
-    }
-    .posicion-nula{
-        border-color: #fff!important;
-    }
-
-    .posicion-ocupada{
-        color: #fff!important;
-        background-color: #f44336!important;
-        border-color: #f44336!important;
-    }
-    .posicion-seleccionada{
-        color: #fff!important;
-        background-color: #1867c0;
-        /* border-color: #FF9800!important; */
-    }
-    .posicion-seleccionable{
-        cursor: pointer;
-    }
-    @media (min-width: 600px){
-        .posicion{
-            font-size: 16px;
-            border-radius: 20px;
-            width: 40px;
-            height: 40px;
-            padding: 8px 0;
-        }
-    }
+    
 </style>
 <script>
 export default {
@@ -184,7 +141,7 @@ export default {
             codigo_camara: null,
             codigo_palet: null,
             open_search: false,
-            palet_search: null,
+            operacion_id: null,
             palet: {},
         }
     },
@@ -225,7 +182,7 @@ export default {
             })
         },
         listarCamaras(){
-            axios.get(url_base+'/camara')
+            axios.get(url_base+`/camara/operacion/${ this.operacion_id }`)
             .then(response => {
                 this.camaras = response.data;
             })

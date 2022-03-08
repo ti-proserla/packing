@@ -74,6 +74,10 @@ var routes =[
         component: require('./view/camara.semaforizacion.vue').default
     },
     {
+        path: '/camara.operacion',
+        component: require('./view/camara.operacion.vue').default
+    },
+    {
         path: '/impresora',
         component: require('./view/impresora.vue').default
     },

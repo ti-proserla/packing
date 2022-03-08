@@ -98,13 +98,6 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
-                    <!-- <v-btn
-                        elevation="0"
-                        color="primary"
-                        outlined
-                        fab>
-                        B10
-                    </v-btn> -->
             </v-col>
         </v-row>
         <!-- <v-fab-transition> -->

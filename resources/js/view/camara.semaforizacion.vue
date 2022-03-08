@@ -103,11 +103,7 @@
     .posicion-nula{
         border-color: transparent!important;
     }
-    .posicion-disabled{
-        border-color: transparent!important;
-        background-color: rgba(0,0,0,.25)!important;
-        color: #fff!important;
-    }
+    
 
     .posicion-ocupada{
         color: #fff!important;
@@ -151,6 +147,11 @@
         width: 20px!important;
         height: 20px!important;
         margin: 4px;
+    }
+    .posicion-disabled{
+        border-color: transparent!important;
+        background-color: rgba(0,0,0,.25)!important;
+        color: #fff!important;
     }
 </style>
 <script>
