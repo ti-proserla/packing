@@ -15,6 +15,9 @@ class AddCodigoToOperacion extends Migration
     {
         Schema::table('operacion', function (Blueprint $table) {
             $table->string('codigo_operacion',12)->nullable();
+            $table->integer('anio')->nullable();
+            $table->integer('semana')->nullable();
+            $table->integer('cantidad_cajas')->nullable();
         });
     }
 

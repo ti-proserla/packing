@@ -230,6 +230,26 @@
                     no-action>
                     <template v-slot:activator>
                             <v-list-item-icon>
+                                <i class="fas fa-temperature-low"></i>
+                            </v-list-item-icon>
+                        <v-list-item-content>Cámara</v-list-item-content>
+                    </template>
+                    <v-list-item link to="/camara.ingreso">
+                        <v-list-item-content>
+                            Ingreso a Cámara
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/camara.operacion">
+                        <v-list-item-content>
+                            Operación en Cámara
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-group>
+                <v-list-group
+                    :value="false"
+                    no-action>
+                    <template v-slot:activator>
+                            <v-list-item-icon>
                                 <i class="far fa-file-alt"></i>
                             </v-list-item-icon>
                         <v-list-item-content>Reportes</v-list-item-content>

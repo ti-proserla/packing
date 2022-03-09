@@ -40,6 +40,7 @@ Route::resource('tipo', 'TipoController');
 Route::resource('tipo-palet', 'TipoPaletController');
 Route::resource('caja', 'CajaController');
 Route::post('operacion/addPalet', 'OperacionController@addPalet');
+Route::get('operacion/codigo/{codigo}', 'OperacionController@showCodigo');
 Route::resource('operacion', 'OperacionController');
 Route::resource('produccion', 'ProduccionController');
 Route::resource('descarte', 'DescarteController');

@@ -2,27 +2,6 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="4">
-                <!-- <v-card class="mb-3" outlined>
-                    <v-card-title>Revisión de Cámaras</v-card-title>
-                    <v-card-text>
-                        <v-row>
-                            <v-col cols="12">
-                                <v-select
-                                label="Cámaras:"
-                                v-model="codigo_camara"
-                                :items="camaras"
-                                item-text="nombre"
-                                item-value="codigo">
-                                </v-select>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-btn color="primary" @click="ver">
-                                    Buscar
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card> -->
                 <v-card outlined>
                     <v-card-title>Seleccionar Operacion</v-card-title>
                     <v-card-text>
@@ -41,7 +20,7 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="12">
-                                    {{palet}}
+                                    {{operacion}}
                                 </v-col>
                             </v-row>
                         </v-form>
@@ -74,6 +53,7 @@
                 </v-card> -->
                 <v-expansion-panels
                     v-model="panel"
+                    popout
                     >
                     <v-expansion-panel :key="index" v-for="(piso,index) in camaras">
                         <v-expansion-panel-header>
@@ -143,6 +123,7 @@ export default {
             open_search: false,
             operacion_id: null,
             palet: {},
+            operacion: {}
         }
     },
     components:{
@@ -184,9 +165,16 @@ export default {
         listarCamaras(){
             axios.get(url_base+`/camara/operacion/${ this.operacion_id }`)
             .then(response => {
+                this.getOperacion();
                 this.camaras = response.data;
             })
 
+        },
+        getOperacion(){
+            axios.get(url_base+`/operacion/codigo/${ this.operacion_id }`)
+            .then(response => {
+                this.operacion = response.data;
+            });
         },
         registrar(){
             axios.post(url_base+'/sku',{

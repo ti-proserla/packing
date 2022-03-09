@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Operacion;
 use App\Model\PaletSalida;
+use Illuminate\Support\Facades\DB;
 
 class OperacionController extends Controller
 {
@@ -29,7 +30,10 @@ class OperacionController extends Controller
                             ->where('fecha_operacion','>=',$request->desde)
                             ->where('fecha_operacion','<=',$request->hasta)
                             ->select('operacion.*','cliente.descripcion as cliente')
-                            ->paginate(10);
+                            ->orderBy('operacion.anio','DESC')
+                            ->orderBy('operacion.semana','DESC')
+                            ->orderBy('operacion.id','DESC')
+                            ->paginate(20);
         }
         return response()->json($operaciones);
     }
@@ -52,8 +56,14 @@ class OperacionController extends Controller
      */
     public function store(Request $request)
     {
+        $numerador=Operacion::where('semana',$request->semana)->where('anio',$request->anio)->select(DB::raw('count(*)+1 numerador'))->first()->numerador;
+        // dd($numerador);
         $operacion=new Operacion();
         $operacion->estado='Pendiente';
+        $operacion->anio=$request->anio;
+        $operacion->semana=$request->semana;
+        $operacion->cantidad_cajas=$request->cantidad_cajas;
+        $operacion->codigo_operacion=$operacion->anio.'.'.str_pad($request->semana, 2, "0", STR_PAD_LEFT).'.'.str_pad($numerador, 2, "0", STR_PAD_LEFT);
         $operacion->descripcion=$request->descripcion;
         $operacion->cliente_id=$request->cliente_id;
         $operacion->fecha_operacion=$request->fecha_operacion;
@@ -82,6 +92,14 @@ class OperacionController extends Controller
     {
         $operacion=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
                         ->where('operacion.id',$id)
+                        ->select('operacion.*','cliente.descripcion as cliente')
+                        ->first();    
+        return response()->json($operacion);
+    }
+    public function showCodigo($codigo)
+    {
+        $operacion=Operacion::join('cliente','cliente.id','=','operacion.cliente_id')
+                        ->where('operacion.codigo_operacion',$codigo)
                         ->select('operacion.*','cliente.descripcion as cliente')
                         ->first();    
         return response()->json($operacion);

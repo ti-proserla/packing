@@ -11,6 +11,28 @@
                         <v-row>
                             <v-col cols="12" lg="6">
                                 <v-text-field 
+                                    type="number"
+                                    outlined
+                                    dense
+                                    required 
+                                    label="Año:" 
+                                    v-model="operacion.anio"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-select
+                                    outlined
+                                    dense
+                                    v-model="operacion.semana"
+                                    label="Semana:"
+                                    :items="semanas"
+                                    item-text="semana"
+                                    item-value="semana"
+                                    >
+                                    </v-select>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field 
                                     outlined
                                     dense
                                     required 
@@ -25,6 +47,15 @@
                                     type="date"
                                     label="Fecha Operación" 
                                     v-model="operacion.fecha_operacion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field 
+                                    outlined
+                                    dense
+                                    type="number"
+                                    label="Cantidad de Cajas" 
+                                    v-model="operacion.cantidad_cajas"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols=12>
@@ -66,12 +97,23 @@ export default {
                 fecha_operacion: moment().format('YYYY-MM-DD')
             },
             clientes: [],
+            semanas: []
         }
     },
     mounted(){
+        this.getSemanas();
         this.listarClientes();
+        this.operacion.anio=moment().format('Y');
+        this.operacion.semana=parseInt(moment().format('w'));
     },
     methods:{
+        getSemanas(){
+            var semanas=[]
+            for (let i = 1; i < 54; i++) {
+                semanas.push({semana:i})
+            }
+            this.semanas=semanas;
+        },
         listarClientes(){
             axios.get(url_base+'/cliente?all')
             .then(response => {

@@ -99,13 +99,15 @@ export default {
     data() {
         return {
             data_post:{
-                desde: moment().format('YYYY-MM-DD'),
-                hasta: moment().format('YYYY-MM-DD')
+                desde: moment().startOf('month').format('YYYY-MM-DD'),
+                hasta: moment().endOf('month').format('YYYY-MM-DD')
             },
             header:[
-                { text: 'Código', value: 'descripcion' },
+                { text: 'Código', value: 'codigo_operacion' },
+                { text: 'Descripción', value: 'descripcion' },
                 { text: 'Fecha', value: 'fecha_operacion' },
                 { text: 'Cliente', value: 'cliente' },
+                { text: 'Cantidad Cajas', value: 'cantidad_cajas' },
                 { text: 'Estado', value: 'estado' },
                 // { text: 'Editar', value: 'editar' },
             ],
