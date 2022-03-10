@@ -250,7 +250,10 @@ class PaletSalidaController extends Controller
         return response()->json($paletSalida);
     }
     public function search_codigo($codigo){
-        $paletSalida=PaletSalida::where('id',explode('-',$codigo)[1])
+        $paletSalida=PaletSalida::select('palet_salida.*','cl.descripcion as cliente','op.codigo_operacion','op.descripcion as operacion')
+                        ->join('cliente as cl','cl.id','=','palet_salida.cliente_id')
+                        ->leftJoin('operacion as op','op.id','=','palet_salida.operacion_id')
+                        ->where('palet_salida.id',explode('-',$codigo)[1])
                         ->first();
         return response()->json($paletSalida);
     }

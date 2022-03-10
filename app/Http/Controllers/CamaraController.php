@@ -71,20 +71,22 @@ class CamaraController extends Controller
         return response()->json($pisos);
     }
     
-    public function operacion($codigo_operacion)
+    public function operacion($codigo_operacion,Request $request)
     {
         $operacion=Operacion::where('codigo_operacion',$codigo_operacion)->first();
         // dd($operacion);
         $operacion_id=$operacion->id;
-        $queryLista="SELECT posicion.codigo_camara, posicion.piso 
+        $queryLista="SELECT posicion.codigo_camara, posicion.piso, GROUP_CONCAT('',posicion.codigo) posicion
                     FROM posicion 
                     LEFT JOIN sku ON sku.posicion_id=posicion.id
                     LEFT JOIN palet_salida as ps ON ps.id=sku.palet_id
                     WHERE ps.operacion_id=$operacion_id
                     GROUP BY posicion.codigo_camara, posicion.piso
                     ";
-
         $listaDeCamaras=DB::select(DB::raw($queryLista), []);
+        if ($request->has('min_data')) {
+            return response()->json($listaDeCamaras);
+        }
         $pisos=array();
         foreach ($listaDeCamaras as $key => $preCamara) {
             $camara=Camara::where('codigo',$preCamara->codigo_camara)->first();
@@ -105,7 +107,11 @@ class CamaraController extends Controller
                                                 ->where('ps.operacion_id',$operacion_id);
                                     })
                                     ->leftJoin('cliente as cl','cl.id','=','ps.cliente_id')
-                                    ->select('posicion.id','posicion.codigo',DB::raw('DATE(sku.ingreso) ingreso'),DB::raw('CONCAT(ps.campania_id," ",ps.tipo_palet_id," ",cl.cod_cartilla,"-",ps.numero) palet'))
+                                    ->select(
+                                        'posicion.id',
+                                        'posicion.codigo',
+                                        DB::raw('DATE(sku.ingreso) ingreso'),
+                                        DB::raw('CONCAT(ps.campania_id," ",ps.tipo_palet_id,"-",ps.numero) palet'))
                                     ->first();
                                     // dd($datos[$i][$j]);
                 }

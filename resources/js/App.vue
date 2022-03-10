@@ -343,7 +343,7 @@
             </v-list>
         </v-navigation-drawer>
         
-        <v-main>
+        <v-main light>
             <router-view class="pa-6"></router-view>
         </v-main>
         <audio id="myAudio">

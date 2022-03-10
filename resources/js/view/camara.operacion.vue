@@ -7,20 +7,22 @@
                     <v-card-text>
                         <v-form v-on:submit.prevent="listarCamaras">
                             <v-row>
-                                <v-col cols="6">
+                                <v-col cols="7">
                                     <v-text-field 
-                                        label="Ingresar Código Operación:" 
+                                        label="Código Operación:" 
                                         v-model="operacion_id"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="6">
+                                <v-col cols="5">
                                     <v-btn
                                         type="submit" color="primary">
                                         Buscar
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="12">
-                                    {{operacion}}
+                                    <h5><b>Código:</b> {{ operacion.codigo_operacion }}</h5>
+                                    <h5><b>Descripción:</b> {{ operacion.descripcion }}</h5>
+                                    <h5><b>Cliente:</b> {{ operacion.cliente }}</h5>
                                 </v-col>
                             </v-row>
                         </v-form>
@@ -28,36 +30,13 @@
                 </v-card>
             </v-col>
             <v-col cols="12" lg="8">
-                <!-- <v-card outlined>
-                    <v-card-title>Ingresar Palet</v-card-title>
-                    <v-card-text>
-                        <v-form v-on:submit.prevent="registrar">
-                            <v-row>
-                                <v-col cols="4">
-                                    <v-text-field 
-                                        label="Ingresar QR:" 
-                                        v-model="codigo_palet"
-                                        :disabled="seleccionado==0"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="2">
-                                    <v-btn
-                                        :disabled="seleccionado==0"
-                                        type="submit" color="primary">
-                                        Registrar
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-form>
-                    </v-card-text>
-                </v-card> -->
                 <v-expansion-panels
                     v-model="panel"
-                    popout
+                    multiple
                     >
                     <v-expansion-panel :key="index" v-for="(piso,index) in camaras">
                         <v-expansion-panel-header>
-                            <h4>{{ piso.titulo }}</h4>
+                            <h5>{{ piso.titulo }}</h5>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <div class="piso">
@@ -83,39 +62,16 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
-                    <!-- <v-btn
-                        elevation="0"
-                        color="primary"
-                        outlined
-                        fab>
-                        B10
-                    </v-btn> -->
             </v-col>
         </v-row>
-        <!-- <v-fab-transition> -->
-        <v-btn
-            color="primary"
-            fab
-            dark
-            bottom
-            right
-            fixed
-            class="v-btn--example"
-            @click="registrar"
-        >
-            <i class="fas fa-search-plus"></i>
-        </v-btn>
     </v-container>
 </template>
-<style>
-    
-</style>
 <script>
 export default {
     data() {
         return {
             camara: [],
-            panel: 0,
+            panel: [],
             seleccionado: 0,
             camaras: [],
             codigo_camara: null,
@@ -143,8 +99,6 @@ export default {
       },
     },
     mounted(){
-        this.listarCamaras();
-        // this.ver();
     },
     methods: {
         seleccionar(id){
@@ -156,53 +110,21 @@ export default {
                 this.palet = response.data;
             })
         },
-        ver(){
-            axios.get(url_base+`/camara/${this.codigo_camara}`)
-            .then(response => {
-                this.camara = response.data;
-            })
-        },
         listarCamaras(){
             axios.get(url_base+`/camara/operacion/${ this.operacion_id }`)
             .then(response => {
                 this.getOperacion();
                 this.camaras = response.data;
+                this.panel=[];
+                for (let i = 0; i < this.camaras.length; i++) {
+                    this.panel.push(i);                    
+                }
             })
-
         },
         getOperacion(){
             axios.get(url_base+`/operacion/codigo/${ this.operacion_id }`)
             .then(response => {
                 this.operacion = response.data;
-            });
-        },
-        registrar(){
-            axios.post(url_base+'/sku',{
-                posicion_id: this.seleccionado,
-                codigo_palet: this.palet_search
-            })
-            .then(response => {
-                var respuesta=response.data;
-                switch (respuesta.status) {
-                    case 'OK':
-                        swal("Palet en Camara.", { 
-                            icon: "success", 
-                            timer: 2000, 
-                            buttons: false
-                        });
-                        this.codigo_palet=null;
-                        this.seleccionado=0;
-                        this.ver();
-                        break;
-                    case 'VALIDATION':
-                        this.error=respuesta.data;
-                        break;
-                    case 'ERROR':
-                        break;
-                    default:
-
-                        break;
-                }
             });
         }
     }
