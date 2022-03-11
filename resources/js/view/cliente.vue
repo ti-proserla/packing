@@ -24,72 +24,88 @@
                 <v-card>
                     <v-card-title class="headline">Nuevo Cliente</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            label="cod_cartilla" 
-                            v-model="cliente.cod_cartilla"
-                            :error-messages="error.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="RUC" 
-                            v-model="cliente.ruc"
-                            :error-messages="error.ruc"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="Nombre" 
-                            v-model="cliente.descripcion"
-                            :error-messages="error.descripcion"
-                        ></v-text-field>
-                        <div class="text-right mt-3">
-                            <v-btn 
-                                outlined 
-                                color="secondary" 
-                                @click="open_nuevo=false"
-                                >Cancelar</v-btn>
-                            <v-btn 
-                                outlined 
-                                color="primary" 
-                                @click="guardar()"
-                                >Guardar</v-btn>
-                        </div>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="cliente.cod_cartilla"
+                                    :error-messages="error.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="RUC" 
+                                    v-model="cliente.ruc"
+                                    :error-messages="error.ruc"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="cliente.descripcion"
+                                    :error-messages="error.descripcion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" class="text-right">
+                                <v-btn 
+                                    outlined 
+                                    color="secondary" 
+                                    @click="closeNewCliente()"
+                                    >Cancelar</v-btn>
+                                <v-btn 
+                                    outlined 
+                                    color="primary" 
+                                    @click="guardar()"
+                                    >Guardar</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                 </v-card>               
             </v-dialog>
             <!-- Editar -->
-            <v-dialog v-model="open_editar" persistent max-width="350">
+            <v-dialog v-model="open_editar" persistent max-width="400">
                 <v-card>
                     <v-card-title class="headline">Editar Cliente</v-card-title>
                     <v-card-text>
-                        <v-text-field 
-                            label="cod_cartilla" 
-                            v-model="cliente_editar.cod_cartilla"
-                            :error-messages="error_editar.cod_cartilla"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="RUC" 
-                            v-model="cliente_editar.ruc"
-                            :error-messages="error_editar.ruc"
-                        ></v-text-field>
-                        <v-text-field 
-                            required 
-                            label="Nombre" 
-                            v-model="cliente_editar.descripcion"
-                            :error-messages="error_editar.descripcion"
-                        ></v-text-field>
-                        <div class="text-right mt-3">
-                            <v-btn 
-                                outlined 
-                                color="secondary" 
-                                @click="open_editar=false"
-                                >Cancelar</v-btn>
-                            <v-btn 
-                                outlined 
-                                color="primary" 
-                                @click="actualizar()"
-                                >Guardar</v-btn>
-                        </div>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="cod_cartilla" 
+                                    v-model="cliente_editar.cod_cartilla"
+                                    :error-messages="error_editar.cod_cartilla"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="RUC" 
+                                    v-model="cliente_editar.ruc"
+                                    :error-messages="error_editar.ruc"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
+                                    label="Nombre" 
+                                    v-model="cliente_editar.descripcion"
+                                    :error-messages="error_editar.descripcion"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" class="text-right">
+                                <v-btn 
+                                    outlined 
+                                    color="secondary" 
+                                    @click="open_editar=false"
+                                    >Cancelar</v-btn>
+                                <v-btn 
+                                    outlined 
+                                    color="primary" 
+                                    @click="actualizar()"
+                                    >Guardar</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                 </v-card>               
             </v-dialog>
@@ -126,10 +142,15 @@ export default {
         this.listar(1);
     },
     methods: {
+        closeNewCliente(){
+            this.open_nuevo=false;
+            this.cliente=this.initForm();
+        },
         initForm(){
             return {
-                descripcion: '',
+                cod_cartilla: '',
                 ruc: '',
+                descripcion: '',
             }
         },
         listar(n=this.table.current_page){

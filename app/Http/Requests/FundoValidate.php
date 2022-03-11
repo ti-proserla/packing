@@ -27,7 +27,11 @@ class FundoValidate extends FormRequest
     public function rules()
     {
         return [
+            'cod_cartilla' => 'required',
             'nombre_fundo' => 'required|max:50',
+            'lugar_produccion' => 'required|max:50',
+            'cod_lugar_produccion' => 'required|max:50',
+            'productor_id' => 'required',
         ];
     }
     

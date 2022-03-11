@@ -49,10 +49,21 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field 
-                                    label="COd Lugar Producción" 
+                                    label="Cod Lugar Producción:" 
                                     v-model="fundo.cod_lugar_produccion"
                                     :error-messages="error.cod_lugar_produccion"
                                 ></v-text-field>
+                            </v-col>
+                            <v-col cols=12>
+                                <v-select
+                                    v-model="fundo.productor_id"
+                                    label="Cliente:"
+                                    :items="clientes"
+                                    item-text="descripcion"
+                                    item-value="id"
+                                    :error-messages="error.productor_id"
+                                    >
+                                    </v-select>
                             </v-col>
                         </v-row>
                         <div class="text-right mt-3">
@@ -107,6 +118,17 @@
                                     :error-messages="error_editar.nombre_fundo"
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols=12>
+                                <v-select
+                                    v-model="fundo_editar.productor_id"
+                                    label="Cliente:"
+                                    :items="clientes"
+                                    item-text="descripcion"
+                                    item-value="id"
+                                    :error-messages="error_editar.productor_id"
+                                    >
+                                    </v-select>
+                            </v-col>
                         </v-row>
                         <div class="text-right mt-3">
                             <v-btn 
@@ -152,6 +174,7 @@ export default {
             open_editar: false,
             fundo_editar: this.initForm(),
             error_editar: {},
+            clientes: [],
         }
     },
     mounted() {
@@ -164,6 +187,7 @@ export default {
             })
         })
         this.listar(1);
+        this.listarClientes();
     },
     methods: {
         initForm(){
@@ -178,6 +202,12 @@ export default {
             axios.get(url_base+'/fundo?page='+n+'&search='+this.search)
             .then(response => {
                 this.table = response.data;
+            })
+        },
+        listarClientes(){
+            axios.get(url_base+'/cliente?all')
+            .then(response => {
+                this.clientes=response.data
             })
         },
         guardar(){
