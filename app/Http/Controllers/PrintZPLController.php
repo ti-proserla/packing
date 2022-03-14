@@ -485,6 +485,7 @@ class PrintZPLController extends Controller
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%Y') as e_yyyy"),
                         DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 2))) as e_mb"),
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),
+                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%m') as e_mm"),
                         'LI.codigo as codigo_lote',
                         'CLI.descripcion as productor',
                         'CLI.provincia',
