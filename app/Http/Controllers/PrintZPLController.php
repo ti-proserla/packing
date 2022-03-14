@@ -496,6 +496,7 @@ class PrintZPLController extends Controller
                         'CL.max_gr',
                         'MA.nombre_materia as materia',
                         DB::raw("IF(SUBSTR(peso_neto,-1) = '0', LEFT(peso_neto,length(peso_neto)-1),peso_neto) peso_neto"),
+                        'peso_libra',
                         'VA.nombre_variedad as variedad',
                         'VA.variedad_licenciada',
                         'FU.cod_lugar_produccion',
