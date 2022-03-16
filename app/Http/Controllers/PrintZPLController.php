@@ -492,24 +492,24 @@ class PrintZPLController extends Controller
                     ->orderBy('id','DESC')
                     ->first();
         
-        DB::statement("SET lc_time_names = 'es_ES'");
-        $etiquetaCaja_es=EtiquetaCaja::select(
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b') as e_bbb_es")
-                    )
-                    ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
-                    ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
-                    ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
-                    ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
-                    ->join('plu as PLU','PLU.id','=','etiqueta_caja.plu_id')
-                    ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
-                    ->join('materia as MA','MA.id','=','LI.materia_id')
-                    ->join('fundo as FU','FU.id','=','LI.fundo_id')
-                    ->join('variedad as VA','VA.id','=','LI.variedad_id')
-                    ->join('marca_caja as MA_CA','MA_CA.id','=','etiqueta_caja.marca_caja_id')
-                    ->where('etiqueta_caja.id',$etiqueta_id)
-                    ->orderBy('id','DESC')
-                    ->first();
-        $etiquetaCaja->e_bbb_es=$etiquetaCaja_es->e_bbb_es;
+        // DB::statement("SET lc_time_names = 'es_ES'");
+        // $etiquetaCaja_es=EtiquetaCaja::select(
+        //                 DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b') as e_bbb_es")
+        //             )
+        //             ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
+        //             ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
+        //             ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
+        //             ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
+        //             ->join('plu as PLU','PLU.id','=','etiqueta_caja.plu_id')
+        //             ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
+        //             ->join('materia as MA','MA.id','=','LI.materia_id')
+        //             ->join('fundo as FU','FU.id','=','LI.fundo_id')
+        //             ->join('variedad as VA','VA.id','=','LI.variedad_id')
+        //             ->join('marca_caja as MA_CA','MA_CA.id','=','etiqueta_caja.marca_caja_id')
+        //             ->where('etiqueta_caja.id',$etiqueta_id)
+        //             ->orderBy('id','DESC')
+        //             ->first();
+        // $etiquetaCaja->e_bbb_es=$etiquetaCaja_es->e_bbb_es;
         
         $zpl=ZPL::where('id',$request->zpl_id)->first()->contenido;
                  
