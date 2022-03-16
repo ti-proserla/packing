@@ -304,52 +304,20 @@ class PrintZPLController extends Controller
         $ip_print = $request->ip_print;
         $palet_id=$request->palet_id;
 
-        $string_zpl="CT~~CD,~CC^~CT~
-                    ^XA
-                    ~TA000
-                    ~JSN
-                    ^LT0
-                    ^MNW
-                    ^MTT
-                    ^PON
-                    ^PMN
-                    ^LH0,0
-                    ^JMA
-                    ^PR8,8
-                    ~SD15
-                    ^JUS
-                    ^LRN
-                    ^CI27
-                    ^PA0,1,1,0
-                    ^XZ
-                    ^XA
-                    ^MMT
-                    ^PW831
-                    ^LL1624
-                    ^LS0
-                    ^FO170,4^GB0,1620,5^FS
-                    ^FT63,1580^A0B,37,38^FH\^CI28^FDEXPORTED^FS^CI27
-                    ^FT140,1504^A0B,79,79^FH\^CI28^FD[nombre_productor]^FS^CI27
-                    ^FT236,1580^A0B,37,38^FH\^CI28^FDPACKED AND PROCESSED^FS^CI27
-                    ^FT318,1504^A0B,73,74^FB731,1,19,C^FH\^CI28^FDJAYANCA FRUITS S.A.C^FS^CI27
-                    ^FO343,4^GB0,1620,5^FS
-                    ^FO516,4^GB0,1620,5^FS
-                    ^FT462,1580^A0B,102,101^FB1252,1,26,C^FH\^CI28^FDN° DE PALET:  [codigo_palet]^FS^CI27
-                    ^FT359,187^BQN,2,6
-                    ^FH\^FDLA,[palet_id]^FS
-                    ^FO659,4^GB0,1620,5^FS
-                    ^FO516,789^GB311,0,5^FS
-                    ^FT609,745^A0B,37,38^FH\^CI28^FDN° BOXES^FS^CI27
-                    ^FO516,453^GB311,0,5^FS
-                    ^FT609,413^A0B,37,38^FH\^CI28^FD[numero_cajas]^FS^CI27
-                    ^PQ1,0,1,Y
-                    ^XZ";
+        $string_zpl="^^XA
+        ^FT64,1637^A0B,31,38^FH\^CI28^FDEXPORTED^FS^CI27
+        ^FT140,1678^A0B,45,46^FB1667,1,12,C^FH\^CI28^FD[nombre_productor]^FS^CI27
+        ^FO184,1^GB0,1677,2^FS
+        ^FT237,1637^A0B,31,38^FH\^CI28^FDPACKED AND PROCESSED^FS^CI27
+        ^FT308,1678^A0B,45,46^FB1667,1,12,C^FH\^CI28^FDJAYANCA FRUITS S.A.C^FS^CI27
+        ^FO351,1^GB0,1677,2^FS
+        ^XZ";
 
             $query="SELECT 	CL.descripcion nombre_productor, 
-                                CONCAT(LPAD(PS.numero,6,'0'),'-',CL.cod_cartilla) codigo_palet,
-                                PS.id palet_id,
-                                CAL.nombre_calibre calibre,
-                                COUNT(CA.id) numero_cajas
+                            LPAD(PS.numero,6,'0') numero,
+                            CONCAT('P-',PS.id) codigo_qr,
+                            CAL.nombre_calibre calibre,
+                            COUNT(CA.id) numero_cajas
                     FROM palet_salida PS 
                     INNER JOIN cliente CL ON PS.cliente_id=CL.id
                     INNER JOIN caja CA ON CA.palet_salida_id=PS.id
@@ -357,7 +325,7 @@ class PrintZPLController extends Controller
                     INNER JOIN calibre CAL ON CAL.id = EC.calibre_id
                     WHERE PS.id=?";
         $data=DB::select(DB::raw("$query"),[$palet_id])[0];
-        // dd($data);
+        
         $data=json_decode(json_encode($data), true);
         
         foreach($data as $key=>$value){
@@ -486,6 +454,7 @@ class PrintZPLController extends Controller
                         DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 2))) as e_mb"),
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),
                         DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%m') as e_mm"),
+                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b') as e_bbb"),
                         'LI.codigo as codigo_lote',
                         'CLI.descripcion as productor',
                         'CLI.provincia',

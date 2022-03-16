@@ -164,6 +164,10 @@ export default {
             .then(response => {
                 var zplPrint=response.data;
                 console.log(zplPrint);
+                var t = this;
+                BrowserPrint.getDefaultDevice("printer", function(device){
+                    t.printer_select=device;
+                });
                 this.printer_select.send(zplPrint, undefined, function(errorMessage){
                     alert("Error: " + errorMessage);	
                 });
