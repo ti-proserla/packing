@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-   
+   //lista registros
     public function index(Request $request)
     {
         if ($request->has('proceso')) {
@@ -38,7 +38,8 @@ class ClienteController extends Controller
         $clientes->save();
 
         return response()->json([
-            "status" => "OK"
+            "status" => "OK",
+            "message"=> "Cliente Guardado."
         ]);
     }
 

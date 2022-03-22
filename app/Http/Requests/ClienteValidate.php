@@ -32,6 +32,7 @@ class ClienteValidate extends FormRequest
         ];
     }
     
+    
     protected function failedValidation(Validator $validator) {
         //extraer array
         $sin_array=str_replace(["[","]"], "",json_encode($validator->errors()));
