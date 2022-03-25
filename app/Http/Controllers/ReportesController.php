@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GeneralExcel;
+use App\Exports\GeneralExcelHeading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -385,6 +386,35 @@ class ReportesController extends Controller
         $desde=$request->desde;
         $hasta=$request->hasta;
         $cliente_id=$request->cliente_id;
+
+        $queryColumnas="SELECT PRE.id presentacion_id,
+                                CAL.id calibre_id,
+                                PRE.nombre_presentacion,
+                                CAL.nombre_calibre,
+                                REPLACE(CONCAT(PRE.nombre_presentacion,'_^_',CAL.nombre_calibre),' ','_') nom_columna
+                        FROM lote_ingreso LI
+                        INNER JOIN etiqueta_caja EC ON LI.id=EC.lote_ingreso_id 
+                        INNER JOIN presentacion PRE ON PRE.id=EC.presentacion_id
+                        INNER JOIN calibre CAL ON CAL.id=EC.calibre_id
+                        where LI.cliente_id=?
+                        AND LI.fecha_cosecha>=?
+                        AND LI.fecha_cosecha<=?
+                        GROUP BY PRE.id,CAL.id";
+        $dataColumnas=DB::select(DB::raw("$queryColumnas"),[$cliente_id,$desde,$hasta]);
+        
+        $nameColumnas="";
+        $subQueryColumnas="";
+        foreach ($dataColumnas as $key => $columna) {
+            $calibre_id=$columna->calibre_id;
+            $presentacion_id=$columna->presentacion_id;
+            $nom_columna=$columna->nom_columna;
+
+            $nameColumnas.=",`$nom_columna`";
+            $subQueryColumnas.=", sum(IF(EC.presentacion_id=$presentacion_id AND EC.calibre_id=$calibre_id ,1,0)) `$nom_columna`";
+        }
+        
+        
+        
         $query="SELECT 	LI.fecha_cosecha,
                         LI.codigo,
                         CL.descripcion nombre_productor,
@@ -417,8 +447,7 @@ class ReportesController extends Controller
                                 SUM(PE.peso-PE.peso_palet-PE.num_jabas*PE.peso_jaba)
                             )*100
                         ,2) `merma_%`
-                        
-
+                        $nameColumnas
                 FROM lote_ingreso LI
                 LEFT JOIN descarte DE ON DE.lote_id=LI.id 
                 LEFT JOIN sub_lote SL ON LI.id = SL.lote_id
@@ -429,22 +458,80 @@ class ReportesController extends Controller
                 LEFT JOIN palet_entrada PE ON SL.id=PE.sub_lote_id
                 LEFT JOIN 
                 (
-                SELECT EC.lote_ingreso_id,SUM(PRE.peso_neto) acumulado
-                FROM
-                etiqueta_caja EC 
-                INNER JOIN presentacion PRE ON PRE.id=EC.presentacion_id
-                LEFT JOIN caja CA ON CA.etiqueta_caja_id=EC.id
-                GROUP BY EC.lote_ingreso_id
+                    SELECT EC.lote_ingreso_id,SUM(PRE.peso_neto) acumulado
+                    FROM
+                    etiqueta_caja EC 
+                    INNER JOIN presentacion PRE ON PRE.id=EC.presentacion_id
+                    LEFT JOIN caja CA ON CA.etiqueta_caja_id=EC.id
+                    GROUP BY EC.lote_ingreso_id
                 ) PRODUCCION
                 ON PRODUCCION.lote_ingreso_id=LI.id
-                where CL.id=?
+                LEFT JOIN 
+                    (
+                        SELECT EC.lote_ingreso_id
+                                $subQueryColumnas
+                        FROM etiqueta_caja EC 
+                        INNER JOIN presentacion PRE ON PRE.id=EC.presentacion_id
+                        LEFT JOIN caja CA ON CA.etiqueta_caja_id=EC.id
+                        GROUP BY EC.lote_ingreso_id
+                    ) CAJAS_PESENTACION
+                    ON CAJAS_PESENTACION.lote_ingreso_id=LI.id
+                    where CL.id=?
                 AND LI.fecha_cosecha>=?
                 AND LI.fecha_cosecha<=?
                 GROUP BY LI.id
                 ORDER BY SL.id ASC";
         $data=DB::select(DB::raw("$query"),[$cliente_id,$desde,$hasta]);   
+
         if ($request->has('excel')) {
-            return (new GeneralExcel($data))->download("Balance Materia $desde - $hasta.xlsx");
+            /**
+             * GENERADOR DE COLUMNAS PARA EL EXCEL
+             */
+
+            $heading_1=[];
+            $heading_2=[];
+            $headings=[];
+            $groupHeadings=[];
+            if (count($data)>0) {
+                $index=0;
+                foreach ($data[0] as $key => $value) {
+                    $index++;
+                    $headings[$key]=[$key];
+                    array_push($heading_1," ");
+                    array_push($heading_2,$key);
+                    if($index==16){
+                        break;
+                    }
+                }
+            }
+            $oldPresentacion="";
+            foreach ($dataColumnas as $key => $columna) {
+                // if ($oldPresentacion=="") {
+                //     $oldPresentacion=$columna->nombre_presentacion;
+                // }
+                
+                if ($oldPresentacion!=$columna->nombre_presentacion) {
+                    array_push($heading_1,$columna->nombre_presentacion);
+                    array_push($heading_2,$columna->nombre_calibre);
+                    // $headings[$oldPresentacion]=$groupHeadings;
+                    $oldPresentacion=$columna->nombre_presentacion;
+                    // $groupHeadings=[];    
+                }else{
+                    array_push($heading_1," ");
+                    array_push($heading_2,$columna->nombre_calibre);
+                }
+                // array_push($groupHeadings,$columna->nombre_calibre);
+            }
+            // $headings[$oldPresentacion]=$groupHeadings;
+            $headings=[
+                "Heading_1"=>$heading_1,
+                "Heading_2"=>$heading_2
+            ];
+            // dd($headings);
+            /**
+             * FIN DE GENERADOR DE COLUMNAS PARA EL EXCEL
+             */
+            return (new GeneralExcelHeading($data,$headings))->download("Balance Materia $desde - $hasta.xlsx");
         }else{
             return response()->json($data);  
         }
