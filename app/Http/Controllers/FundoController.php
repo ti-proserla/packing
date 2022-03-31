@@ -41,6 +41,9 @@ class FundoController extends Controller
         $fundos->nombre_fundo=$request->nombre_fundo;
         $fundos->lugar_produccion=$request->lugar_produccion;
         $fundos->cod_lugar_produccion=$request->cod_lugar_produccion;
+        $fundos->distrito=$request->distrito;
+        $fundos->provincia=$request->provincia;
+        $fundos->departamento=$request->departamento;
         $fundos->productor_id=$request->productor_id;
         $fundos->save();
         return response()->json([
@@ -66,6 +69,9 @@ class FundoController extends Controller
         $fundos->nombre_fundo=$request->nombre_fundo;
         $fundos->lugar_produccion=$request->lugar_produccion;
         $fundos->cod_lugar_produccion=$request->cod_lugar_produccion;
+        $fundos->distrito=$request->distrito;
+        $fundos->provincia=$request->provincia;
+        $fundos->departamento=$request->departamento;
         $fundos->productor_id=$request->productor_id;
         $fundos->save();
 

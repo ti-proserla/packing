@@ -54,6 +54,27 @@
                                     :error-messages="error.cod_lugar_produccion"
                                 ></v-text-field>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Distrito:" 
+                                    v-model="fundo.distrito"
+                                    :error-messages="error.distrito"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Provincia:" 
+                                    v-model="fundo.provincia"
+                                    :error-messages="error.provincia"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Departamento:" 
+                                    v-model="fundo.departamento"
+                                    :error-messages="error.departamento"
+                                ></v-text-field>
+                            </v-col>
                             <v-col cols=12>
                                 <v-select
                                     v-model="fundo.productor_id"
@@ -97,6 +118,14 @@
                             <v-col cols="12">
                                 <v-text-field 
                                     required 
+                                    label="Nombre" 
+                                    v-model="fundo_editar.nombre_fundo"
+                                    :error-messages="error_editar.nombre_fundo"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    required 
                                     label="Lugar Producción:" 
                                     v-model="fundo_editar.lugar_produccion"
                                     :error-messages="error_editar.lugar_produccion"
@@ -112,10 +141,23 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field 
-                                    required 
-                                    label="Nombre" 
-                                    v-model="fundo_editar.nombre_fundo"
-                                    :error-messages="error_editar.nombre_fundo"
+                                    label="Distrito:" 
+                                    v-model="fundo_editar.distrito"
+                                    :error-messages="error.distrito"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Provincia:" 
+                                    v-model="fundo_editar.provincia"
+                                    :error-messages="error.provincia"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-text-field 
+                                    label="Departamento:" 
+                                    v-model="fundo_editar.departamento"
+                                    :error-messages="error.departamento"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols=12>
@@ -158,6 +200,9 @@ export default {
                 { text: 'Descripción', value: 'nombre_fundo' },
                 { text: 'Lugar de Producción', value: 'lugar_produccion' },
                 { text: 'Cod Lugar Producción', value: 'cod_lugar_produccion' },
+                { text: 'Distrito', value: 'distrito' },
+                { text: 'Provincia', value: 'provincia' },
+                { text: 'Departamento', value: 'departamento' },
                 { text: 'Editar', value: 'editar' },
             ],
             table: {
@@ -195,7 +240,10 @@ export default {
                 cod_cartilla: '',
                 nombre_fundo: '',
                 lugar_produccion: '',
-                cod_lugar_produccion: ''
+                cod_lugar_produccion: '',
+                distrito: '',
+                provincia: '',
+                departamento: ''
             }
         },
         listar(n=this.table.current_page){
@@ -249,7 +297,7 @@ export default {
                 var respuesta=response.data;
                 switch (respuesta.status) {
                     case 'OK':
-                        swal("fundo Actualizado", { 
+                        swal("Fundo Actualizado", { 
                             icon: "success", 
                             timer: 2000, 
                             buttons: false
