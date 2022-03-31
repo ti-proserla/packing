@@ -1,6 +1,0 @@
-P-JPS02PHA1209-8-I-CARTON 4.5 KG-INGLEBY-4023-POLYTRAPEZOIDAL-GENERICA
-
-- (P)               Identificador Caja
-- (Código Palet)    Código de Lote
-- (8)               Calibre
-- (I)               Categoria
