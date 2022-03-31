@@ -438,67 +438,14 @@ class PrintZPLController extends Controller
 
     public function muestra_etiqueta_caja(Request $request){
         $etiqueta_id=$request->etiqueta_caja_id;
-        // DB::statement("SET lc_time_names = 'es_ES'");
-
-        $etiquetaCaja=EtiquetaCaja::select(
-                        DB::raw('CONCAT("C-",etiqueta_caja.id) codigo_caja'),
-                        'etiqueta_caja.*',
-                        DB::raw("SUBSTRING(YEAR(LI.fecha_cosecha),-2,2) anio_cos"),
-                        DB::raw("SUBSTRING(YEAR(etiqueta_caja.fecha_empaque),-2,2) anio_emp"),
-                        DB::raw("DAYOFYEAR(DATE_FORMAT(etiqueta_caja.fecha_empaque, '2016-%m-%d')) jul_emp"),
-                        DB::raw("DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')) jul_cos"),
-                        DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d,%Y'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d,%Y'), 2))) fecha_empaque"),
-                        DB::raw("UPPER(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d/%Y')) fecha_empaque_2"),
-                        DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d %Y'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b %d %Y'), 2))) fecha_empaque_3"),
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%Y') as e_yyyy"),
-                        DB::raw("CONCAT(UPPER(LEFT(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 1)), LOWER(SUBSTRING(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b'), 2))) as e_mb"),
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%d') as e_dd"),
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%m') as e_mm"),
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b') as e_bbb"),
-                        DB::raw("DATE_FORMAT(etiqueta_caja.fecha_empaque,'%v') as e_ww"),
-                        DB::raw("SUBSTRING(YEAR(LI.fecha_cosecha),-2,2) c_yy"),
-                        DB::raw("LPAD(DAYOFYEAR(DATE_FORMAT(LI.fecha_cosecha, '2016-%m-%d')),3,'0') c_jul"),
-                        DB::raw("LPAD(WEEKDAY(etiqueta_caja.fecha_empaque)+1,2,'0') e_ds"),
-                        'LI.codigo as codigo_lote',
-                        'CLI.descripcion as productor',
-                        'CLI.provincia',
-                        'CLI.direccion',
-                        'PE.contenido',
-                        'CL.nombre_calibre as calibre',
-                        'CL.min_gr',
-                        'CL.max_gr',
-                        'MA.nombre_materia as materia',
-                        DB::raw("IF(SUBSTR(peso_neto,-1) = '0', LEFT(peso_neto,length(peso_neto)-1),peso_neto) peso_neto"),
-                        'peso_libra',
-                        'VA.nombre_variedad as variedad',
-                        'VA.variedad_licenciada',
-                        'FU.cod_lugar_produccion',
-                        'FU.ubicacion',
-                        'FU.nombre_fundo',
-                        'FU.lugar_produccion',
-                        'PLU.nombre_plu as plu',
-                        // 'EAN.descripcion as codigo_ean',
-                        'CT.nombre_categoria as categoria',
-                        DB::raw("CONCAT(SUBSTRING(PE.nombre_presentacion, 1, 3),'.',SUBSTRING(MA_CA.nombre_marca_caja, 1, 3)) resumen")
-                        )
-                    ->join('calibre as CL','CL.id','=','etiqueta_caja.calibre_id')
-                    ->join('categoria as CT','CT.id','=','etiqueta_caja.categoria_id')
-                    ->join('lote_ingreso as LI','LI.id','=','etiqueta_caja.lote_ingreso_id')
-                    ->join('cliente as CLI','CLI.id','=','LI.cliente_id')
-                    ->join('plu as PLU','PLU.id','=','etiqueta_caja.plu_id')
-                    ->join('presentacion as PE','PE.id','=','etiqueta_caja.presentacion_id')
-                    ->join('materia as MA','MA.id','=','LI.materia_id')
-                    ->join('fundo as FU','FU.id','=','LI.fundo_id')
-                    ->join('variedad as VA','VA.id','=','LI.variedad_id')
-                    ->join('marca_caja as MA_CA','MA_CA.id','=','etiqueta_caja.marca_caja_id')
-                    // ->leftJoin('codigo_ean as EAN',function ($join) {
-                    //     $join->on('EAN.variedad_id', '=', 'LI.variedad_id')
-                    //     ->on('EAN.calibre_id', '=', 'etiqueta_caja.calibre_id');
-                    // })
-                    ->where('etiqueta_caja.id',$etiqueta_id)
-                    ->orderBy('id','DESC')
-                    ->first();
-        
+        /**
+         * Procedimiento almacenado
+         */
+        $etiquetaCaja=DB::select(DB::raw("CALL pkg_etiqueta(?)"),[$etiqueta_id])[0];
+        $etiquetaCaja=json_decode(json_encode($etiquetaCaja),true);
+        /**
+         * Columna fecha empaque en español
+         */
         DB::statement("SET lc_time_names = 'es_ES'");
         $etiquetaCaja_es=EtiquetaCaja::select(
                         DB::raw("UPPER(DATE_FORMAT(etiqueta_caja.fecha_empaque,'%b')) as e_bbb_es")
@@ -514,14 +461,12 @@ class PrintZPLController extends Controller
                     ->join('variedad as VA','VA.id','=','LI.variedad_id')
                     ->join('marca_caja as MA_CA','MA_CA.id','=','etiqueta_caja.marca_caja_id')
                     ->where('etiqueta_caja.id',$etiqueta_id)
-                    // ->orderBy('etiqid','DESC')
                     ->first();
-                    // dd($etiquetaCaja_es);
-        $etiquetaCaja->e_bbb_es=$etiquetaCaja_es->e_bbb_es;
-        
+        $etiquetaCaja+=['e_bbb_es'=>$etiquetaCaja_es->e_bbb_es];
         $zpl=ZPL::where('id',$request->zpl_id)->first()->contenido;
+        
                  
-        foreach($etiquetaCaja->toArray() as $key=>$value){
+        foreach($etiquetaCaja as $key=>$value){
             $zpl=str_replace('['.$key.']',$value,$zpl);
         }
         return response()->json($zpl);
