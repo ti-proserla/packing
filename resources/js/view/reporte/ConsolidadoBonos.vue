@@ -54,7 +54,7 @@ export default {
             header: [
                 { text: 'Código', value: 'dni' },
                 { text: 'Trabajador', value: 'trabajador'},
-                { text: 'Bono Optenido', value: 'bono_optenido' }
+                { text: 'Bono Obtenido', value: 'bono_optenido' }
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,
