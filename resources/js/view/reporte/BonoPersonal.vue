@@ -65,7 +65,7 @@ export default {
                 { text: 'Cajas/Hora', value: 'cajas_hora' },
                 { text: 'Bono x Caja', value: 'bono_caja' },
                 { text: 'Meta', value: 'meta' },
-                { text: 'Bono Optenido', value: 'bono_optenido' }
+                { text: 'Bono Obtenido', value: 'bono_optenido' }
             ],
             fecha_recepcion: moment().format('YYYY-MM-DD'),
             cliente_id: null,
